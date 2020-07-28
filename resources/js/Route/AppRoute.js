@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react'
-import DashBoard from '../components/DashBoard/DashBoard';
 import {Route, Switch} from "react-router";
+
+import DashBoard from '../components/DashBoard/DashBoard';
 import Example from '../components/Example';
 
 function AppRoute() {
