@@ -24,10 +24,13 @@ function SideBar() {
 
                             <div className="nav-item active">
 
-                                <Link to="/"><i className="ik ik-bar-chart-2"/><span>Dashboard</span></Link>
+                                <Link to={{ pathname:'/',state:'dashboard' }}><i className="ik ik-bar-chart-2"/><span>Dashboard</span></Link>
                             </div>
                             <div className="nav-item">
-                                <Link to="/data"><i className="ik ik-menu"/><span>Data</span> </Link>
+                                <Link to={{ pathname:"/data",state:'data' }}><i className="ik ik-menu"/><span>Data</span> </Link>
+                            </div>
+                            <div className="nav-item">
+                                <Link to={{ pathname:"/form",state:'Form' }}><i className="ik ik-menu"/><span>Form</span> </Link>
                             </div>
                             <div className="nav-item has-sub">
                                 <a href="#"><i className="ik ik-layers"/><span>Widgets</span> </a>
