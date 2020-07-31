@@ -4,7 +4,6 @@ function DashBoard() {
     return (
         <Fragment>
             <div>
-                <div className="main-content">
                     <div className="container-fluid">
                         <div className="row clearfix">
                             <div className="col-lg-3 col-md-6 col-sm-12">
@@ -707,7 +706,6 @@ function DashBoard() {
                         </div>
                     </div>
                 </div>
-            </div>
 
         </Fragment>
     )
