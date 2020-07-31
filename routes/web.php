@@ -18,4 +18,4 @@ Route::get('{ReactRoute}', function () {
 })->where('ReactRoute', '.*');
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
-Route::Resource('menu', 'MenuController');
+Route::resource('/menu', 'MenuController');
