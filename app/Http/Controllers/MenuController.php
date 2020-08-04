@@ -116,8 +116,8 @@ class MenuController extends Controller
             $extension = explode("/", $sub_str);
             $allowed = Helper::ImageExtension($extension[1]);
             if ($allowed == "Allowed") {
-                if (File::exists($request->menu_icon)) {
-                    File::delete($request->menu_icon);
+                if (File::exists($menu_model->menu_icon)) {
+                    File::delete($menu_model->menu_icon);
                 }
                 $upload_path = "backend_assets/images/menu_icon/" . time() . "." . $extension[1];
                 $image_upload = Image::make($request->menu_icon)->resize(300, 300);
