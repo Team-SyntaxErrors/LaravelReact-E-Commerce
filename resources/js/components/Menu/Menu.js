@@ -150,7 +150,31 @@ const Menu = () => {
                                 </button>
                             </div>
                             <div className="modal-body">
+
                                 <div className="form-group">
+                                    <div className="col-lg-12">
+                                        <img className="icon ml-30p" src={!(menu_icon) ? "backend_assets/img/menu-icon.png" : menu_icon} />
+                                        <span className="text-danger" />
+                                    </div>
+                                    <div className="row mt-2">
+                                        <label className="col-lg-2 control-label">
+                                            Menu Icon:
+                                        </label>
+                                        <div className="col-lg-10">
+                                            <input
+                                                type="file"
+                                                className="form-control"
+                                                onChange={onImageChangeHandler}
+                                                placeholder="Enter Menu Icon"
+                                            />
+                                            <span className="text-danger">
+                                                {error.menu_icon}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="form-group ">
                                     <div className="row">
                                         <label className="col-lg-2 control-label">
                                             Menu Name:
@@ -172,28 +196,6 @@ const Menu = () => {
                                     </div>
                                 </div>
 
-                                <div className="form-group">
-                                    <div className="row">
-                                        <label className="col-lg-2 control-label">
-                                            Menu Icon:
-                                        </label>
-                                        <div className="col-lg-10">
-                                            <input
-                                                type="file"
-                                                className="form-control"
-                                                onChange={onImageChangeHandler}
-                                                placeholder="Enter Menu Icon"
-                                            />
-                                            <span className="text-danger">
-                                                {error.menu_icon}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-9">
-                                        <img class="icon" src={menu_icon} />
-                                        <span className="text-danger" />
-                                    </div>
-                                </div>
                             </div>
                             <div className="modal-footer">
                                 <button
@@ -247,6 +249,31 @@ const Menu = () => {
                                 </button>
                             </div>
                             <div className="modal-body">
+
+                                <div className="form-group">
+                                    <div className="col-lg-12 ml-30p">
+                                        <img class="icon" src={menu_icon} />
+                                        <span className="text-danger" />
+                                    </div>
+                                    <div className="row mt-2">
+                                        <label className="col-lg-2 control-label">
+                                            Menu Icon:
+                                        </label>
+                                        <div className="col-lg-10">
+                                            <input
+                                                type="file"
+                                                className="form-control"
+                                                onChange={onImageChangeHandler}
+                                                placeholder="Enter Menu Icon"
+                                            />
+                                            <span className="text-danger">
+                                                {error.menu_icon}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                                 <div className="form-group">
                                     <div className="row">
                                         <label className="col-lg-2 control-label">
@@ -269,28 +296,6 @@ const Menu = () => {
                                     </div>
                                 </div>
 
-                                <div className="form-group">
-                                    <div className="row">
-                                        <label className="col-lg-2 control-label">
-                                            Menu Icon:
-                                        </label>
-                                        <div className="col-lg-10">
-                                            <input
-                                                type="file"
-                                                className="form-control"
-                                                onChange={onImageChangeHandler}
-                                                placeholder="Enter Menu Icon"
-                                            />
-                                            <span className="text-danger">
-                                                {error.menu_icon}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-9">
-                                        <img class="icon" src={menu_icon} />
-                                        <span className="text-danger" />
-                                    </div>
-                                </div>
                             </div>
                             <div className="modal-footer">
                                 <button
