@@ -1,3 +1,5 @@
+import "./Menu.css";
+
 import React, { useState } from "react";
 
 import Axios from "axios";
@@ -95,6 +97,10 @@ const Menu = () => {
                                             onChange={onImageChangeHandler}
                                             placeholder="Enter Menu Icon"
                                         />
+                                        <span className="text-danger" />
+                                    </div>
+                                    <div className="col-lg-9">
+                                        <img class="icon" src={menu_icon} />
                                         <span className="text-danger" />
                                     </div>
                                 </div>
