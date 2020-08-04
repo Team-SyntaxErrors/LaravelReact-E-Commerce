@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('{ReactRoute}', function () {
-    return view('index');
-})->where('ReactRoute', '.*');
+
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('/menu', 'MenuController');
+Route::get('/menu/edit/{id}', 'MenuController@edit');
+Route::get('{ReactRoute}', function () {
+    return view('index');
+})->where('ReactRoute', '.*');

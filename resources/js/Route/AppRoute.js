@@ -9,7 +9,7 @@ function AppRoute() {
         <Fragment>
             <Switch>
                 <Route exact path="/" component={DashBoard} />
-                <Route exact path="/menu" component={Menu} />
+                <Route exact path="/menu_list" component={Menu} />
             </Switch>
         </Fragment>
     );
