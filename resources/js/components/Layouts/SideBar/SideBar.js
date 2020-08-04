@@ -1,6 +1,5 @@
+import { Link, useLocation } from "react-router-dom";
 import React, { Fragment } from "react";
-
-import { Link } from "react-router-dom";
 
 function SideBar() {
     return (
@@ -32,7 +31,7 @@ function SideBar() {
                             id="main-menu-navigation"
                             className="navigation-main"
                         >
-                            <div className="nav-item active">
+                            <div className={useLocation().pathname=='/' ? 'nav-item active' : 'nav-item'}>
                                 <Link
                                     to={{ pathname: "/", state: "Dashboard" }}
                                 >
@@ -40,19 +39,7 @@ function SideBar() {
                                     <span>Dashboard</span>
                                 </Link>
                             </div>
-                            <div className="nav-item">
-                                <Link to={{ pathname: "/data", state: "data" }}>
-                                    <i className="ik ik-menu" />
-                                    <span>Data</span>{" "}
-                                </Link>
-                            </div>
-                            <div className="nav-item">
-                                <Link to={{ pathname: "/form", state: "Form" }}>
-                                    <i className="ik ik-menu" />
-                                    <span>Form</span>{" "}
-                                </Link>
-                            </div>
-                            <div className="nav-item">
+                            <div className={useLocation().pathname=='/menu' ? 'nav-item active' : 'nav-item'}>
                                 <Link to={{ pathname: "/menu", state: "Menu" }}>
                                     <i className="ik ik-menu" />
                                     <span>Menu</span>{" "}
