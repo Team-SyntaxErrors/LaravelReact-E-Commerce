@@ -64,7 +64,7 @@ const MenuList = props => {
                                     >
                                         <thead>
                                             <tr role="row">
-                                                <th>Menu Icon</th>
+                                                <th width="15">Menu Icon</th>
                                                 <th>Menu Name</th>
                                                 <th>Menu Slug</th>
                                                 <th>Action</th>
