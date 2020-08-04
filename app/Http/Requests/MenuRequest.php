@@ -23,8 +23,9 @@ class MenuRequest extends FormRequest
      */
     public function rules()
     {
+        $menu = $this->route('menu');
         return [
-            "menu_name" => "required",
+            "menu_name" => "required|unique:menus,menu_name,".$menu.",menu_id",
             "menu_icon" => "required",
         ];
     }
