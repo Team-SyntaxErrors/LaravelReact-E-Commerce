@@ -31,7 +31,13 @@ function SideBar() {
                             id="main-menu-navigation"
                             className="navigation-main"
                         >
-                            <div className={useLocation().pathname=='/' ? 'nav-item active' : 'nav-item'}>
+                            <div
+                                className={
+                                    useLocation().pathname == "/"
+                                        ? "nav-item active"
+                                        : "nav-item"
+                                }
+                            >
                                 <Link
                                     to={{ pathname: "/", state: "Dashboard" }}
                                 >
@@ -39,8 +45,19 @@ function SideBar() {
                                     <span>Dashboard</span>
                                 </Link>
                             </div>
-                            <div className={useLocation().pathname=='/menu' ? 'nav-item active' : 'nav-item'}>
-                                <Link to={{ pathname: "/menu", state: "Menu" }}>
+                            <div
+                                className={
+                                    useLocation().pathname == "/menu_list"
+                                        ? "nav-item active"
+                                        : "nav-item"
+                                }
+                            >
+                                <Link
+                                    to={{
+                                        pathname: "/menu_list",
+                                        state: "Menu"
+                                    }}
+                                >
                                     <i className="ik ik-menu" />
                                     <span>Menu</span>{" "}
                                 </Link>
