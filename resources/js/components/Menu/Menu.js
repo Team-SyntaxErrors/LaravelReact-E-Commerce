@@ -37,6 +37,11 @@ const Menu = () => {
         reader.readAsDataURL(files);
     };
 
+    const ClearFrom = () => {
+        setMenuName("");
+        setMenuIcon("");
+    };
+
     const submitHandler = e => {
         e.preventDefault();
         const data = { menu_name, menu_icon };
@@ -45,6 +50,7 @@ const Menu = () => {
                 console.log(response);
                 $("#close").click();
                 GetMenuList();
+                ClearFrom();
             })
             .catch(error => {
                 if (error.response.status == 422) {
@@ -102,6 +108,7 @@ const Menu = () => {
                 console.log(response);
                 $("#edit_close").click();
                 GetMenuList();
+                ClearFrom();
             })
             .catch(error => {
                 if (error.response.status == 422) {
@@ -150,10 +157,16 @@ const Menu = () => {
                                 </button>
                             </div>
                             <div className="modal-body">
-
                                 <div className="form-group">
                                     <div className="col-lg-12">
-                                        <img className="icon ml-30p" src={!(menu_icon) ? "backend_assets/img/menu-icon.png" : menu_icon} />
+                                        <img
+                                            className="icon ml-30p"
+                                            src={
+                                                !menu_icon
+                                                    ? "backend_assets/img/menu-icon.png"
+                                                    : menu_icon
+                                            }
+                                        />
                                         <span className="text-danger" />
                                     </div>
                                     <div className="row mt-2">
@@ -195,7 +208,6 @@ const Menu = () => {
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                             <div className="modal-footer">
                                 <button
@@ -203,6 +215,7 @@ const Menu = () => {
                                     className="btn btn-secondary"
                                     id="close"
                                     data-dismiss="modal"
+                                    onClick={ClearFrom}
                                 >
                                     Close
                                 </button>
@@ -249,7 +262,6 @@ const Menu = () => {
                                 </button>
                             </div>
                             <div className="modal-body">
-
                                 <div className="form-group">
                                     <div className="col-lg-12 ml-30p">
                                         <img class="icon" src={menu_icon} />
@@ -273,7 +285,6 @@ const Menu = () => {
                                     </div>
                                 </div>
 
-
                                 <div className="form-group">
                                     <div className="row">
                                         <label className="col-lg-2 control-label">
@@ -295,7 +306,6 @@ const Menu = () => {
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                             <div className="modal-footer">
                                 <button
@@ -303,6 +313,7 @@ const Menu = () => {
                                     className="btn btn-secondary"
                                     id="edit_close"
                                     data-dismiss="modal"
+                                    onClick={ClearFrom}
                                 >
                                     Close
                                 </button>

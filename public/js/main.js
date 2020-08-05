@@ -37215,6 +37215,11 @@ var Menu = function Menu() {
     reader.readAsDataURL(files);
   };
 
+  var ClearFrom = function ClearFrom() {
+    setMenuName("");
+    setMenuIcon("");
+  };
+
   var submitHandler = function submitHandler(e) {
     e.preventDefault();
     var data = {
@@ -37225,6 +37230,7 @@ var Menu = function Menu() {
       console.log(response);
       $("#close").click();
       GetMenuList();
+      ClearFrom();
     })["catch"](function (error) {
       if (error.response.status == 422) {
         setError(error.response.data.errors);
@@ -37279,6 +37285,7 @@ var Menu = function Menu() {
       console.log(response);
       $("#edit_close").click();
       GetMenuList();
+      ClearFrom();
     })["catch"](function (error) {
       if (error.response.status == 422) {
         setError(error.response.data.errors);
@@ -37369,7 +37376,8 @@ var Menu = function Menu() {
     type: "button",
     className: "btn btn-secondary",
     id: "close",
-    "data-dismiss": "modal"
+    "data-dismiss": "modal",
+    onClick: ClearFrom
   }, "Close"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
     type: "submit",
     className: "btn btn-primary"
@@ -37447,7 +37455,8 @@ var Menu = function Menu() {
     type: "button",
     className: "btn btn-secondary",
     id: "edit_close",
-    "data-dismiss": "modal"
+    "data-dismiss": "modal",
+    onClick: ClearFrom
   }, "Close"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
     type: "submit",
     className: "btn btn-primary"
@@ -37655,8 +37664,8 @@ __webpack_require__(/*! ./index */ "./resources/js/index.js");
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! G:\Work\LaravelReact-E-Commerce\resources\js\main.js */"./resources/js/main.js");
-module.exports = __webpack_require__(/*! G:\Work\LaravelReact-E-Commerce\resources\sass\main.scss */"./resources/sass/main.scss");
+__webpack_require__(/*! /home/professor/Documents/Laravel_Projects/Laravel + React_js/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /home/professor/Documents/Laravel_Projects/Laravel + React_js/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
 
 
 /***/ })
