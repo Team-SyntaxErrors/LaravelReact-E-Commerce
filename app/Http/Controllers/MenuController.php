@@ -19,9 +19,15 @@ class MenuController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $menu = Menu::all();
+        $menu = Menu::where(function ($menu) use ($request) {
+            // Searching
+            if ($request->q) {
+                $menu->where('menu_name', 'LIKE', '%' . $request->q . '%');
+            }
+        })->paginate($request->row);
+
         return MenuResource::collection($menu);
     }
 

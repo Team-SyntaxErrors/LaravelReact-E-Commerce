@@ -37181,18 +37181,44 @@ var Menu = function Menu() {
       menu_icon = _useState6[0],
       setMenuIcon = _useState6[1];
 
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(""),
       _useState8 = _slicedToArray(_useState7, 2),
-      error = _useState8[0],
-      setError = _useState8[1];
+      search = _useState8[0],
+      setSearch = _useState8[1];
 
-  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([8, 10, 20, 30, 40, 50]),
       _useState10 = _slicedToArray(_useState9, 2),
-      menu_list = _useState10[0],
-      setMenuList = _useState10[1];
+      select_row = _useState10[0],
+      setSelectRow = _useState10[1];
+
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(8),
+      _useState12 = _slicedToArray(_useState11, 2),
+      current_row = _useState12[0],
+      setCurrentRaw = _useState12[1];
+
+  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
+      _useState14 = _slicedToArray(_useState13, 2),
+      error = _useState14[0],
+      setError = _useState14[1];
+
+  var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
+      _useState16 = _slicedToArray(_useState15, 2),
+      menu_list = _useState16[0],
+      setMenuList = _useState16[1];
+
+  var searchHandler = function searchHandler(e) {
+    setSearch(e.target.value);
+  };
+
+  var CurrentRowHandler = function CurrentRowHandler(e) {
+    console.log("ok");
+    setCurrentRaw(e.target.value);
+    GetMenuList();
+  };
 
   var GetMenuList = function GetMenuList() {
-    axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/menu").then(function (response) {
+    var main_url = "menu?q=" + search + "&row=" + current_row;
+    axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(main_url).then(function (response) {
       // console.log(response.data.data);
       setMenuList(response.data.data);
     })["catch"](function (error) {
@@ -37463,7 +37489,11 @@ var Menu = function Menu() {
   }, "Save changes")))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_MenuList__WEBPACK_IMPORTED_MODULE_3__["default"], {
     menu_list: menu_list,
     Delete: DeleteHandler,
-    Edit: EditHandler
+    Edit: EditHandler,
+    onChangeSearch: searchHandler,
+    SearchValue: search,
+    SearchKeyUp: GetMenuList,
+    CurrentRow: CurrentRowHandler
   }));
 };
 
@@ -37509,8 +37539,11 @@ var MenuList = function MenuList(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, "Show", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("select", {
     name: "simpletable_length",
     "aria-controls": "simpletable",
-    className: "custom-select custom-select-sm form-control form-control-sm"
+    className: "custom-select custom-select-sm form-control form-control-sm",
+    onChange: props.CurrentRow
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+    value: 8
+  }, "8"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
     value: 10
   }, "10"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
     value: 25
@@ -37526,8 +37559,11 @@ var MenuList = function MenuList(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, "Search:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
     type: "search",
     className: "form-control form-control-sm",
-    placeholder: true,
-    "aria-controls": "simpletable"
+    placeholder: "Type to filter...",
+    "aria-controls": "simpletable",
+    onChange: props.onChangeSearch,
+    value: props.SearchValue,
+    onKeyUp: props.SearchKeyUp
   }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {

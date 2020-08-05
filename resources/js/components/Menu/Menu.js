@@ -10,11 +10,25 @@ const Menu = () => {
     const [menu_id, setMenuId] = useState("");
     const [menu_name, setMenuName] = useState("");
     const [menu_icon, setMenuIcon] = useState("");
+    const [search, setSearch] = useState("");
+    const [select_row, setSelectRow] = useState([8, 10, 20, 30, 40, 50]);
+    const [current_row, setCurrentRaw] = useState(8);
     const [error, setError] = useState([]);
     const [menu_list, setMenuList] = useState([]);
 
+    const searchHandler = e => {
+        setSearch(e.target.value);
+    };
+
+    const CurrentRowHandler = e => {
+        console.log("ok");
+        setCurrentRaw(e.target.value);
+        GetMenuList();
+    };
+
     const GetMenuList = () => {
-        Axios.get("/menu")
+        const main_url = "menu?q=" + search + "&row=" + current_row;
+        Axios.get(main_url)
             .then(response => {
                 // console.log(response.data.data);
                 setMenuList(response.data.data);
@@ -333,6 +347,10 @@ const Menu = () => {
                 menu_list={menu_list}
                 Delete={DeleteHandler}
                 Edit={EditHandler}
+                onChangeSearch={searchHandler}
+                SearchValue={search}
+                SearchKeyUp={GetMenuList}
+                CurrentRow={CurrentRowHandler}
             />
         </Fragment>
     );

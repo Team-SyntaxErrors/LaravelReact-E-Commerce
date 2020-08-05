@@ -27,7 +27,16 @@ const MenuList = props => {
                                                 name="simpletable_length"
                                                 aria-controls="simpletable"
                                                 className="custom-select custom-select-sm form-control form-control-sm"
+                                                onChange={props.CurrentRow}
                                             >
+                                                {/* {props.SelectRow.map(
+                                                    (select_row, i) => {
+                                                        <option>
+                                                            {i + 1}
+                                                        </option>;
+                                                    }
+                                                )} */}
+                                                <option value={8}>8</option>
                                                 <option value={10}>10</option>
                                                 <option value={25}>25</option>
                                                 <option value={50}>50</option>
@@ -47,8 +56,11 @@ const MenuList = props => {
                                             <input
                                                 type="search"
                                                 className="form-control form-control-sm"
-                                                placeholder
+                                                placeholder="Type to filter..."
                                                 aria-controls="simpletable"
+                                                onChange={props.onChangeSearch}
+                                                value={props.SearchValue}
+                                                onKeyUp={props.SearchKeyUp}
                                             />
                                         </label>
                                     </div>
