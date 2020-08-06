@@ -1986,7 +1986,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".icon {\n    width: 300px;\n    height: 300px;\n}\n.ml-30p{\n    margin-left:30%;\n}\n.image-list {\n    width: 100%;\n}\n", ""]);
+exports.push([module.i, ".custom-icon {\n    width: 300px;\n    height: 300px;\n}\n.ml-30p{\n    margin-left:30%;\n}\n.image-list {\n    width: 100%;\n}\n", ""]);
 
 // exports
 
@@ -37244,6 +37244,7 @@ var Menu = function Menu() {
   var ClearFrom = function ClearFrom() {
     setMenuName("");
     setMenuIcon("");
+    setError("");
   };
 
   var submitHandler = function submitHandler(e) {
@@ -37325,7 +37326,8 @@ var Menu = function Menu() {
     },
     className: "btn btn-secondary",
     "data-toggle": "modal",
-    "data-target": "#add_modal"
+    "data-target": "#add_modal",
+    onClick: ClearFrom
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
     "class": "ik ik-clipboard"
   }), "Add new"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
@@ -37361,7 +37363,7 @@ var Menu = function Menu() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "col-lg-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
-    className: "icon ml-30p",
+    className: "custom-icon ml-30p rounded-circle",
     src: !menu_icon ? "backend_assets/img/menu-icon.png" : menu_icon
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
     className: "text-danger"
@@ -37440,7 +37442,7 @@ var Menu = function Menu() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "col-lg-12 ml-30p"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
-    "class": "icon",
+    "class": "custom-icon rounded-circle",
     src: menu_icon
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
     className: "text-danger"
@@ -37579,7 +37581,7 @@ var MenuList = function MenuList(props) {
     width: "15"
   }, "Menu Icon"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Menu Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Menu Slug"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Action"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tbody", null, props.menu_list.map(function (menu, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
-      className: "image-list",
+      className: "image-list rounded-circle",
       src: menu.menu_icon
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, menu.menu_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, menu.menu_slug), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
       className: "btn btn-danger",
@@ -37700,8 +37702,8 @@ __webpack_require__(/*! ./index */ "./resources/js/index.js");
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/professor/Documents/Laravel_Projects/Laravel + React_js/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
-module.exports = __webpack_require__(/*! /home/professor/Documents/Laravel_Projects/Laravel + React_js/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
+__webpack_require__(/*! G:\Work\LaravelReact-E-Commerce\resources\js\main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! G:\Work\LaravelReact-E-Commerce\resources\sass\main.scss */"./resources/sass/main.scss");
 
 
 /***/ })
