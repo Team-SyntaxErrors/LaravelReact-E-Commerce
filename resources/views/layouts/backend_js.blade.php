@@ -9,6 +9,7 @@
 <script src="{{asset('backend_assets/plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js')}}"></script>
 <script src="{{asset('backend_assets/plugins/d3/dist/d3.min.js')}}"></script>
 <script src="{{asset('backend_assets/plugins/c3/c3.min.js')}}"></script>
+<script src="{{asset('backend_assets/plugins/screenfull/dist/screenfull.js')}}"></script>
 <script src="{{asset('backend_assets/js/tables.js')}}"></script>
 <script src="{{asset('backend_assets/js/charts.js')}}"></script>
 <script src="{{asset('backend_assets/dist/js/theme.min.js')}}"></script>

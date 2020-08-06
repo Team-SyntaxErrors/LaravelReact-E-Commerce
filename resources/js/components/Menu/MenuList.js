@@ -87,7 +87,7 @@ const MenuList = props => {
                                                 <tr>
                                                     <td>
                                                         <img
-                                                            className="image-list"
+                                                            className="image-list rounded-circle"
                                                             src={menu.menu_icon}
                                                         />
                                                     </td>
