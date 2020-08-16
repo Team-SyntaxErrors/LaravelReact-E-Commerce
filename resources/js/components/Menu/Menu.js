@@ -15,6 +15,7 @@ const Menu = () => {
     const [current_row, setCurrentRaw] = useState(8);
     const [error, setError] = useState([]);
     const [menu_list, setMenuList] = useState([]);
+    const [page, setPage] = useState(1);
 
     const searchHandler = e => {
         setSearch(e.target.value);
@@ -54,7 +55,6 @@ const Menu = () => {
     const ClearFrom = () => {
         setMenuName("");
         setMenuIcon("");
-        setError("");
     };
 
     const submitHandler = e => {
@@ -139,7 +139,6 @@ const Menu = () => {
                 className="btn btn-secondary"
                 data-toggle="modal"
                 data-target="#add_modal"
-                onClick={ClearFrom}
             >
                 <i class="ik ik-clipboard"></i>
                 Add new
@@ -176,7 +175,7 @@ const Menu = () => {
                                 <div className="form-group">
                                     <div className="col-lg-12">
                                         <img
-                                            className="custom-icon ml-30p rounded-circle"
+                                            className="custom-icon ml-30p"
                                             src={
                                                 !menu_icon
                                                     ? "backend_assets/img/menu-icon.png"
@@ -280,7 +279,10 @@ const Menu = () => {
                             <div className="modal-body">
                                 <div className="form-group">
                                     <div className="col-lg-12 ml-30p">
-                                        <img class="custom-icon rounded-circle" src={menu_icon} />
+                                        <img
+                                            class="custom-icon"
+                                            src={menu_icon}
+                                        />
                                         <span className="text-danger" />
                                     </div>
                                     <div className="row mt-2">
@@ -352,6 +354,8 @@ const Menu = () => {
                 onChangeSearch={searchHandler}
                 SearchValue={search}
                 SearchKeyUp={GetMenuList}
+                activePage={page}
+                itemsCountPerPage={current_row}
                 CurrentRow={CurrentRowHandler}
             />
         </Fragment>
