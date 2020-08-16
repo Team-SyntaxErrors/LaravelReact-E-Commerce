@@ -70,13 +70,13 @@ const MenuList = props => {
                                 <div className="col-sm-12">
                                     <table
                                         id="simpletable"
-                                        className="table table-striped table-bordered nowrap dataTable"
+                                        className="table"
                                         role="grid"
                                         aria-describedby="simpletable_info"
                                     >
                                         <thead>
                                             <tr role="row">
-                                                <th width="15">Menu Icon</th>
+                                                <th className="custom-head">Menu Icon</th>
                                                 <th>Menu Name</th>
                                                 <th>Menu Slug</th>
                                                 <th>Action</th>
