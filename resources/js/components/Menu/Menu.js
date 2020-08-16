@@ -62,7 +62,7 @@ const Menu = () => {
         const data = { menu_name, menu_icon };
         Axios.post("/menu", data)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 $("#close").click();
                 GetMenuList();
                 ClearFrom();
@@ -120,7 +120,7 @@ const Menu = () => {
         const data = { menu_name, menu_icon };
         Axios.put("/menu/" + menu_id, data)
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 $("#edit_close").click();
                 GetMenuList();
                 ClearFrom();
