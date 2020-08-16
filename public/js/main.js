@@ -37254,7 +37254,7 @@ var Menu = function Menu() {
       menu_icon: menu_icon
     };
     axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("/menu", data).then(function (response) {
-      console.log(response);
+      // console.log(response);
       $("#close").click();
       GetMenuList();
       ClearFrom();
@@ -37309,7 +37309,7 @@ var Menu = function Menu() {
       menu_icon: menu_icon
     };
     axios__WEBPACK_IMPORTED_MODULE_2___default.a.put("/menu/" + menu_id, data).then(function (response) {
-      console.log(response);
+      // console.log(response);
       $("#edit_close").click();
       GetMenuList();
       ClearFrom();
