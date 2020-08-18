@@ -15,7 +15,6 @@ const Menu = () => {
     const [current_row, setCurrentRaw] = useState(8);
     const [error, setError] = useState([]);
     const [menu_list, setMenuList] = useState([]);
-    const [page, setPage] = useState(1);
 
     const searchHandler = e => {
         setSearch(e.target.value);
@@ -55,6 +54,7 @@ const Menu = () => {
     const ClearFrom = () => {
         setMenuName("");
         setMenuIcon("");
+        setError("");
     };
 
     const submitHandler = e => {
@@ -139,6 +139,7 @@ const Menu = () => {
                 className="btn btn-secondary"
                 data-toggle="modal"
                 data-target="#add_modal"
+                onClick={ClearFrom}
             >
                 <i class="ik ik-clipboard"></i>
                 Add new
@@ -173,53 +174,58 @@ const Menu = () => {
                             </div>
                             <div className="modal-body">
                                 <div className="form-group">
-                                    <div className="col-lg-12">
-                                        <img
-                                            className="custom-icon ml-30p"
-                                            src={
-                                                !menu_icon
-                                                    ? "backend_assets/img/menu-icon.png"
-                                                    : menu_icon
-                                            }
-                                        />
-                                        <span className="text-danger" />
-                                    </div>
-                                    <div className="row mt-2">
-                                        <label className="col-lg-2 control-label">
-                                            Menu Icon:
-                                        </label>
-                                        <div className="col-lg-10">
-                                            <input
-                                                type="file"
-                                                className="form-control"
-                                                onChange={onImageChangeHandler}
-                                                placeholder="Enter Menu Icon"
-                                            />
-                                            <span className="text-danger">
-                                                {error.menu_icon}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="form-group ">
                                     <div className="row">
-                                        <label className="col-lg-2 control-label">
-                                            Menu Name:
-                                        </label>
-                                        <div className="col-lg-10">
-                                            <input
-                                                type="text"
-                                                className="form-control"
-                                                onChange={e =>
-                                                    setMenuName(e.target.value)
+                                        <div className="col-md-3 col-sm-12 mt-3 text-center">
+                                            <img
+                                                className="custom-icon rounded-circle"
+                                                src={
+                                                    !menu_icon
+                                                        ? "backend_assets/img/menu-icon.png"
+                                                        : menu_icon
                                                 }
-                                                value={menu_name}
-                                                placeholder="Enter Menu Name"
                                             />
-                                            <span className="text-danger">
-                                                {error.menu_name}
-                                            </span>
+                                            <span className="text-danger" />
+                                        </div>
+                                        <div className="col-md-9 col-sm-12 ">
+                                            <div className="form-group">
+                                                <label className="col-lg-6 control-label">
+                                                    Menu Icon:
+                                                </label>
+                                                <div className="col-lg-10">
+                                                    <input
+                                                        type="file"
+                                                        className="form-control"
+                                                        onChange={
+                                                            onImageChangeHandler
+                                                        }
+                                                        placeholder="Enter Menu Icon"
+                                                    />
+                                                    <span className="text-danger">
+                                                        {error.menu_icon}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="form-group ">
+                                                <label className="col-lg-6 control-label">
+                                                    Menu Name:
+                                                </label>
+                                                <div className="col-lg-10">
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        onChange={e =>
+                                                            setMenuName(
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        value={menu_name}
+                                                        placeholder="Enter Menu Name"
+                                                    />
+                                                    <span className="text-danger">
+                                                        {error.menu_name}
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -280,7 +286,7 @@ const Menu = () => {
                                 <div className="form-group">
                                     <div className="col-lg-12 ml-30p">
                                         <img
-                                            class="custom-icon"
+                                            class="custom-icon rounded-circle"
                                             src={menu_icon}
                                         />
                                         <span className="text-danger" />
@@ -354,8 +360,6 @@ const Menu = () => {
                 onChangeSearch={searchHandler}
                 SearchValue={search}
                 SearchKeyUp={GetMenuList}
-                activePage={page}
-                itemsCountPerPage={current_row}
                 CurrentRow={CurrentRowHandler}
             />
         </Fragment>

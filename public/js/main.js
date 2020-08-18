@@ -2048,7 +2048,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".custom-icon {\n    width: 300px;\n    height: 300px;\n}\n.ml-30p {\n    margin-left: 30%;\n}\n.image-list {\n    width: 100%;\n}\n", ""]);
+exports.push([module.i, ".custom-icon {\n    width: 7rem;\n    height: 7rem;\n}\n.custom-head {\n    width: 91px;\n}\n.image-list {\n    width: 100%;\n}\n", ""]);
 
 // exports
 
@@ -37765,11 +37765,6 @@ var Menu = function Menu() {
       menu_list = _useState16[0],
       setMenuList = _useState16[1];
 
-  var _useState17 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(1),
-      _useState18 = _slicedToArray(_useState17, 2),
-      page = _useState18[0],
-      setPage = _useState18[1];
-
   var searchHandler = function searchHandler(e) {
     setSearch(e.target.value);
   };
@@ -37808,6 +37803,7 @@ var Menu = function Menu() {
   var ClearFrom = function ClearFrom() {
     setMenuName("");
     setMenuIcon("");
+    setError("");
   };
 
   var submitHandler = function submitHandler(e) {
@@ -37889,7 +37885,8 @@ var Menu = function Menu() {
     },
     className: "btn btn-secondary",
     "data-toggle": "modal",
-    "data-target": "#add_modal"
+    "data-target": "#add_modal",
+    onClick: ClearFrom
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
     "class": "ik ik-clipboard"
   }), "Add new"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
@@ -37923,16 +37920,20 @@ var Menu = function Menu() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "col-lg-12"
+    className: "row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-md-3 col-sm-12 mt-3 text-center"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
-    className: "custom-icon ml-30p",
+    className: "custom-icon rounded-circle",
     src: !menu_icon ? "backend_assets/img/menu-icon.png" : menu_icon
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
     className: "text-danger"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "row mt-2"
+    className: "col-md-9 col-sm-12 "
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "form-group"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
-    className: "col-lg-2 control-label"
+    className: "col-lg-6 control-label"
   }, "Menu Icon:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "col-lg-10"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
@@ -37942,12 +37943,10 @@ var Menu = function Menu() {
     placeholder: "Enter Menu Icon"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
     className: "text-danger"
-  }, error.menu_icon)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+  }, error.menu_icon))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "form-group "
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
-    className: "col-lg-2 control-label"
+    className: "col-lg-6 control-label"
   }, "Menu Name:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "col-lg-10"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
@@ -37960,7 +37959,7 @@ var Menu = function Menu() {
     placeholder: "Enter Menu Name"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
     className: "text-danger"
-  }, error.menu_name))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+  }, error.menu_name))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "modal-footer"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
     type: "button",
@@ -38004,7 +38003,7 @@ var Menu = function Menu() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "col-lg-12 ml-30p"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
-    "class": "custom-icon",
+    "class": "custom-icon rounded-circle",
     src: menu_icon
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
     className: "text-danger"
@@ -38057,8 +38056,6 @@ var Menu = function Menu() {
     onChangeSearch: searchHandler,
     SearchValue: search,
     SearchKeyUp: GetMenuList,
-    activePage: page,
-    itemsCountPerPage: current_row,
     CurrentRow: CurrentRowHandler
   }));
 };
@@ -38139,13 +38136,13 @@ var MenuList = function MenuList(props) {
     className: "col-sm-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("table", {
     id: "simpletable",
-    className: "table table-striped table-bordered nowrap dataTable",
+    className: "table",
     role: "grid",
     "aria-describedby": "simpletable_info"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", {
     role: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
-    width: "15"
+    className: "custom-head"
   }, "Menu Icon"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Menu Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Menu Slug"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Action"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tbody", null, props.menu_list.map(function (menu, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", {
       key: i

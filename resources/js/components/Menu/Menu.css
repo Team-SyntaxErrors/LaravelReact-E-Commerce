@@ -1,9 +1,9 @@
 .custom-icon {
-    width: 300px;
-    height: 300px;
+    width: 7rem;
+    height: 7rem;
 }
-.ml-30p {
-    margin-left: 30%;
+.custom-head {
+    width: 91px;
 }
 .image-list {
     width: 100%;
