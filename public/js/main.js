@@ -36155,8 +36155,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
-/* harmony import */ var _components_DashBoard_DashBoard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/DashBoard/DashBoard */ "./resources/js/components/DashBoard/DashBoard.js");
-/* harmony import */ var _components_Menu_Menu__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Menu/Menu */ "./resources/js/components/Menu/Menu.js");
+/* harmony import */ var _components_Category_Category__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Category/Category */ "./resources/js/components/Category/Category.js");
+/* harmony import */ var _components_DashBoard_DashBoard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/DashBoard/DashBoard */ "./resources/js/components/DashBoard/DashBoard.js");
+/* harmony import */ var _components_Menu_Menu__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Menu/Menu */ "./resources/js/components/Menu/Menu.js");
+
 
 
 
@@ -36166,15 +36168,40 @@ function AppRoute() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Switch"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Route"], {
     exact: true,
     path: "/",
-    component: _components_DashBoard_DashBoard__WEBPACK_IMPORTED_MODULE_2__["default"]
+    component: _components_DashBoard_DashBoard__WEBPACK_IMPORTED_MODULE_3__["default"]
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Route"], {
     exact: true,
     path: "/menu_list",
-    component: _components_Menu_Menu__WEBPACK_IMPORTED_MODULE_3__["default"]
+    component: _components_Menu_Menu__WEBPACK_IMPORTED_MODULE_4__["default"]
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Route"], {
+    exact: true,
+    path: "/categories",
+    component: _components_Category_Category__WEBPACK_IMPORTED_MODULE_2__["default"]
   })));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (AppRoute);
+
+/***/ }),
+
+/***/ "./resources/js/components/Category/Category.js":
+/*!******************************************************!*\
+  !*** ./resources/js/components/Category/Category.js ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var Category = function Category() {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Hi"));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Category);
 
 /***/ }),
 
@@ -36221,7 +36248,7 @@ function DashBoard() {
     "aria-valuemin": 0,
     "aria-valuemax": 100,
     style: {
-      width: '62%'
+      width: "62%"
     }
   })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "col-lg-3 col-md-6 col-sm-12"
@@ -36248,7 +36275,7 @@ function DashBoard() {
     "aria-valuemin": 0,
     "aria-valuemax": 100,
     style: {
-      width: '78%'
+      width: "78%"
     }
   })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "col-lg-3 col-md-6 col-sm-12"
@@ -36275,7 +36302,7 @@ function DashBoard() {
     "aria-valuemin": 0,
     "aria-valuemax": 100,
     style: {
-      width: '31%'
+      width: "31%"
     }
   })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "col-lg-3 col-md-6 col-sm-12"
@@ -36302,7 +36329,7 @@ function DashBoard() {
     "aria-valuemin": 0,
     "aria-valuemax": 100,
     style: {
-      width: '20%'
+      width: "20%"
     }
   }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "row"
@@ -36321,7 +36348,7 @@ function DashBoard() {
   }, "Visitors By Countries"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "visitfromworld",
     style: {
-      width: '100%',
+      width: "100%",
       height: 350
     }
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -36340,7 +36367,7 @@ function DashBoard() {
     className: "progress-bar bg-green",
     role: "progressbar",
     style: {
-      width: '48%'
+      width: "48%"
     },
     "aria-valuenow": 48,
     "aria-valuemin": 0,
@@ -36359,7 +36386,7 @@ function DashBoard() {
     className: "progress-bar bg-aqua",
     role: "progressbar",
     style: {
-      width: '33%'
+      width: "33%"
     },
     "aria-valuenow": 33,
     "aria-valuemin": 0,
@@ -36368,7 +36395,7 @@ function DashBoard() {
     className: "row mb-15"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "col-9"
-  }, " USA"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, " ", "USA"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "col-3 text-right"
   }, "18%"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "col-12"
@@ -36378,7 +36405,7 @@ function DashBoard() {
     className: "progress-bar bg-purple",
     role: "progressbar",
     style: {
-      width: '40%'
+      width: "40%"
     },
     "aria-valuenow": 40,
     "aria-valuemin": 0,
@@ -36397,7 +36424,7 @@ function DashBoard() {
     className: "progress-bar bg-danger",
     role: "progressbar",
     style: {
-      width: '15%'
+      width: "15%"
     },
     "aria-valuenow": 15,
     "aria-valuemin": 0,
@@ -37015,7 +37042,7 @@ function DashBoard() {
     className: "rounded-circle"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "name"
-  }, "Gene Newman"), "  ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+  }, "Gene Newman"), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "username"
   }, "@gene_newman"), " ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     className: "list-group-item",
@@ -37027,7 +37054,7 @@ function DashBoard() {
     className: "rounded-circle"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "name"
-  }, "Billy Black"), "  ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+  }, "Billy Black"), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "username"
   }, "@billyblack"), " ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     className: "list-group-item",
@@ -37039,7 +37066,7 @@ function DashBoard() {
     className: "rounded-circle"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "name"
-  }, "Herbert Diaz"), "  ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+  }, "Herbert Diaz"), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "username"
   }, "@herbert"), " ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     className: "list-group-item",
@@ -37051,7 +37078,7 @@ function DashBoard() {
     className: "rounded-circle"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "name"
-  }, "Sylvia Harvey"), "  ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+  }, "Sylvia Harvey"), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "username"
   }, "@sylvia"), " ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     className: "list-group-item active",
@@ -37063,7 +37090,7 @@ function DashBoard() {
     className: "rounded-circle"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "name"
-  }, "Marsha Hoffman"), "  ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+  }, "Marsha Hoffman"), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "username"
   }, "@m_hoffman"), " ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     className: "list-group-item",
@@ -37075,7 +37102,7 @@ function DashBoard() {
     className: "rounded-circle"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "name"
-  }, "Mason Grant"), "  ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+  }, "Mason Grant"), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "username"
   }, "@masongrant"), " ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     className: "list-group-item",
@@ -37087,7 +37114,7 @@ function DashBoard() {
     className: "rounded-circle"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "name"
-  }, "Shelly Sullivan"), "  ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+  }, "Shelly Sullivan"), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "username"
   }, "@shelly"))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "chat-panel",
@@ -37209,7 +37236,7 @@ function Footer() {
     className: "float-none float-sm-right mt-1 mt-sm-0 text-center"
   }, "Crafted with ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "fa fa-heart text-danger"
-  }), " by ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+  }), " ", "by", " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     href: "http://lavalite.org/",
     className: "text-dark",
     target: "_blank"
@@ -37479,12 +37506,12 @@ function NavBar() {
     href: "profile.html"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "ik ik-user dropdown-icon"
-  }), " Profile"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+  }), " ", "Profile"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     className: "dropdown-item",
     href: ""
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "ik ik-settings dropdown-icon"
-  }), " Settings"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+  }), " ", "Settings"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     className: "dropdown-item",
     href: ""
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
@@ -37493,17 +37520,17 @@ function NavBar() {
     className: "badge badge-primary"
   }, "6")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "ik ik-mail dropdown-icon"
-  }), " Inbox"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+  }), " ", "Inbox"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     className: "dropdown-item",
     href: ""
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "ik ik-navigation dropdown-icon"
-  }), " Message"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+  }), " ", "Message"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     className: "dropdown-item",
     href: "login.html"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "ik ik-power dropdown-icon"
-  }), " Logout"))))))));
+  }), " ", "Logout"))))))));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (NavBar);
@@ -37623,6 +37650,8 @@ function SideBar() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
     className: "ik ik-bar-chart-2"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", null, "Dashboard"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "nav-lavel"
+  }, "UI Element"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: Object(react_router_dom__WEBPACK_IMPORTED_MODULE_0__["useLocation"])().pathname == "/menu_list" ? "nav-item active" : "nav-item"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_0__["Link"], {
     to: {
@@ -37632,6 +37661,15 @@ function SideBar() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
     className: "ik ik-menu"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", null, "Menu"), " ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: Object(react_router_dom__WEBPACK_IMPORTED_MODULE_0__["useLocation"])().pathname == "/categories" ? "nav-item active" : "nav-item"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_0__["Link"], {
+    to: {
+      pathname: "/categories",
+      state: "Category"
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+    className: "ik ik-server"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", null, "Category"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "nav-item has-sub"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("a", {
     href: "#"
@@ -38127,21 +38165,21 @@ var Menu = function Menu() {
       className: "image-list rounded-circle",
       src: menu.menu_icon
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, menu.menu_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, menu.menu_slug), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-      className: "btn btn-danger",
+      className: "btn btn-icon btn btn-danger",
       onClick: function onClick() {
         return DeleteHandler(menu.menu_id);
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
-      className: "fa fa-trash"
+      className: "ik ik-trash"
     })), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
-      className: "btn btn-info",
+      className: "btn btn-icon btn btn-dark",
       "data-toggle": "modal",
       "data-target": "#edit_modal",
       onClick: function onClick() {
         return EditHandler(menu.menu_id, menu, i);
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
-      className: "fa fa-edit"
+      className: "ik ik-edit-2"
     }))));
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tfoot", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Menu Icon"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Menu Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Menu Slug"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Action")))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "row"
@@ -38152,7 +38190,7 @@ var Menu = function Menu() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("nav", {
     "aria-label": "Page navigation example"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_3___default.a, {
-    itemClass: "page-item",
+    itemClass: "paginate_button page-item",
     linkClass: "page-link",
     activePage: activePage,
     itemsCountPerPage: itemsCountPerPage,

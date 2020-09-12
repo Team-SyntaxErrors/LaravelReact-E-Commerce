@@ -45,6 +45,7 @@ function SideBar() {
                                     <span>Dashboard</span>
                                 </Link>
                             </div>
+                            <div className="nav-lavel">UI Element</div>
                             <div
                                 className={
                                     useLocation().pathname == "/menu_list"
@@ -60,6 +61,23 @@ function SideBar() {
                                 >
                                     <i className="ik ik-menu" />
                                     <span>Menu</span>{" "}
+                                </Link>
+                            </div>
+                            <div
+                                className={
+                                    useLocation().pathname == "/categories"
+                                        ? "nav-item active"
+                                        : "nav-item"
+                                }
+                            >
+                                <Link
+                                    to={{
+                                        pathname: "/categories",
+                                        state: "Category"
+                                    }}
+                                >
+                                    <i className="ik ik-server"></i>
+                                    <span>Category</span>
                                 </Link>
                             </div>
                             <div className="nav-item has-sub">
