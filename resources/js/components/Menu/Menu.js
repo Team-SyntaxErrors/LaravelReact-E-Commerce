@@ -442,17 +442,17 @@ const Menu = () => {
                                                     <td>{menu.menu_slug}</td>
                                                     <td>
                                                         <button
-                                                            className="btn btn-danger"
+                                                            className="btn btn-icon btn btn-danger"
                                                             onClick={() =>
                                                                 DeleteHandler(
                                                                     menu.menu_id
                                                                 )
                                                             }
                                                         >
-                                                            <i className="fa fa-trash"></i>
+                                                            <i className="ik ik-trash"></i>
                                                         </button>{" "}
                                                         <button
-                                                            className="btn btn-info"
+                                                            className="btn btn-icon btn btn-dark"
                                                             data-toggle="modal"
                                                             data-target="#edit_modal"
                                                             onClick={() =>
@@ -463,7 +463,7 @@ const Menu = () => {
                                                                 )
                                                             }
                                                         >
-                                                            <i className="fa fa-edit"></i>
+                                                            <i className="ik ik-edit-2"></i>
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -485,7 +485,7 @@ const Menu = () => {
                                 <div className="col-sm-12 col-md-7">
                                     <nav aria-label="Page navigation example">
                                         <Pagination
-                                            itemClass="page-item"
+                                            itemClass="paginate_button page-item"
                                             linkClass="page-link"
                                             activePage={activePage}
                                             itemsCountPerPage={

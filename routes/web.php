@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('/menu', 'MenuController');
+Route::resource('/category', 'CategoryController');
 Route::get('{ReactRoute}', function () {
     return view('index');
 })->where('ReactRoute', '.*');
