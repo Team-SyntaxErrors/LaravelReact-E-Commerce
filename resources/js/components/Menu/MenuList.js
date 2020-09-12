@@ -78,7 +78,9 @@ const MenuList = props => {
                                     >
                                         <thead>
                                             <tr role="row">
-                                                <th className="custom-head">Menu Icon</th>
+                                                <th className="custom-head">
+                                                    Menu Icon
+                                                </th>
                                                 <th>Menu Name</th>
                                                 <th>Menu Slug</th>
                                                 <th>Action</th>
