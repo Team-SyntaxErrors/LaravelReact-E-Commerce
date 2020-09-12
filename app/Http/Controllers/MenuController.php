@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Menu;
-use Helper;
-use Arr;
-use Str;
-use Image;
-use File;
-use Illuminate\Http\Request;
+use App\Helpers\Helper;
 use App\Http\Requests\MenuRequest;
 use App\Http\Resources\MenuResource;
+use App\Menu;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class MenuController extends Controller
 {
@@ -21,13 +21,7 @@ class MenuController extends Controller
      */
     public function index(Request $request)
     {
-        $menu = Menu::where(function ($menu) use ($request) {
-            // Searching
-            if ($request->q) {
-                $menu->where('menu_name', 'LIKE', '%' . $request->q . '%');
-            }
-        })->paginate($request->row);
-
+        $menu = Menu::Search($request->q)->paginate($request->row);
         return MenuResource::collection($menu);
     }
 
@@ -44,7 +38,7 @@ class MenuController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\MenuRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(MenuRequest $request)
@@ -68,7 +62,7 @@ class MenuController extends Controller
                 $status = 201;
                 $response = [
                     "status" => $status,
-                    "data" => new MenuResource($menu_model),
+                    "data"   => new MenuResource($menu_model),
                 ];
             } else {
                 $status = 400;
@@ -107,7 +101,7 @@ class MenuController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\MenuRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -135,7 +129,7 @@ class MenuController extends Controller
                 $status = 201;
                 $response = [
                     "status" => $status,
-                    "data" => new MenuResource($menu_model),
+                    "data"   => new MenuResource($menu_model),
                 ];
             } else {
                 $status = 400;
@@ -151,7 +145,7 @@ class MenuController extends Controller
         $status = 201;
         $response = [
             "status" => $status,
-            "data" => new MenuResource($menu_model),
+            "data"   => new MenuResource($menu_model),
         ];
         return response()->json($response, $status);
     }
@@ -164,7 +158,11 @@ class MenuController extends Controller
      */
     public function destroy($id)
     {
-        Menu::findOrFail($id)->delete();
+        $menu = Menu::findOrFail($id);
+        if (File::exists($menu->menu_icon)) {
+            File::delete($menu->menu_icon);
+        }
+        $menu->delete();
         return response()->json(null, 204);
     }
 }
