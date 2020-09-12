@@ -3,7 +3,7 @@ import "./Menu.css";
 import React, { Fragment, useEffect, useState } from "react";
 
 import Axios from "axios";
-import MenuList from "./MenuList";
+import Pagination from "react-js-pagination";
 import swal from "sweetalert";
 
 const Menu = () => {
@@ -13,25 +13,26 @@ const Menu = () => {
     const [search, setSearch] = useState("");
     const [select_row, setSelectRow] = useState([8, 10, 20, 30, 40, 50]);
     const [current_row, setCurrentRaw] = useState(8);
+    const [page, setPage] = useState(1);
     const [error, setError] = useState([]);
     const [menu_list, setMenuList] = useState([]);
+    const [activePage, setActivePage] = useState(1);
+    const [itemsCountPerPage, setItemsCountPerPage] = useState(8);
+    const [totalItemsCount, setTotalItemsCount] = useState(450);
 
-    const searchHandler = e => {
-        setSearch(e.target.value);
-    };
-
-    const CurrentRowHandler = e => {
-        console.log("ok");
-        setCurrentRaw(e.target.value);
-        GetMenuList();
+    const handlePageChange = pageNumber => {
+        setPage(pageNumber);
     };
 
     const GetMenuList = () => {
-        const main_url = "menu?q=" + search + "&row=" + current_row;
+        const main_url =
+            "menu?q=" + search + "&row=" + current_row + "&page=" + page;
         Axios.get(main_url)
             .then(response => {
-                // console.log(response.data.data);
                 setMenuList(response.data.data);
+                setActivePage(response.data.meta.current_page);
+                setItemsCountPerPage(response.data.meta.per_page);
+                setTotalItemsCount(response.data.meta.total);
             })
             .catch(error => {
                 console.log(error);
@@ -40,7 +41,7 @@ const Menu = () => {
 
     useEffect(() => {
         GetMenuList();
-    }, []);
+    }, [current_row, search, page]);
 
     const onImageChangeHandler = e => {
         let files = e.target.files[0];
@@ -102,17 +103,12 @@ const Menu = () => {
         });
     };
 
-    const EditHandler = id => {
-        Axios.get("/menu/edit/" + id)
-            .then(response => {
-                // console.log(response);
-                setMenuName(response.data.menu_name);
-                setMenuIcon(response.data.menu_icon);
-                setMenuId(response.data.menu_id);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+    const EditHandler = (id, data, index) => {
+        menu_list.menu_id = id;
+        let value = JSON.parse(JSON.stringify(data));
+        setMenuName(value.menu_name);
+        setMenuIcon(value.menu_icon);
+        setMenuId(value.menu_id);
     };
 
     const updateHandler = e => {
@@ -353,15 +349,159 @@ const Menu = () => {
                 </div>
             </form>
 
-            <MenuList
-                menu_list={menu_list}
-                Delete={DeleteHandler}
-                Edit={EditHandler}
-                onChangeSearch={searchHandler}
-                SearchValue={search}
-                SearchKeyUp={GetMenuList}
-                CurrentRow={CurrentRowHandler}
-            />
+            <div className="card">
+                <div className="card-header d-block">
+                    <h3>Menu List</h3>
+                </div>
+                <div className="card-body">
+                    <div className="dt-responsive">
+                        <div
+                            id="simpletable_wrapper"
+                            className="dataTables_wrapper dt-bootstrap4"
+                        >
+                            <div className="row">
+                                <div className="col-sm-12 col-md-6">
+                                    <div
+                                        className="dataTables_length"
+                                        id="simpletable_length"
+                                    >
+                                        <label>
+                                            Show
+                                            <select
+                                                name="simpletable_length"
+                                                aria-controls="simpletable"
+                                                className="custom-select custom-select-sm form-control form-control-sm"
+                                                onChange={e =>
+                                                    setCurrentRaw(
+                                                        e.target.value
+                                                    )
+                                                }
+                                            >
+                                                {select_row.map((rows, i) => (
+                                                    <option
+                                                        key={i}
+                                                        value={rows}
+                                                    >
+                                                        {rows}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            entries
+                                        </label>
+                                    </div>
+                                </div>
+                                <div className="col-sm-12 col-md-6">
+                                    <div
+                                        id="simpletable_filter"
+                                        className="dataTables_filter"
+                                    >
+                                        <label>
+                                            Search:
+                                            <input
+                                                type="search"
+                                                className="form-control form-control-sm"
+                                                placeholder="Type to filter..."
+                                                aria-controls="simpletable"
+                                                onChange={e =>
+                                                    setSearch(e.target.value)
+                                                }
+                                                value={search}
+                                            />
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    <table
+                                        id="simpletable"
+                                        className="table"
+                                        role="grid"
+                                        aria-describedby="simpletable_info"
+                                    >
+                                        <thead>
+                                            <tr role="row">
+                                                <th className="custom-head">
+                                                    Menu Icon
+                                                </th>
+                                                <th>Menu Name</th>
+                                                <th>Menu Slug</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {menu_list.map((menu, i) => (
+                                                <tr key={i}>
+                                                    <td>
+                                                        <img
+                                                            className="image-list rounded-circle"
+                                                            src={menu.menu_icon}
+                                                        />
+                                                    </td>
+                                                    <td>{menu.menu_name}</td>
+                                                    <td>{menu.menu_slug}</td>
+                                                    <td>
+                                                        <button
+                                                            className="btn btn-danger"
+                                                            onClick={() =>
+                                                                DeleteHandler(
+                                                                    menu.menu_id
+                                                                )
+                                                            }
+                                                        >
+                                                            <i className="fa fa-trash"></i>
+                                                        </button>{" "}
+                                                        <button
+                                                            className="btn btn-info"
+                                                            data-toggle="modal"
+                                                            data-target="#edit_modal"
+                                                            onClick={() =>
+                                                                EditHandler(
+                                                                    menu.menu_id,
+                                                                    menu,
+                                                                    i
+                                                                )
+                                                            }
+                                                        >
+                                                            <i className="fa fa-edit"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Menu Icon</th>
+                                                <th>Menu Name</th>
+                                                <th>Menu Slug</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-sm-12 col-md-5"></div>
+                                <div className="col-sm-12 col-md-7">
+                                    <nav aria-label="Page navigation example">
+                                        <Pagination
+                                            itemClass="page-item"
+                                            linkClass="page-link"
+                                            activePage={activePage}
+                                            itemsCountPerPage={
+                                                itemsCountPerPage
+                                            }
+                                            totalItemsCount={totalItemsCount}
+                                            pageRangeDisplayed={3}
+                                            onChange={handlePageChange}
+                                        />
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </Fragment>
     );
 };

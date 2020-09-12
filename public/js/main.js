@@ -37703,7 +37703,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _MenuList__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./MenuList */ "./resources/js/components/Menu/MenuList.js");
+/* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-js-pagination */ "./node_modules/react-js-pagination/dist/Pagination.js");
+/* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_js_pagination__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var sweetalert__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! sweetalert */ "./node_modules/sweetalert/dist/sweetalert.min.js");
 /* harmony import */ var sweetalert__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(sweetalert__WEBPACK_IMPORTED_MODULE_4__);
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
@@ -37755,31 +37756,47 @@ var Menu = function Menu() {
       current_row = _useState12[0],
       setCurrentRaw = _useState12[1];
 
-  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
+  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(1),
       _useState14 = _slicedToArray(_useState13, 2),
-      error = _useState14[0],
-      setError = _useState14[1];
+      page = _useState14[0],
+      setPage = _useState14[1];
 
   var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
       _useState16 = _slicedToArray(_useState15, 2),
-      menu_list = _useState16[0],
-      setMenuList = _useState16[1];
+      error = _useState16[0],
+      setError = _useState16[1];
 
-  var searchHandler = function searchHandler(e) {
-    setSearch(e.target.value);
-  };
+  var _useState17 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
+      _useState18 = _slicedToArray(_useState17, 2),
+      menu_list = _useState18[0],
+      setMenuList = _useState18[1];
 
-  var CurrentRowHandler = function CurrentRowHandler(e) {
-    console.log("ok");
-    setCurrentRaw(e.target.value);
-    GetMenuList();
+  var _useState19 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(1),
+      _useState20 = _slicedToArray(_useState19, 2),
+      activePage = _useState20[0],
+      setActivePage = _useState20[1];
+
+  var _useState21 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(8),
+      _useState22 = _slicedToArray(_useState21, 2),
+      itemsCountPerPage = _useState22[0],
+      setItemsCountPerPage = _useState22[1];
+
+  var _useState23 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(450),
+      _useState24 = _slicedToArray(_useState23, 2),
+      totalItemsCount = _useState24[0],
+      setTotalItemsCount = _useState24[1];
+
+  var handlePageChange = function handlePageChange(pageNumber) {
+    setPage(pageNumber);
   };
 
   var GetMenuList = function GetMenuList() {
-    var main_url = "menu?q=" + search + "&row=" + current_row;
+    var main_url = "menu?q=" + search + "&row=" + current_row + "&page=" + page;
     axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(main_url).then(function (response) {
-      // console.log(response.data.data);
       setMenuList(response.data.data);
+      setActivePage(response.data.meta.current_page);
+      setItemsCountPerPage(response.data.meta.per_page);
+      setTotalItemsCount(response.data.meta.total);
     })["catch"](function (error) {
       console.log(error);
     });
@@ -37787,7 +37804,7 @@ var Menu = function Menu() {
 
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
     GetMenuList();
-  }, []);
+  }, [current_row, search, page]);
 
   var onImageChangeHandler = function onImageChangeHandler(e) {
     var files = e.target.files[0];
@@ -37850,15 +37867,12 @@ var Menu = function Menu() {
     });
   };
 
-  var EditHandler = function EditHandler(id) {
-    axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/menu/edit/" + id).then(function (response) {
-      // console.log(response);
-      setMenuName(response.data.menu_name);
-      setMenuIcon(response.data.menu_icon);
-      setMenuId(response.data.menu_id);
-    })["catch"](function (error) {
-      console.log(error);
-    });
+  var EditHandler = function EditHandler(id, data, index) {
+    menu_list.menu_id = id;
+    var value = JSON.parse(JSON.stringify(data));
+    setMenuName(value.menu_name);
+    setMenuIcon(value.menu_icon);
+    setMenuId(value.menu_id);
   };
 
   var updateHandler = function updateHandler(e) {
@@ -38049,46 +38063,11 @@ var Menu = function Menu() {
   }, "Close"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
     type: "submit",
     className: "btn btn-primary"
-  }, "Save changes")))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_MenuList__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    menu_list: menu_list,
-    Delete: DeleteHandler,
-    Edit: EditHandler,
-    onChangeSearch: searchHandler,
-    SearchValue: search,
-    SearchKeyUp: GetMenuList,
-    CurrentRow: CurrentRowHandler
-  }));
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (Menu);
-
-/***/ }),
-
-/***/ "./resources/js/components/Menu/MenuList.js":
-/*!**************************************************!*\
-  !*** ./resources/js/components/Menu/MenuList.js ***!
-  \**************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Menu_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Menu.css */ "./resources/js/components/Menu/Menu.css");
-/* harmony import */ var _Menu_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_Menu_css__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-js-pagination */ "./node_modules/react-js-pagination/dist/Pagination.js");
-/* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_js_pagination__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-
-var MenuList = function MenuList(props) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+  }, "Save changes")))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "card"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "card-header d-block"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h3", null, "Zero Configuration")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h3", null, "Menu List")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "card-body"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "dt-responsive"
@@ -38106,18 +38085,15 @@ var MenuList = function MenuList(props) {
     name: "simpletable_length",
     "aria-controls": "simpletable",
     className: "custom-select custom-select-sm form-control form-control-sm",
-    onChange: props.CurrentRow
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
-    value: 8
-  }, "8"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
-    value: 10
-  }, "10"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
-    value: 25
-  }, "25"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
-    value: 50
-  }, "50"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
-    value: 100
-  }, "100")), "entries"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    onChange: function onChange(e) {
+      return setCurrentRaw(e.target.value);
+    }
+  }, select_row.map(function (rows, i) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+      key: i,
+      value: rows
+    }, rows);
+  })), "entries"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "col-sm-12 col-md-6"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     id: "simpletable_filter",
@@ -38127,9 +38103,10 @@ var MenuList = function MenuList(props) {
     className: "form-control form-control-sm",
     placeholder: "Type to filter...",
     "aria-controls": "simpletable",
-    onChange: props.onChangeSearch,
-    value: props.SearchValue,
-    onKeyUp: props.SearchKeyUp
+    onChange: function onChange(e) {
+      return setSearch(e.target.value);
+    },
+    value: search
   }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -38143,7 +38120,7 @@ var MenuList = function MenuList(props) {
     role: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
     className: "custom-head"
-  }, "Menu Icon"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Menu Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Menu Slug"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Action"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tbody", null, props.menu_list.map(function (menu, i) {
+  }, "Menu Icon"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Menu Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Menu Slug"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Action"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tbody", null, menu_list.map(function (menu, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", {
       key: i
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
@@ -38152,7 +38129,7 @@ var MenuList = function MenuList(props) {
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, menu.menu_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, menu.menu_slug), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
       className: "btn btn-danger",
       onClick: function onClick() {
-        return props.Delete(menu.menu_id);
+        return DeleteHandler(menu.menu_id);
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
       className: "fa fa-trash"
@@ -38161,7 +38138,7 @@ var MenuList = function MenuList(props) {
       "data-toggle": "modal",
       "data-target": "#edit_modal",
       onClick: function onClick() {
-        return props.Edit(menu.menu_id);
+        return EditHandler(menu.menu_id, menu, i);
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
       className: "fa fa-edit"
@@ -38172,20 +38149,20 @@ var MenuList = function MenuList(props) {
     className: "col-sm-12 col-md-5"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "col-sm-12 col-md-7"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_2___default.a, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("nav", {
+    "aria-label": "Page navigation example"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_3___default.a, {
     itemClass: "page-item",
     linkClass: "page-link",
-    activePage: props.activePage,
-    itemsCountPerPage: props.itemsCountPerPage,
-    totalItemsCount: props.menu_list.length,
-    pageRangeDisplayed: 3 // onChange={this.handlePageChange.bind(
-    //     this
-    // )}
-
-  }))))))));
+    activePage: activePage,
+    itemsCountPerPage: itemsCountPerPage,
+    totalItemsCount: totalItemsCount,
+    pageRangeDisplayed: 3,
+    onChange: handlePageChange
+  })))))))));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (MenuList);
+/* harmony default export */ __webpack_exports__["default"] = (Menu);
 
 /***/ }),
 

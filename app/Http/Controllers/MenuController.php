@@ -94,8 +94,7 @@ class MenuController extends Controller
      */
     public function edit($id)
     {
-        $menu = Menu::findOrFail($id);
-        return response()->json($menu, 201);
+        //
     }
 
     /**
