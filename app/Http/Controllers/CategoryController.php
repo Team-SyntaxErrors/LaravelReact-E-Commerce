@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Helpers\Helper;
 use App\Http\Requests\CategoryRequest;
+use App\Http\Resources\CategoryResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class CategoryController extends Controller
 {
@@ -36,7 +41,36 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        //
+        // dd($request->all());
+        $category_model = new Category();
+        $requested_data = $request->all();
+        if ($request->category_icon) {
+            $position = strpos($request->category_icon, ";");
+            $sub_str = substr($request->category_icon, 0, $position);
+            $extension = explode("/", $sub_str);
+            $allowed = Helper::ImageExtension($extension[1]);
+            if ($allowed == "Allowed") {
+                $upload_path = "backend_assets/images/category_icon/" . time() . "." . $extension[1];
+                $image_upload = Image::make($request->category_icon)->resize(300, 300);
+                $image_upload->save($upload_path);
+                $requested_data = Arr::set($requested_data, "category_icon", $upload_path);
+                $category_slug = Str::slug($request->category_name, '-');
+                $requested_data = Arr::set($requested_data, "category_slug", $category_slug);
+                $category_model->fill($requested_data)->save();
+                $status = 201;
+                $response = [
+                    "status" => $status,
+                    "data"   => new CategoryResource($category_model),
+                ];
+            } else {
+                $status = 400;
+                $response = [
+                    'errors' => ['project_logo_ext' => $allowed],
+                    'status' => 400,
+                ];
+            }
+        }
+        return response()->json($response, $status);
     }
 
     /**

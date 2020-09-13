@@ -187,7 +187,7 @@ const Menu = () => {
                                                 <label className="col-lg-6 control-label">
                                                     Menu Icon:
                                                 </label>
-                                                <div className="col-lg-10">
+                                                <div className="col-lg-12">
                                                     <input
                                                         type="file"
                                                         className="form-control"
@@ -205,7 +205,7 @@ const Menu = () => {
                                                 <label className="col-lg-6 control-label">
                                                     Menu Name:
                                                 </label>
-                                                <div className="col-lg-10">
+                                                <div className="col-lg-12">
                                                     <input
                                                         type="text"
                                                         className="form-control"
@@ -297,7 +297,7 @@ const Menu = () => {
                                                 <label className="col-lg-6 control-label">
                                                     Menu Icon:
                                                 </label>
-                                                <div className="col-lg-10">
+                                                <div className="col-lg-12">
                                                     <input
                                                         type="file"
                                                         className="form-control"
@@ -315,7 +315,7 @@ const Menu = () => {
                                                 <label className="col-lg-6 control-label">
                                                     Menu Name:
                                                 </label>
-                                                <div className="col-lg-10">
+                                                <div className="col-lg-12">
                                                     <input
                                                         type="text"
                                                         className="form-control"
