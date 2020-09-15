@@ -8,6 +8,7 @@ use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 
@@ -18,9 +19,10 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $category = Category::Search($request->q)->paginate($request->row);
+        return response()->json($category, 201);
     }
 
     /**
@@ -102,9 +104,49 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, $id)
     {
-        //
+        // dd($request->all());
+        $category_model = Category::findOrFail($id);
+        $requested_data = $request->all();
+        if ($request->category_icon != $category_model->category_icon) {
+            $position = strpos($request->category_icon, ";");
+            $sub_str = substr($request->category_icon, 0, $position);
+            $extension = explode("/", $sub_str);
+            $allowed = Helper::ImageExtension($extension[1]);
+            if ($allowed == "Allowed") {
+                if (File::exists($category_model->category_icon)) {
+                    File::delete($category_model->category_icon);
+                }
+                $upload_path = "backend_assets/images/category_icon/" . time() . "." . $extension[1];
+                $image_upload = Image::make($request->category_icon)->resize(300, 300);
+                $image_upload->save($upload_path);
+                $requested_data = Arr::set($requested_data, "category_icon", $upload_path);
+                $category_slug = Str::slug($request->category_name, '-');
+                $requested_data = Arr::set($requested_data, "category_slug", $category_slug);
+                $category_model->fill($requested_data)->save();
+                $status = 201;
+                $response = [
+                    "status" => $status,
+                    "data"   => new CategoryResource($category_model),
+                ];
+            } else {
+                $status = 400;
+                $response = [
+                    'errors' => ['project_logo_ext' => $allowed],
+                    'status' => 400,
+                ];
+            }
+        }
+        $category_slug = Str::slug($request->category_name, '-');
+        $requested_data = Arr::set($requested_data, "category_slug", $category_slug);
+        $category_model->fill($requested_data)->save();
+        $status = 201;
+        $response = [
+            "status" => $status,
+            "data"   => new CategoryResource($category_model),
+        ];
+        return response()->json($response, $status);
     }
 
     /**
@@ -113,8 +155,13 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        //
+        $category = Category::findOrFail($id);
+        if (File::exists($category->category_icon)) {
+            File::delete($category->category_icon);
+        }
+        $category->delete();
+        return response()->json(null, 204);
     }
 }
