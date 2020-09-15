@@ -89,6 +89,7 @@ const Category = () => {
         let FORM = category_form;
         Object.keys(FORM).forEach(function (key, index) {
             FORM[key] = '';
+
         });
     }
     // Data Submit
