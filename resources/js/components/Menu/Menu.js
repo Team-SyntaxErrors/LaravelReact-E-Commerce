@@ -25,7 +25,7 @@ const Menu = () => {
     };
 
     const GetMenuList = () => {
-        const main_url = "menu?q=" + search + "&row=" + current_row + "&page=" + page;
+        const main_url = `menu?q=${search}&row=${current_row}&page=${page}`;
         Axios.get(main_url)
             .then(response => {
                 setMenuList(response.data.data);
@@ -77,7 +77,7 @@ const Menu = () => {
     const DeleteHandler = id => {
         swal({
             title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover this imaginary file!",
+            text: `Once deleted, you will not be able to recover this imaginary file!`,
             icon: "warning",
             buttons: true,
             dangerMode: true
@@ -86,7 +86,11 @@ const Menu = () => {
                 Axios.delete("/menu/" + id)
                     .then(response => {
                         if (response.status === 204) {
-                            swal("Deleted!", "Menu Has been Deleted", "success");
+                            swal(
+                                "Deleted!",
+                                "Menu Has been Deleted",
+                                "success"
+                            );
                         } else {
                             swal("Opps", "Something Went Wrong", "warning");
                         }
@@ -188,7 +192,9 @@ const Menu = () => {
                                                     <input
                                                         type="file"
                                                         className="form-control"
-                                                        onChange={onImageChangeHandler}
+                                                        onChange={
+                                                            onImageChangeHandler
+                                                        }
                                                         placeholder="Enter Menu Icon"
                                                     />
                                                     <span className="text-danger">
@@ -296,7 +302,9 @@ const Menu = () => {
                                                     <input
                                                         type="file"
                                                         className="form-control"
-                                                        onChange={onImageChangeHandler}
+                                                        onChange={
+                                                            onImageChangeHandler
+                                                        }
                                                         placeholder="Enter Menu Icon"
                                                     />
                                                     <span className="text-danger">
@@ -380,7 +388,10 @@ const Menu = () => {
                                                 }
                                             >
                                                 {select_row.map((rows, i) => (
-                                                    <option key={i} value={rows}>
+                                                    <option
+                                                        key={i}
+                                                        value={rows}
+                                                    >
                                                         {rows}
                                                     </option>
                                                 ))}
@@ -490,7 +501,9 @@ const Menu = () => {
                                             itemClass="paginate_button page-item"
                                             linkClass="page-link"
                                             activePage={activePage}
-                                            itemsCountPerPage={itemsCountPerPage}
+                                            itemsCountPerPage={
+                                                itemsCountPerPage
+                                            }
                                             totalItemsCount={totalItemsCount}
                                             pageRangeDisplayed={3}
                                             onChange={handlePageChange}

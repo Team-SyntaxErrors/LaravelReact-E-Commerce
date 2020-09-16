@@ -36311,7 +36311,7 @@ var Category = function Category() {
   }, []); // Category List Get
 
   var GetCategoryList = function GetCategoryList() {
-    var main_url = "category?q=" + search + "&row=" + current_row + "&page=" + page;
+    var main_url = "category?q=".concat(search, "&row=").concat(current_row, "&page=").concat(page);
     axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(main_url).then(function (response) {
       setCategoryList(response.data.data);
       setActivePage(response.data.current_page);
@@ -36361,7 +36361,7 @@ var Category = function Category() {
     setErrors([]);
     var FORM = category_form;
     Object.keys(FORM).forEach(function (key, index) {
-      FORM[key] = '';
+      FORM[key] = "";
     });
   }; // Data Submit
 
@@ -38381,7 +38381,7 @@ var Menu = function Menu() {
   };
 
   var GetMenuList = function GetMenuList() {
-    var main_url = "menu?q=" + search + "&row=" + current_row + "&page=" + page;
+    var main_url = "menu?q=".concat(search, "&row=").concat(current_row, "&page=").concat(page);
     axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(main_url).then(function (response) {
       setMenuList(response.data.data);
       setActivePage(response.data.meta.current_page);
