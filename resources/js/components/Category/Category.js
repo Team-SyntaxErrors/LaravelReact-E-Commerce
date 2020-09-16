@@ -44,7 +44,7 @@ const Category = () => {
     }, []);
     // Category List Get
     const GetCategoryList = () => {
-        const main_url = "category?q=" + search + "&row=" + current_row + "&page=" + page;
+        const main_url = `category?q=${search}&row=${current_row}&page=${page}`;
         Axios.get(main_url)
             .then(response => {
                 setCategoryList(response.data.data);
@@ -60,7 +60,7 @@ const Category = () => {
         GetCategoryList();
         return () => {
             setCategoryList([]);
-        }
+        };
     }, [current_row, search, page]);
     // Image render
     const onImageChangeHandler = e => {
@@ -90,11 +90,10 @@ const Category = () => {
     const ClearFrom = () => {
         setErrors([]);
         let FORM = category_form;
-        Object.keys(FORM).forEach(function (key, index) {
-            FORM[key] = '';
-
+        Object.keys(FORM).forEach(function(key, index) {
+            FORM[key] = "";
         });
-    }
+    };
     // Data Submit
     const submitHandler = e => {
         e.preventDefault();
@@ -115,7 +114,7 @@ const Category = () => {
     const DeleteHandler = id => {
         swal({
             title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover this imaginary file!",
+            text: `Once deleted, you will not be able to recover this imaginary file!`,
             icon: "warning",
             buttons: true,
             dangerMode: true
@@ -124,7 +123,11 @@ const Category = () => {
                 Axios.delete("/category/" + id)
                     .then(response => {
                         if (response.status === 204) {
-                            swal("Deleted!", "Category Has been Deleted", "success");
+                            swal(
+                                "Deleted!",
+                                "Category Has been Deleted",
+                                "success"
+                            );
                         } else {
                             swal("Opps", "Something Went Wrong", "warning");
                         }
@@ -244,17 +247,25 @@ const Category = () => {
                                                         onChange={e =>
                                                             setCategory_form({
                                                                 ...category_form,
-                                                                menu_id: e.target.value
+                                                                menu_id:
+                                                                    e.target
+                                                                        .value
                                                             })
                                                         }
                                                     >
-                                                        <option value defaultValue hidden>
+                                                        <option
+                                                            value
+                                                            defaultValue
+                                                            hidden
+                                                        >
                                                             --Select One--
                                                         </option>
                                                         {Menu.map((menu, i) => (
                                                             <option
                                                                 key={i}
-                                                                value={menu.menu_id}
+                                                                value={
+                                                                    menu.menu_id
+                                                                }
                                                             >
                                                                 {menu.menu_name}
                                                             </option>
@@ -276,7 +287,9 @@ const Category = () => {
                                                         onChange={e =>
                                                             setCategory_form({
                                                                 ...category_form,
-                                                                category_name: e.target.value
+                                                                category_name:
+                                                                    e.target
+                                                                        .value
                                                             })
                                                         }
                                                         value={
@@ -384,7 +397,9 @@ const Category = () => {
                                                         onChange={e =>
                                                             setEditForm({
                                                                 ...EditForm,
-                                                                menu_id: e.target.value
+                                                                menu_id:
+                                                                    e.target
+                                                                        .value
                                                             })
                                                         }
                                                         value={EditForm.menu_id}
@@ -419,7 +434,9 @@ const Category = () => {
                                                         onChange={e =>
                                                             setEditForm({
                                                                 ...EditForm,
-                                                                category_name: e.target.value
+                                                                category_name:
+                                                                    e.target
+                                                                        .value
                                                             })
                                                         }
                                                         value={
@@ -483,11 +500,16 @@ const Category = () => {
                                                 aria-controls="simpletable"
                                                 className="custom-select custom-select-sm form-control form-control-sm"
                                                 onChange={e =>
-                                                    setCurrentRaw(e.target.value)
+                                                    setCurrentRaw(
+                                                        e.target.value
+                                                    )
                                                 }
                                             >
                                                 {select_row.map((rows, i) => (
-                                                    <option key={i} value={rows}>
+                                                    <option
+                                                        key={i}
+                                                        value={rows}
+                                                    >
                                                         {rows}
                                                     </option>
                                                 ))}
@@ -545,11 +567,21 @@ const Category = () => {
                                                         <td>
                                                             <img
                                                                 className="image-list rounded-circle"
-                                                                src={category_data.category_icon}
+                                                                src={
+                                                                    category_data.category_icon
+                                                                }
                                                             />
                                                         </td>
-                                                        <td>{category_data.category_name}</td>
-                                                        <td>{category_data.category_slug}</td>
+                                                        <td>
+                                                            {
+                                                                category_data.category_name
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            {
+                                                                category_data.category_slug
+                                                            }
+                                                        </td>
                                                         <td>
                                                             <button
                                                                 className="btn btn-icon btn btn-danger"
@@ -599,7 +631,9 @@ const Category = () => {
                                             itemClass="paginate_button page-item"
                                             linkClass="page-link"
                                             activePage={activePage}
-                                            itemsCountPerPage={itemsCountPerPage}
+                                            itemsCountPerPage={
+                                                itemsCountPerPage
+                                            }
                                             totalItemsCount={totalItemsCount}
                                             pageRangeDisplayed={3}
                                             onChange={handlePageChange}
