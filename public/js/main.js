@@ -36324,6 +36324,9 @@ var Category = function Category() {
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     GetCategoryList();
+    return function () {
+      setCategoryList([]);
+    };
   }, [current_row, search, page]); // Image render
 
   var onImageChangeHandler = function onImageChangeHandler(e) {

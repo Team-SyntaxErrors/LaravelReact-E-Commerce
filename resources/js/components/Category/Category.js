@@ -58,6 +58,9 @@ const Category = () => {
     };
     useEffect(() => {
         GetCategoryList();
+        return () => {
+            setCategoryList([]);
+        }
     }, [current_row, search, page]);
     // Image render
     const onImageChangeHandler = e => {
