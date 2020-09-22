@@ -80,6 +80,23 @@ function SideBar() {
                                     <span>Category</span>
                                 </Link>
                             </div>
+                            <div
+                                className={
+                                    useLocation().pathname == "/subcategories"
+                                        ? "nav-item active"
+                                        : "nav-item"
+                                }
+                            >
+                                <Link
+                                    to={{
+                                        pathname: "/subcategories",
+                                        state: "SubCategory"
+                                    }}
+                                >
+                                    <i className="ik ik-server"></i>
+                                    <span>Sub Category</span>
+                                </Link>
+                            </div>
                             <div className="nav-item has-sub">
                                 <a href="#">
                                     <i className="ik ik-layers" />
