@@ -5,10 +5,11 @@ import React, { Fragment, useEffect, useState } from "react";
 import Axios from "axios";
 import Pagination from "react-js-pagination";
 import swal from "sweetalert";
+import useForms from "../customHooks/useForms";
 
 const Category = () => {
     const [Menu, setMenu] = useState([]);
-    const [category_form, setCategory_form] = useState({
+    const [category_form, handleChange] = useForms({
         menu_id: "",
         category_name: "",
         category_icon: ""
@@ -22,7 +23,7 @@ const Category = () => {
     const [activePage, setActivePage] = useState(1);
     const [itemsCountPerPage, setItemsCountPerPage] = useState(8);
     const [totalItemsCount, setTotalItemsCount] = useState(450);
-    const [EditForm, setEditForm] = useState({
+    const [EditForm, EditHandleChange, setEditForm] = useForms({
         menu_id: "",
         category_name: "",
         category_icon: ""
@@ -64,30 +65,6 @@ const Category = () => {
             setCategoryList([]);
         };
     }, [current_row, search, page]);
-    // Image render
-    const onImageChangeHandler = e => {
-        let files = e.target.files[0];
-        let reader = new FileReader();
-        reader.onload = e => {
-            setCategory_form({
-                ...category_form,
-                category_icon: e.target.result
-            });
-        };
-        reader.readAsDataURL(files);
-    };
-    // Edit Image render
-    const onEditImageChangeHandler = e => {
-        let files = e.target.files[0];
-        let reader = new FileReader();
-        reader.onload = e => {
-            setEditForm({
-                ...EditForm,
-                category_icon: e.target.result
-            });
-        };
-        reader.readAsDataURL(files);
-    };
     // Clear From
     const ClearFrom = () => {
         setErrors([]);
@@ -148,7 +125,6 @@ const Category = () => {
         CategoryList.category_id = id;
         let value = JSON.parse(JSON.stringify(data));
         setEditForm(value);
-        console.log(EditForm);
     };
     // Category Data Update
     const updateHandler = e => {
@@ -185,7 +161,7 @@ const Category = () => {
                     id="add_modal"
                     tabIndex={-1}
                     role="dialog"
-                    aria-labelled="exampleModalLongLabel"
+                    aria-labelledby="exampleModalLongLabel"
                     aria-hidden="true"
                 >
                     <div className="modal-dialog modal-lg" role="document">
@@ -228,10 +204,9 @@ const Category = () => {
                                                 <div className="col-lg-12">
                                                     <input
                                                         type="file"
+                                                        name="category_icon"
                                                         className="form-control"
-                                                        onChange={
-                                                            onImageChangeHandler
-                                                        }
+                                                        onChange={handleChange}
                                                         placeholder="Enter Menu Icon"
                                                     />
                                                     <span className="text-danger">
@@ -245,15 +220,9 @@ const Category = () => {
                                                 </label>
                                                 <div className="col-lg-12">
                                                     <select
+                                                        name="menu_id"
                                                         className="form-control"
-                                                        onChange={e =>
-                                                            setCategory_form({
-                                                                ...category_form,
-                                                                menu_id:
-                                                                    e.target
-                                                                        .value
-                                                            })
-                                                        }
+                                                        onChange={handleChange}
                                                     >
                                                         <option
                                                             value
@@ -285,15 +254,9 @@ const Category = () => {
                                                 <div className="col-lg-12">
                                                     <input
                                                         type="text"
+                                                        name="category_name"
                                                         className="form-control"
-                                                        onChange={e =>
-                                                            setCategory_form({
-                                                                ...category_form,
-                                                                category_name:
-                                                                    e.target
-                                                                        .value
-                                                            })
-                                                        }
+                                                        onChange={handleChange}
                                                         value={
                                                             category_form.category_name
                                                         }
@@ -335,7 +298,7 @@ const Category = () => {
                     id="edit_modal"
                     tabIndex={-1}
                     role="dialog"
-                    aria-labelled="exampleModalLongLabel"
+                    aria-labelledby="exampleModalLongLabel"
                     aria-hidden="true"
                 >
                     <div className="modal-dialog modal-lg" role="document">
@@ -378,9 +341,10 @@ const Category = () => {
                                                 <div className="col-lg-12">
                                                     <input
                                                         type="file"
+                                                        name="category_icon"
                                                         className="form-control"
                                                         onChange={
-                                                            onEditImageChangeHandler
+                                                            EditHandleChange
                                                         }
                                                         placeholder="Enter Menu Icon"
                                                     />
@@ -396,13 +360,9 @@ const Category = () => {
                                                 <div className="col-lg-12">
                                                     <select
                                                         className="form-control"
-                                                        onChange={e =>
-                                                            setEditForm({
-                                                                ...EditForm,
-                                                                menu_id:
-                                                                    e.target
-                                                                        .value
-                                                            })
+                                                        name="menu_id"
+                                                        onChange={
+                                                            EditHandleChange
                                                         }
                                                         value={EditForm.menu_id}
                                                     >
@@ -432,14 +392,10 @@ const Category = () => {
                                                 <div className="col-lg-12">
                                                     <input
                                                         type="text"
+                                                        name="category_name"
                                                         className="form-control"
-                                                        onChange={e =>
-                                                            setEditForm({
-                                                                ...EditForm,
-                                                                category_name:
-                                                                    e.target
-                                                                        .value
-                                                            })
+                                                        onChange={
+                                                            EditHandleChange
                                                         }
                                                         value={
                                                             EditForm.category_name
