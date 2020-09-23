@@ -36201,12 +36201,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_js_pagination__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var sweetalert__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! sweetalert */ "./node_modules/sweetalert/dist/sweetalert.min.js");
 /* harmony import */ var sweetalert__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(sweetalert__WEBPACK_IMPORTED_MODULE_3__);
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+/* harmony import */ var _customHooks_useForms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../customHooks/useForms */ "./resources/js/components/customHooks/useForms.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -36224,74 +36219,76 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var Category = function Category() {
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
       Menu = _useState2[0],
       setMenu = _useState2[1];
 
-  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
+  var _useForms = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_4__["default"])({
     menu_id: "",
     category_name: "",
     category_icon: ""
   }),
+      _useForms2 = _slicedToArray(_useForms, 2),
+      category_form = _useForms2[0],
+      handleChange = _useForms2[1];
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState4 = _slicedToArray(_useState3, 2),
-      category_form = _useState4[0],
-      setCategory_form = _useState4[1];
+      Errors = _useState4[0],
+      setErrors = _useState4[1];
 
   var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState6 = _slicedToArray(_useState5, 2),
-      Errors = _useState6[0],
-      setErrors = _useState6[1];
+      CategoryList = _useState6[0],
+      setCategoryList = _useState6[1];
 
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""),
       _useState8 = _slicedToArray(_useState7, 2),
-      CategoryList = _useState8[0],
-      setCategoryList = _useState8[1];
+      search = _useState8[0],
+      setSearch = _useState8[1];
 
-  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""),
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([8, 10, 20, 30, 40, 50]),
       _useState10 = _slicedToArray(_useState9, 2),
-      search = _useState10[0],
-      setSearch = _useState10[1];
+      select_row = _useState10[0],
+      setSelectRow = _useState10[1];
 
-  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([8, 10, 20, 30, 40, 50]),
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(8),
       _useState12 = _slicedToArray(_useState11, 2),
-      select_row = _useState12[0],
-      setSelectRow = _useState12[1];
+      current_row = _useState12[0],
+      setCurrentRaw = _useState12[1];
 
-  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(8),
+  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(1),
       _useState14 = _slicedToArray(_useState13, 2),
-      current_row = _useState14[0],
-      setCurrentRaw = _useState14[1];
+      page = _useState14[0],
+      setPage = _useState14[1];
 
   var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(1),
       _useState16 = _slicedToArray(_useState15, 2),
-      page = _useState16[0],
-      setPage = _useState16[1];
+      activePage = _useState16[0],
+      setActivePage = _useState16[1];
 
-  var _useState17 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(1),
+  var _useState17 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(8),
       _useState18 = _slicedToArray(_useState17, 2),
-      activePage = _useState18[0],
-      setActivePage = _useState18[1];
+      itemsCountPerPage = _useState18[0],
+      setItemsCountPerPage = _useState18[1];
 
-  var _useState19 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(8),
+  var _useState19 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(450),
       _useState20 = _slicedToArray(_useState19, 2),
-      itemsCountPerPage = _useState20[0],
-      setItemsCountPerPage = _useState20[1];
+      totalItemsCount = _useState20[0],
+      setTotalItemsCount = _useState20[1];
 
-  var _useState21 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(450),
-      _useState22 = _slicedToArray(_useState21, 2),
-      totalItemsCount = _useState22[0],
-      setTotalItemsCount = _useState22[1];
-
-  var _useState23 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
+  var _useForms3 = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_4__["default"])({
     menu_id: "",
     category_name: "",
     category_icon: ""
   }),
-      _useState24 = _slicedToArray(_useState23, 2),
-      EditForm = _useState24[0],
-      setEditForm = _useState24[1];
+      _useForms4 = _slicedToArray(_useForms3, 3),
+      EditForm = _useForms4[0],
+      EditHandleChange = _useForms4[1],
+      setEditForm = _useForms4[2];
 
   var handlePageChange = function handlePageChange(pageNumber) {
     setPage(pageNumber);
@@ -36327,35 +36324,7 @@ var Category = function Category() {
     return function () {
       setCategoryList([]);
     };
-  }, [current_row, search, page]); // Image render
-
-  var onImageChangeHandler = function onImageChangeHandler(e) {
-    var files = e.target.files[0];
-    var reader = new FileReader();
-
-    reader.onload = function (e) {
-      setCategory_form(_objectSpread(_objectSpread({}, category_form), {}, {
-        category_icon: e.target.result
-      }));
-    };
-
-    reader.readAsDataURL(files);
-  }; // Edit Image render
-
-
-  var onEditImageChangeHandler = function onEditImageChangeHandler(e) {
-    var files = e.target.files[0];
-    var reader = new FileReader();
-
-    reader.onload = function (e) {
-      setEditForm(_objectSpread(_objectSpread({}, EditForm), {}, {
-        category_icon: e.target.result
-      }));
-    };
-
-    reader.readAsDataURL(files);
-  }; // Clear From
-
+  }, [current_row, search, page]); // Clear From
 
   var ClearFrom = function ClearFrom() {
     setErrors([]);
@@ -36412,7 +36381,6 @@ var Category = function Category() {
     CategoryList.category_id = id;
     var value = JSON.parse(JSON.stringify(data));
     setEditForm(value);
-    console.log(EditForm);
   }; // Category Data Update
 
 
@@ -36488,8 +36456,9 @@ var Category = function Category() {
     className: "col-lg-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "file",
+    name: "category_icon",
     className: "form-control",
-    onChange: onImageChangeHandler,
+    onChange: handleChange,
     placeholder: "Enter Menu Icon"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "text-danger"
@@ -36500,12 +36469,9 @@ var Category = function Category() {
   }, "Menu:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "col-lg-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+    name: "menu_id",
     className: "form-control",
-    onChange: function onChange(e) {
-      return setCategory_form(_objectSpread(_objectSpread({}, category_form), {}, {
-        menu_id: e.target.value
-      }));
-    }
+    onChange: handleChange
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
     value: true,
     defaultValue: true,
@@ -36525,12 +36491,9 @@ var Category = function Category() {
     className: "col-lg-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "text",
+    name: "category_name",
     className: "form-control",
-    onChange: function onChange(e) {
-      return setCategory_form(_objectSpread(_objectSpread({}, category_form), {}, {
-        category_name: e.target.value
-      }));
-    },
+    onChange: handleChange,
     value: category_form.category_name,
     placeholder: "Enter Menu Name"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
@@ -36594,8 +36557,9 @@ var Category = function Category() {
     className: "col-lg-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "file",
+    name: "category_icon",
     className: "form-control",
-    onChange: onEditImageChangeHandler,
+    onChange: EditHandleChange,
     placeholder: "Enter Menu Icon"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "text-danger"
@@ -36607,11 +36571,8 @@ var Category = function Category() {
     className: "col-lg-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
     className: "form-control",
-    onChange: function onChange(e) {
-      return setEditForm(_objectSpread(_objectSpread({}, EditForm), {}, {
-        menu_id: e.target.value
-      }));
-    },
+    name: "menu_id",
+    onChange: EditHandleChange,
     value: EditForm.menu_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
     value: true,
@@ -36631,12 +36592,9 @@ var Category = function Category() {
     className: "col-lg-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "text",
+    name: "category_name",
     className: "form-control",
-    onChange: function onChange(e) {
-      return setEditForm(_objectSpread(_objectSpread({}, EditForm), {}, {
-        category_name: e.target.value
-      }));
-    },
+    onChange: EditHandleChange,
     value: EditForm.category_name,
     placeholder: "Enter Menu Name"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
@@ -38757,6 +38715,70 @@ var Menu = function Menu() {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Menu);
+
+/***/ }),
+
+/***/ "./resources/js/components/customHooks/useForms.js":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/customHooks/useForms.js ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+var useForms = function useForms(initialValues) {
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(initialValues),
+      _useState2 = _slicedToArray(_useState, 2),
+      values = _useState2[0],
+      setValues = _useState2[1];
+
+  var SetValues = function SetValues(e) {
+    if (e.target.files) {
+      var files = e.target.files[0];
+      var name = e.target.name;
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        setValues(_objectSpread(_objectSpread({}, values), {}, _defineProperty({}, name, e.target.result)));
+      };
+
+      reader.readAsDataURL(files);
+    } else {
+      setValues(_objectSpread(_objectSpread({}, values), {}, _defineProperty({}, e.target.name, e.target.value)));
+    }
+  };
+
+  var SetObject = function SetObject(initialValues) {
+    setValues(initialValues);
+  };
+
+  return [values, SetValues, SetObject];
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (useForms);
 
 /***/ }),
 
