@@ -14,4 +14,14 @@ class Category extends Model
     {
         return $query->where('category_name', 'LIKE', '%' . $q . '%');
     }
+
+    public function menus()
+    {
+        return $this->belongsTo('App\Menu', 'menu_id');
+    }
+
+    public function subcategories()
+    {
+        return $this->hasMany('App\SubCategory', 'category_id');
+    }
 }

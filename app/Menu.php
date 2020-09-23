@@ -14,4 +14,14 @@ class Menu extends Model
     {
         return $query->where('menu_name', 'LIKE', '%' . $q . '%');
     }
+
+    public function categories()
+    {
+        return $this->hasMany("App\Category", 'menu_id');
+    }
+
+    public function subcategories()
+    {
+        return $this->hasMany("App\SubCategory", 'menu_id');
+    }
 }
