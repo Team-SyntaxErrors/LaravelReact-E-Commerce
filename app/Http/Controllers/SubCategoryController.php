@@ -89,9 +89,26 @@ class SubCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(SubCategoryRequest $request, $id)
     {
-        //
+        $sub_category = SubCategory::findOrFail($id);
+        $requested_data = $request->all();
+        if ($request->sub_category_icon != $sub_category->sub_category_icon) {
+            if (File::exists($sub_category->sub_category_icon)) {
+                File::delete($sub_category->sub_category_icon);
+            }
+            $upload_path = $this->VerifyStore($request, 'sub_category_icon', 'sub_category_icon');
+            $requested_data = Arr::set($requested_data, "sub_category_icon", $upload_path);
+        }
+        $sub_category_slug = Str::slug($request->sub_category_name, '-');
+        $requested_data = Arr::set($requested_data, "sub_category_slug", $sub_category_slug);
+        $sub_category->fill($requested_data)->save();
+        $status = 201;
+        $response = [
+            "status" => $status,
+            "data"   => new SubCategoryResource($sub_category),
+        ];
+        return response()->json($response, $status);
     }
 
     /**

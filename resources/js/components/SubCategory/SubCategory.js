@@ -15,9 +15,18 @@ const SubCategory = () => {
     const [itemsCountPerPage, setItemsCountPerPage] = useState(8);
     const [totalItemsCount, setTotalItemsCount] = useState(450);
 
+    const [Errors, setErrors] = useState([]);
+
     const [Menu, setMenu] = useState([]);
     const [Category, setCategory] = useState([]);
     const [SubCategoryForm, setSubCategoryForm] = useState({
+        menu_id: "",
+        category_id: "",
+        sub_category_name: "",
+        sub_category_icon: ""
+    });
+
+    const [EditForm, setEditForm] = useState({
         menu_id: "",
         category_id: "",
         sub_category_name: "",
@@ -96,6 +105,20 @@ const SubCategory = () => {
     };
     // Image Render
 
+    // Edit Image render
+    const onEditImageChangeHandler = e => {
+        let files = e.target.files[0];
+        let reader = new FileReader();
+        reader.onload = e => {
+            setEditForm({
+                ...EditForm,
+                sub_category_icon: e.target.result
+            });
+        };
+        reader.readAsDataURL(files);
+    };
+    // Edit Image render
+
     // Form Submit Handler
     const submitHandler = e => {
         e.preventDefault();
@@ -147,6 +170,31 @@ const SubCategory = () => {
     };
     // Delete Handler
 
+    // Edit Data Get Handler
+    const EditHandler = (id, data, index) => {
+        SubCategoryList.sub_category_id = id;
+        let value = JSON.parse(JSON.stringify(data));
+        setEditForm(value);
+    };
+    // Edit Data Get Handler
+
+    // Update Form Submit Handler
+    const updateHandler = e => {
+        e.preventDefault();
+        Axios.put("/sub_category/" + EditForm.sub_category_id, EditForm)
+            .then(response => {
+                $(".close").click();
+                GetSubCategoryList();
+                ClearFrom();
+            })
+            .catch(error => {
+                if (error.response.status == 422) {
+                    setError(error.response.data.errors);
+                }
+            });
+    };
+    // Update Form Submit Handler
+
     // Clear From
     const ClearFrom = () => {
         setErrors([]);
@@ -164,11 +212,11 @@ const SubCategory = () => {
                 className="btn btn-secondary"
                 data-toggle="modal"
                 data-target="#add_modal"
+                onClick={ClearFrom}
             >
                 <i className="ik ik-clipboard"></i>
                 Add new
             </button>
-
             <form onSubmit={submitHandler}>
                 <div
                     className="modal fade"
@@ -223,7 +271,11 @@ const SubCategory = () => {
                                                             onImageChangeHandler
                                                         }
                                                     />
-                                                    <span className="text-danger"></span>
+                                                    <span className="text-danger">
+                                                        {
+                                                            Errors.sub_category_icon
+                                                        }
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="form-group">
@@ -260,7 +312,9 @@ const SubCategory = () => {
                                                             </option>
                                                         ))}
                                                     </select>
-                                                    <span className="text-danger"></span>
+                                                    <span className="text-danger">
+                                                        {Errors.menu_id}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="form-group">
@@ -301,7 +355,9 @@ const SubCategory = () => {
                                                             )
                                                         )}
                                                     </select>
-                                                    <span className="text-danger"></span>
+                                                    <span className="text-danger">
+                                                        {Errors.category_id}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="form-group ">
@@ -322,7 +378,11 @@ const SubCategory = () => {
                                                             })
                                                         }
                                                     />
-                                                    <span className="text-danger"></span>
+                                                    <span className="text-danger">
+                                                        {
+                                                            Errors.sub_category_name
+                                                        }
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -334,6 +394,207 @@ const SubCategory = () => {
                                     type="button"
                                     className="btn btn-secondary"
                                     data-dismiss="modal"
+                                    onClick={ClearFrom}
+                                >
+                                    Close
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <form onSubmit={updateHandler}>
+                <div
+                    className="modal fade"
+                    id="edit_modal"
+                    tabIndex={-1}
+                    role="dialog"
+                    aria-hidden="true"
+                >
+                    <div className="modal-dialog modal-lg" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5
+                                    className="modal-title"
+                                    id="exampleModalLongLabel"
+                                >
+                                    Edit Sub Category
+                                </h5>
+                                <button
+                                    type="button"
+                                    className="close"
+                                    data-dismiss="modal"
+                                    aria-label="Close"
+                                >
+                                    <span aria-hidden="true">X</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <div className="form-group">
+                                    <div className="row">
+                                        <div className="col-md-3 col-sm-12 mt-3 text-center">
+                                            <img
+                                                className="custom-icon rounded-circle"
+                                                src={
+                                                    !EditForm.sub_category_icon
+                                                        ? "backend_assets/img/menu-icon.png"
+                                                        : EditForm.sub_category_icon
+                                                }
+                                            />
+                                            <span className="text-danger" />
+                                        </div>
+                                        <div className="col-md-9 col-sm-12 ">
+                                            <div className="form-group">
+                                                <label className="col-lg-6 control-label">
+                                                    Sub Category Icon:
+                                                </label>
+                                                <div className="col-lg-12">
+                                                    <input
+                                                        type="file"
+                                                        className="form-control"
+                                                        placeholder="Enter SubCategory Icon"
+                                                        onChange={
+                                                            onEditImageChangeHandler
+                                                        }
+                                                    />
+                                                    <span className="text-danger">
+                                                        {
+                                                            Errors.sub_category_icon
+                                                        }
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="form-group">
+                                                <label className="col-lg-6 control-label">
+                                                    Menu:
+                                                </label>
+                                                <div className="col-lg-12">
+                                                    <select
+                                                        className="form-control"
+                                                        onChange={e =>
+                                                            setEditForm({
+                                                                ...EditForm,
+                                                                menu_id:
+                                                                    e.target
+                                                                        .value
+                                                            })
+                                                        }
+                                                        value={EditForm.menu_id}
+                                                    >
+                                                        <option
+                                                            value
+                                                            defaultValue
+                                                            hidden
+                                                        >
+                                                            --Select One--
+                                                        </option>
+                                                        {Menu.map((menu, i) => (
+                                                            <option
+                                                                key={i}
+                                                                value={
+                                                                    menu.menu_id
+                                                                }
+                                                            >
+                                                                {menu.menu_name}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                    <span className="text-danger">
+                                                        {Errors.menu_id}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="form-group">
+                                                <label className="col-lg-6 control-label">
+                                                    Category:
+                                                </label>
+                                                <div className="col-lg-12">
+                                                    <select
+                                                        className="form-control"
+                                                        onChange={e =>
+                                                            setEditForm({
+                                                                ...EditForm,
+                                                                category_id:
+                                                                    e.target
+                                                                        .value
+                                                            })
+                                                        }
+                                                        value={
+                                                            EditForm.category_id
+                                                        }
+                                                    >
+                                                        <option
+                                                            value
+                                                            defaultValue
+                                                            hidden
+                                                        >
+                                                            --Select One--
+                                                        </option>
+                                                        {Category.map(
+                                                            (category, i) => (
+                                                                <option
+                                                                    key={i}
+                                                                    value={
+                                                                        category.category_id
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        category.category_name
+                                                                    }
+                                                                </option>
+                                                            )
+                                                        )}
+                                                    </select>
+                                                    <span className="text-danger">
+                                                        {Errors.category_id}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="form-group ">
+                                                <label className="col-lg-6 control-label">
+                                                    Sub Category Name:
+                                                </label>
+                                                <div className="col-lg-12">
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        placeholder="Enter Sub Category Name"
+                                                        onChange={e =>
+                                                            setEditForm({
+                                                                ...EditForm,
+                                                                sub_category_name:
+                                                                    e.target
+                                                                        .value
+                                                            })
+                                                        }
+                                                        value={
+                                                            EditForm.sub_category_name
+                                                        }
+                                                    />
+                                                    <span className="text-danger">
+                                                        {
+                                                            Errors.sub_category_name
+                                                        }
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    data-dismiss="modal"
+                                    onClick={ClearFrom}
                                 >
                                     Close
                                 </button>
@@ -477,13 +738,13 @@ const SubCategory = () => {
                                                                 className="btn btn-icon btn btn-dark"
                                                                 data-toggle="modal"
                                                                 data-target="#edit_modal"
-                                                                // onClick={() =>
-                                                                //     EditHandler(
-                                                                //         category_data.category_id,
-                                                                //         category_data,
-                                                                //         i
-                                                                //     )
-                                                                // }
+                                                                onClick={() =>
+                                                                    EditHandler(
+                                                                        subCategory.sub_category_id,
+                                                                        subCategory,
+                                                                        i
+                                                                    )
+                                                                }
                                                             >
                                                                 <i className="ik ik-edit-2"></i>
                                                             </button>

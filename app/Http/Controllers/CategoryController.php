@@ -101,15 +101,6 @@ class CategoryController extends Controller
             }
             $upload_path = $this->VerifyStore($request, 'category_icon', 'category_icon');
             $requested_data = Arr::set($requested_data, "category_icon", $upload_path);
-            $category_slug = Str::slug($request->category_name, '-');
-            $requested_data = Arr::set($requested_data, "category_slug", $category_slug);
-            $category_model->fill($requested_data)->save();
-            $status = 201;
-            $response = [
-                "status" => $status,
-                "data"   => new CategoryResource($category_model),
-            ];
-
         }
         $category_slug = Str::slug($request->category_name, '-');
         $requested_data = Arr::set($requested_data, "category_slug", $category_slug);
