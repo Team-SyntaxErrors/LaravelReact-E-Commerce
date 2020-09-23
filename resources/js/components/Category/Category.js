@@ -573,12 +573,12 @@ const Category = () => {
                                                         </td>
                                                         <td>
                                                             {
-                                                                category_data.category_name
+                                                                category_data.menu_id
                                                             }
                                                         </td>
                                                         <td>
                                                             {
-                                                                category_data.category_slug
+                                                                category_data.category_name
                                                             }
                                                         </td>
                                                         <td>

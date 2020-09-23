@@ -36794,7 +36794,7 @@ var Category = function Category() {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
       className: "image-list rounded-circle",
       src: category_data.category_icon
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, category_data.category_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, category_data.category_slug), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, category_data.menu_id), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, category_data.category_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
       className: "btn btn-icon btn btn-danger",
       onClick: function onClick() {
         return DeleteHandler(category_data.category_id);
@@ -38959,23 +38959,28 @@ var SubCategory = function SubCategory() {
 
   var _useState17 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
       _useState18 = _slicedToArray(_useState17, 2),
-      Menu = _useState18[0],
-      setMenu = _useState18[1];
+      Errors = _useState18[0],
+      setErrors = _useState18[1];
 
   var _useState19 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
       _useState20 = _slicedToArray(_useState19, 2),
-      Category = _useState20[0],
-      setCategory = _useState20[1];
+      Menu = _useState20[0],
+      setMenu = _useState20[1];
 
-  var _useState21 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
+  var _useState21 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
+      _useState22 = _slicedToArray(_useState21, 2),
+      Category = _useState22[0],
+      setCategory = _useState22[1];
+
+  var _useState23 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
     menu_id: "",
     category_id: "",
     sub_category_name: "",
     sub_category_icon: ""
   }),
-      _useState22 = _slicedToArray(_useState21, 2),
-      SubCategoryForm = _useState22[0],
-      setSubCategoryForm = _useState22[1];
+      _useState24 = _slicedToArray(_useState23, 2),
+      SubCategoryForm = _useState24[0],
+      setSubCategoryForm = _useState24[1];
 
   var handlePageChange = function handlePageChange(pageNumber) {
     setPage(pageNumber);
@@ -39102,7 +39107,8 @@ var SubCategory = function SubCategory() {
     },
     className: "btn btn-secondary",
     "data-toggle": "modal",
-    "data-target": "#add_modal"
+    "data-target": "#add_modal",
+    onClick: ClearFrom
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
     className: "ik ik-clipboard"
   }), "Add new"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
