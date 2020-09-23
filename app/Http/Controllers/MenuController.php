@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Helper;
 use App\Http\Requests\MenuRequest;
 use App\Http\Resources\MenuResource;
 use App\Menu;
+use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
 
 class MenuController extends Controller
 {
+    use ImageUpload;
     /**
      * Display a listing of the resource.
      *
@@ -43,34 +43,20 @@ class MenuController extends Controller
      */
     public function store(MenuRequest $request)
     {
-        // dd($request->all());
         $menu_model = new Menu();
         $requested_data = $request->all();
         if ($request->menu_icon) {
-            $position = strpos($request->menu_icon, ";");
-            $sub_str = substr($request->menu_icon, 0, $position);
-            $extension = explode("/", $sub_str);
-            $allowed = Helper::ImageExtension($extension[1]);
-            if ($allowed == "Allowed") {
-                $upload_path = "backend_assets/images/menu_icon/" . time() . "." . $extension[1];
-                $image_upload = Image::make($request->menu_icon)->resize(300, 300);
-                $image_upload->save($upload_path);
-                $requested_data = Arr::set($requested_data, "menu_icon", $upload_path);
-                $menu_slug = Str::slug($request->menu_name, '-');
-                $requested_data = Arr::set($requested_data, "menu_slug", $menu_slug);
-                $menu_model->fill($requested_data)->save();
-                $status = 201;
-                $response = [
-                    "status" => $status,
-                    "data"   => new MenuResource($menu_model),
-                ];
-            } else {
-                $status = 400;
-                $response = [
-                    'errors' => ['project_logo_ext' => $allowed],
-                    'status' => 400,
-                ];
-            }
+            $upload_path = $this->VerifyStore($request, 'menu_icon', 'menu_icon');
+            $requested_data = Arr::set($requested_data, "menu_icon", $upload_path);
+            $menu_slug = Str::slug($request->menu_name, '-');
+            $requested_data = Arr::set($requested_data, "menu_slug", $menu_slug);
+            $menu_model->fill($requested_data)->save();
+            $status = 201;
+            $response = [
+                "status" => $status,
+                "data"   => new MenuResource($menu_model),
+            ];
+
         }
         return response()->json($response, $status);
     }
@@ -110,33 +96,20 @@ class MenuController extends Controller
         $menu_model = Menu::findOrFail($id);
         $requested_data = $request->all();
         if ($request->menu_icon != $menu_model->menu_icon) {
-            $position = strpos($request->menu_icon, ";");
-            $sub_str = substr($request->menu_icon, 0, $position);
-            $extension = explode("/", $sub_str);
-            $allowed = Helper::ImageExtension($extension[1]);
-            if ($allowed == "Allowed") {
-                if (File::exists($menu_model->menu_icon)) {
-                    File::delete($menu_model->menu_icon);
-                }
-                $upload_path = "backend_assets/images/menu_icon/" . time() . "." . $extension[1];
-                $image_upload = Image::make($request->menu_icon)->resize(300, 300);
-                $image_upload->save($upload_path);
-                $requested_data = Arr::set($requested_data, "menu_icon", $upload_path);
-                $menu_slug = Str::slug($request->menu_name, '-');
-                $requested_data = Arr::set($requested_data, "menu_slug", $menu_slug);
-                $menu_model->fill($requested_data)->save();
-                $status = 201;
-                $response = [
-                    "status" => $status,
-                    "data"   => new MenuResource($menu_model),
-                ];
-            } else {
-                $status = 400;
-                $response = [
-                    'errors' => ['project_logo_ext' => $allowed],
-                    'status' => 400,
-                ];
+            if (File::exists($menu_model->menu_icon)) {
+                File::delete($menu_model->menu_icon);
             }
+            $upload_path = $this->VerifyStore($request, 'menu_icon', 'menu_icon');
+            $requested_data = Arr::set($requested_data, "menu_icon", $upload_path);
+            $menu_slug = Str::slug($request->menu_name, '-');
+            $requested_data = Arr::set($requested_data, "menu_slug", $menu_slug);
+            $menu_model->fill($requested_data)->save();
+            $status = 201;
+            $response = [
+                "status" => $status,
+                "data"   => new MenuResource($menu_model),
+            ];
+
         }
         $menu_slug = Str::slug($request->menu_name, '-');
         $requested_data = Arr::set($requested_data, "menu_slug", $menu_slug);

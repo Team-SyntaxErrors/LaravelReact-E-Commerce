@@ -18,7 +18,9 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('/menu', 'MenuController');
 Route::resource('/category', 'CategoryController');
+Route::resource('/sub_category', 'SubCategoryController');
 Route::get('/all_menu_get', 'RelativeController@all_menu_get');
+Route::get('/all_category_get', 'RelativeController@all_category_get');
 Route::get('{ReactRoute}', function () {
     return view('index');
 })->where('ReactRoute', '.*');
