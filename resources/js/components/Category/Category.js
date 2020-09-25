@@ -505,21 +505,30 @@ const Category = () => {
                                         <thead>
                                             <tr role="row">
                                                 <th
-                                                    className="custom-head"
+                                                    className="custom-head text-center"
                                                     style={{ width: "15%" }}
                                                 >
                                                     Category Icon
                                                 </th>
-                                                <th>Menu Name</th>
-                                                <th>Category Name</th>
-                                                <th>Action</th>
+                                                <th className="text-center">
+                                                    Menu Name
+                                                </th>
+                                                <th className="text-center">
+                                                    Category Name
+                                                </th>
+                                                <th className="text-center">
+                                                    Status
+                                                </th>
+                                                <th className="text-center">
+                                                    Action
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {CategoryList.map(
                                                 (category_data, i) => (
                                                     <tr key={i}>
-                                                        <td>
+                                                        <td className="text-center">
                                                             <img
                                                                 className="image-list rounded-circle"
                                                                 src={
@@ -527,17 +536,31 @@ const Category = () => {
                                                                 }
                                                             />
                                                         </td>
-                                                        <td>
-                                                            {
-                                                                category_data.menu_id
-                                                            }
+                                                        <td className="text-center">
+                                                            {category_data.menus
+                                                                ? category_data
+                                                                      .menus
+                                                                      .menu_name
+                                                                : "Null"}
                                                         </td>
-                                                        <td>
+                                                        <td className="text-center">
                                                             {
                                                                 category_data.category_name
                                                             }
                                                         </td>
-                                                        <td>
+                                                        <td className="text-center">
+                                                            <center>
+                                                                <div
+                                                                    className={
+                                                                        category_data.status ==
+                                                                        1
+                                                                            ? "p-status bg-green"
+                                                                            : "p-status bg-red"
+                                                                    }
+                                                                ></div>
+                                                            </center>
+                                                        </td>
+                                                        <td className="text-center">
                                                             <i
                                                                 className="ik ik-edit f-16 mr-15 text-blue"
                                                                 data-toggle="modal"

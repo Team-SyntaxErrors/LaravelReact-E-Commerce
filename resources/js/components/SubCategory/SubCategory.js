@@ -687,10 +687,24 @@ const SubCategory = () => {
                                                 >
                                                     Sub Category Icon
                                                 </th>
-                                                <th>Sub Category Name</th>
-                                                <th>Sub Category Slug</th>
-                                                <th>Category Name</th>
-                                                <th>Action</th>
+                                                <th className="text-center">
+                                                    Sub Category Name
+                                                </th>
+                                                <th className="text-center">
+                                                    Sub Category Slug
+                                                </th>
+                                                <th className="text-center">
+                                                    Menu Name
+                                                </th>
+                                                <th className="text-center">
+                                                    Category Name
+                                                </th>
+                                                <th className="text-center">
+                                                    Status
+                                                </th>
+                                                <th className="text-center">
+                                                    Action
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -705,37 +719,45 @@ const SubCategory = () => {
                                                                 }
                                                             />
                                                         </td>
-                                                        <td>
+                                                        <td className="text-center">
                                                             {
                                                                 subCategory.sub_category_name
                                                             }
                                                         </td>
-                                                        <td>
+                                                        <td className="text-center">
                                                             {
                                                                 subCategory.sub_category_slug
                                                             }
                                                         </td>
-                                                        <td>
+                                                        <td className="text-center">
+                                                            {subCategory.menus
+                                                                ? subCategory
+                                                                      .menus
+                                                                      .menu_name
+                                                                : "Null"}
+                                                        </td>
+                                                        <td className="text-center">
                                                             {
                                                                 subCategory
                                                                     .categories
                                                                     .category_name
                                                             }
                                                         </td>
-                                                        <td>
-                                                            <button
-                                                                className="btn btn-icon btn btn-danger"
-                                                                type="button"
-                                                                onClick={() =>
-                                                                    DeleteHandler(
-                                                                        subCategory.sub_category_id
-                                                                    )
-                                                                }
-                                                            >
-                                                                <i className="ik ik-trash"></i>
-                                                            </button>{" "}
-                                                            <button
-                                                                className="btn btn-icon btn btn-dark"
+                                                        <td className="text-center">
+                                                            <center>
+                                                                <div
+                                                                    className={
+                                                                        subCategory.status ==
+                                                                        1
+                                                                            ? "p-status bg-green"
+                                                                            : "p-status bg-red"
+                                                                    }
+                                                                ></div>
+                                                            </center>
+                                                        </td>
+                                                        <td className="text-center">
+                                                            <i
+                                                                className="ik ik-edit f-16 mr-15 text-blue"
                                                                 data-toggle="modal"
                                                                 data-target="#edit_modal"
                                                                 onClick={() =>
@@ -745,9 +767,16 @@ const SubCategory = () => {
                                                                         i
                                                                     )
                                                                 }
-                                                            >
-                                                                <i className="ik ik-edit-2"></i>
-                                                            </button>
+                                                            ></i>{" "}
+                                                            <i className="ik ik-repeat f-16 mr-15 text-green"></i>{" "}
+                                                            <i
+                                                                className="ik ik-trash-2 f-16 text-red"
+                                                                onClick={() =>
+                                                                    DeleteHandler(
+                                                                        subCategory.sub_category_id
+                                                                    )
+                                                                }
+                                                            ></i>
                                                         </td>
                                                     </tr>
                                                 )
@@ -758,7 +787,9 @@ const SubCategory = () => {
                                                 <th>Sub Category Icon</th>
                                                 <th>Sub Category Name</th>
                                                 <th>Sub Category Slug</th>
+                                                <th>Menu Name</th>
                                                 <th>Category Name</th>
+                                                <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
                                         </tfoot>

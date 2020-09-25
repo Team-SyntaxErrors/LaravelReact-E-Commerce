@@ -21,7 +21,7 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $category = Category::Search($request->q)->paginate($request->row);
+        $category = Category::with("menus")->Search($request->q)->paginate($request->row);
         return response()->json($category, 201);
     }
 

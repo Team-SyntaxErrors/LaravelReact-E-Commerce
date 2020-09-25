@@ -91,10 +91,10 @@ const Menu = () => {
                                 "Menu Has been Deleted",
                                 "success"
                             );
+                            GetMenuList();
                         } else {
                             swal("Opps", "Something Went Wrong", "warning");
                         }
-                        GetMenuList();
                     })
                     .catch(error => {
                         console.log(error);
@@ -151,9 +151,9 @@ const Menu = () => {
                     aria-labelledby="exampleModalLongLabel"
                     aria-hidden="true"
                 >
-                    <div className="modal-dialog modal-lg" role="document">
+                    <div className="modal-dialog" role="document">
                         <div className="modal-content">
-                            <div className="modal-header">
+                            <div className="modal-header bg-dark">
                                 <h5
                                     className="modal-title"
                                     id="exampleModalLongLabel"
@@ -166,7 +166,9 @@ const Menu = () => {
                                     data-dismiss="modal"
                                     aria-label="Close"
                                 >
-                                    <span aria-hidden="true">×</span>
+                                    <span aria-hidden="true">
+                                        <i class="ik ik-x"></i>
+                                    </span>
                                 </button>
                             </div>
                             <div className="modal-body">
@@ -263,7 +265,7 @@ const Menu = () => {
                 >
                     <div className="modal-dialog modal-lg" role="document">
                         <div className="modal-content">
-                            <div className="modal-header">
+                            <div className="modal-header bg-dark">
                                 <h5
                                     className="modal-title"
                                     id="exampleModalLongLabel"
@@ -276,7 +278,10 @@ const Menu = () => {
                                     data-dismiss="modal"
                                     aria-label="Close"
                                 >
-                                    <span aria-hidden="true">×</span>
+                                    <span aria-hidden="true">
+                                        {" "}
+                                        <i class="ik ik-x"></i>
+                                    </span>
                                 </button>
                             </div>
                             <div className="modal-body">
@@ -437,9 +442,18 @@ const Menu = () => {
                                                 >
                                                     Menu Icon
                                                 </th>
-                                                <th>Menu Name</th>
-                                                <th>Menu Slug</th>
-                                                <th>Action</th>
+                                                <th className="text-center">
+                                                    Menu Name
+                                                </th>
+                                                <th className="text-center">
+                                                    Menu Slug
+                                                </th>
+                                                <th className="text-center">
+                                                    Status
+                                                </th>
+                                                <th className="text-center">
+                                                    Action
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -451,21 +465,27 @@ const Menu = () => {
                                                             src={menu.menu_icon}
                                                         />
                                                     </td>
-                                                    <td>{menu.menu_name}</td>
-                                                    <td>{menu.menu_slug}</td>
+                                                    <td className="text-center">
+                                                        {menu.menu_name}
+                                                    </td>
+                                                    <td className="text-center">
+                                                        {menu.menu_slug}
+                                                    </td>
                                                     <td>
-                                                        <button
-                                                            className="btn btn-icon btn btn-danger"
-                                                            onClick={() =>
-                                                                DeleteHandler(
-                                                                    menu.menu_id
-                                                                )
-                                                            }
-                                                        >
-                                                            <i className="ik ik-trash"></i>
-                                                        </button>{" "}
-                                                        <button
-                                                            className="btn btn-icon btn btn-dark"
+                                                        <center>
+                                                            <div
+                                                                className={
+                                                                    menu.status ==
+                                                                    1
+                                                                        ? "p-status bg-green"
+                                                                        : "p-status bg-red"
+                                                                }
+                                                            ></div>
+                                                        </center>
+                                                    </td>
+                                                    <td className="text-center">
+                                                        <i
+                                                            className="ik ik-edit f-16 mr-15 text-blue"
                                                             data-toggle="modal"
                                                             data-target="#edit_modal"
                                                             onClick={() =>
@@ -475,9 +495,16 @@ const Menu = () => {
                                                                     i
                                                                 )
                                                             }
-                                                        >
-                                                            <i className="ik ik-edit-2"></i>
-                                                        </button>
+                                                        ></i>{" "}
+                                                        <i className="ik ik-repeat f-16 mr-15 text-green"></i>{" "}
+                                                        <i
+                                                            className="ik ik-trash-2 f-16 text-red"
+                                                            onClick={() =>
+                                                                DeleteHandler(
+                                                                    menu.menu_id
+                                                                )
+                                                            }
+                                                        ></i>
                                                     </td>
                                                 </tr>
                                             ))}
@@ -487,6 +514,7 @@ const Menu = () => {
                                                 <th>Menu Icon</th>
                                                 <th>Menu Name</th>
                                                 <th>Menu Slug</th>
+                                                <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
                                         </tfoot>
@@ -496,10 +524,12 @@ const Menu = () => {
                             <div className="row">
                                 <div className="col-sm-12 col-md-5"></div>
                                 <div className="col-sm-12 col-md-7">
-                                    <nav aria-label="Page navigation example">
+                                    {current_row >= totalItemsCount ? (
+                                        ""
+                                    ) : (
                                         <Pagination
-                                            itemClass="paginate_button page-item"
-                                            linkClass="page-link"
+                                            innerClass="btn-group"
+                                            linkClass="btn btn-outline-secondary"
                                             activePage={activePage}
                                             itemsCountPerPage={
                                                 itemsCountPerPage
@@ -508,7 +538,7 @@ const Menu = () => {
                                             pageRangeDisplayed={3}
                                             onChange={handlePageChange}
                                         />
-                                    </nav>
+                                    )}
                                 </div>
                             </div>
                         </div>

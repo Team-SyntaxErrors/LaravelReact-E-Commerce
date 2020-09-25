@@ -10,3 +10,18 @@
 .image-list {
     width: 10%;
 }
+
+.bg-dark {
+    color: white !important;
+    background-color: #404E67 !important;
+}
+
+.ik-x {
+    color: white !important;
+}
+
+.p-status {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
