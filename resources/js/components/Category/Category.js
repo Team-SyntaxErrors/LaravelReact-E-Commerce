@@ -578,10 +578,12 @@ const Category = () => {
                             <div className="row">
                                 <div className="col-sm-12 col-md-5"></div>
                                 <div className="col-sm-12 col-md-7">
-                                    <nav aria-label="Page navigation example">
+                                    {current_row >= totalItemsCount ? (
+                                        ""
+                                    ) : (
                                         <Pagination
-                                            itemClass="paginate_button page-item"
-                                            linkClass="page-link"
+                                            innerClass="btn-group"
+                                            linkClass="btn btn-outline-secondary"
                                             activePage={activePage}
                                             itemsCountPerPage={
                                                 itemsCountPerPage
@@ -590,7 +592,7 @@ const Category = () => {
                                             pageRangeDisplayed={3}
                                             onChange={handlePageChange}
                                         />
-                                    </nav>
+                                    )}
                                 </div>
                             </div>
                         </div>

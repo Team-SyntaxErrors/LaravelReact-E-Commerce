@@ -2048,7 +2048,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".custom-card {\n    margin-top: 6%;\n}\n", ""]);
+exports.push([module.i, ".custom-card {\n    margin-top: 6%;\n}\n\nul {\n    list-style-type: none;\n}\n", ""]);
 
 // exports
 
@@ -36773,17 +36773,15 @@ var Category = function Category() {
     className: "col-sm-12 col-md-5"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "col-sm-12 col-md-7"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("nav", {
-    "aria-label": "Page navigation example"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_3___default.a, {
-    itemClass: "paginate_button page-item",
-    linkClass: "page-link",
+  }, current_row >= totalItemsCount ? "" : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_3___default.a, {
+    innerClass: "btn-group",
+    linkClass: "btn btn-outline-secondary",
     activePage: activePage,
     itemsCountPerPage: itemsCountPerPage,
     totalItemsCount: totalItemsCount,
     pageRangeDisplayed: 3,
     onChange: handlePageChange
-  })))))))));
+  }))))))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Category);
@@ -38883,7 +38881,7 @@ var SubCategory = function SubCategory() {
       Search = _useState4[0],
       setSearch = _useState4[1];
 
-  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(""),
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(8),
       _useState6 = _slicedToArray(_useState5, 2),
       Current_row = _useState6[0],
       setCurrent_row = _useState6[1];
@@ -39463,17 +39461,15 @@ var SubCategory = function SubCategory() {
     className: "col-sm-12 col-md-5"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "col-sm-12 col-md-7"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("nav", {
-    "aria-label": "Page navigation example"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_3___default.a, {
-    itemClass: "paginate_button page-item",
-    linkClass: "page-link",
+  }, Current_row >= totalItemsCount ? "" : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_3___default.a, {
+    innerClass: "btn-group",
+    linkClass: "btn btn-outline-secondary",
     activePage: activePage,
     itemsCountPerPage: itemsCountPerPage,
     totalItemsCount: totalItemsCount,
     pageRangeDisplayed: 3,
     onChange: handlePageChange
-  })))))))));
+  }))))))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (SubCategory);
