@@ -8,7 +8,7 @@ import Pagination from "react-js-pagination";
 const SubCategory = () => {
     const [SubCategoryList, setSubCategoryList] = useState([]);
     const [Search, setSearch] = useState("");
-    const [Current_row, setCurrent_row] = useState("");
+    const [Current_row, setCurrent_row] = useState(8);
     const [page, setPage] = useState("");
     const [select_row, setSelectRow] = useState([8, 10, 20, 30, 40, 50]);
     const [activePage, setActivePage] = useState(1);
@@ -768,10 +768,12 @@ const SubCategory = () => {
                             <div className="row">
                                 <div className="col-sm-12 col-md-5"></div>
                                 <div className="col-sm-12 col-md-7">
-                                    <nav aria-label="Page navigation example">
+                                    {Current_row >= totalItemsCount ? (
+                                        ""
+                                    ) : (
                                         <Pagination
-                                            itemClass="paginate_button page-item"
-                                            linkClass="page-link"
+                                            innerClass="btn-group"
+                                            linkClass="btn btn-outline-secondary"
                                             activePage={activePage}
                                             itemsCountPerPage={
                                                 itemsCountPerPage
@@ -780,7 +782,7 @@ const SubCategory = () => {
                                             pageRangeDisplayed={3}
                                             onChange={handlePageChange}
                                         />
-                                    </nav>
+                                    )}
                                 </div>
                             </div>
                         </div>
