@@ -21,7 +21,7 @@ class SubCategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $subcategory = SubCategory::with('categories')->Search($request->q)->paginate($request->row);
+        $subcategory = SubCategory::with('categories', 'menus')->Search($request->q)->paginate($request->row);
         return response()->json($subcategory, 200);
     }
 
