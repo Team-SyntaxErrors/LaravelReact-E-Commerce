@@ -510,8 +510,8 @@ const Category = () => {
                                                 >
                                                     Category Icon
                                                 </th>
+                                                <th>Menu Name</th>
                                                 <th>Category Name</th>
-                                                <th>Category Slug</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -538,18 +538,8 @@ const Category = () => {
                                                             }
                                                         </td>
                                                         <td>
-                                                            <button
-                                                                className="btn btn-icon btn btn-danger"
-                                                                onClick={() =>
-                                                                    DeleteHandler(
-                                                                        category_data.category_id
-                                                                    )
-                                                                }
-                                                            >
-                                                                <i className="ik ik-trash"></i>
-                                                            </button>{" "}
-                                                            <button
-                                                                className="btn btn-icon btn btn-dark"
+                                                            <i
+                                                                className="ik ik-edit f-16 mr-15 text-blue"
                                                                 data-toggle="modal"
                                                                 data-target="#edit_modal"
                                                                 onClick={() =>
@@ -559,9 +549,16 @@ const Category = () => {
                                                                         i
                                                                     )
                                                                 }
-                                                            >
-                                                                <i className="ik ik-edit-2"></i>
-                                                            </button>
+                                                            ></i>{" "}
+                                                            <i className="ik ik-repeat f-16 mr-15 text-green"></i>{" "}
+                                                            <i
+                                                                className="ik ik-trash-2 f-16 text-red"
+                                                                onClick={() =>
+                                                                    DeleteHandler(
+                                                                        category_data.category_id
+                                                                    )
+                                                                }
+                                                            ></i>
                                                         </td>
                                                     </tr>
                                                 )
