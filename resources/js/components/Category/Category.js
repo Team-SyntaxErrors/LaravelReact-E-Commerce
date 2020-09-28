@@ -153,7 +153,7 @@ const Category = () => {
                     );
                     GetCategoryList();
                 } else {
-                    swal("Opps", "Something Went Wrong", "warning");
+                    swal("Oops", "Something Went Wrong", "warning");
                 }
             })
             .catch(error => {

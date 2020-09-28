@@ -20,14 +20,14 @@ const SubCategory = () => {
 
     const [Menu, setMenu] = useState([]);
     const [Category, setCategory] = useState([]);
-    const [SubCategoryForm, setSubCategoryForm] = useState({
+    const [SubCategoryForm, handleChange] = useForms({
         menu_id: "",
         category_id: "",
         sub_category_name: "",
         sub_category_icon: ""
     });
 
-    const [EditForm, setEditForm] = useState({
+    const [EditForm, EditHandleChange, setEditForm] = useForms({
         menu_id: "",
         category_id: "",
         sub_category_name: "",
@@ -39,10 +39,7 @@ const SubCategory = () => {
     };
 
     const MenuChangeFunctions = e => {
-        setSubCategoryForm({
-            ...SubCategoryForm,
-            menu_id: e.target.value
-        });
+        handleChange(e);
         GetCategory(e.target.value);
     };
 
@@ -180,6 +177,7 @@ const SubCategory = () => {
         SubCategoryList.sub_category_id = id;
         let value = JSON.parse(JSON.stringify(data));
         setEditForm(value);
+        GetCategory(value.menu_id);
     };
     // Edit Data Get Handler
 
@@ -291,11 +289,10 @@ const SubCategory = () => {
                                                 <div className="col-lg-12">
                                                     <input
                                                         type="file"
+                                                        name="sub_category_icon"
                                                         className="form-control"
                                                         placeholder="Enter SubCategory Icon"
-                                                        onChange={
-                                                            onImageChangeHandler
-                                                        }
+                                                        onChange={handleChange}
                                                     />
                                                     <span className="text-danger">
                                                         {
@@ -310,6 +307,7 @@ const SubCategory = () => {
                                                 </label>
                                                 <div className="col-lg-12">
                                                     <select
+                                                        name="menu_id"
                                                         className="form-control"
                                                         onChange={e =>
                                                             MenuChangeFunctions(
@@ -346,15 +344,9 @@ const SubCategory = () => {
                                                 </label>
                                                 <div className="col-lg-12">
                                                     <select
+                                                        name="category_id"
                                                         className="form-control"
-                                                        onChange={e =>
-                                                            setSubCategoryForm({
-                                                                ...SubCategoryForm,
-                                                                category_id:
-                                                                    e.target
-                                                                        .value
-                                                            })
-                                                        }
+                                                        onChange={handleChange}
                                                     >
                                                         <option
                                                             value
@@ -391,15 +383,9 @@ const SubCategory = () => {
                                                     <input
                                                         type="text"
                                                         className="form-control"
+                                                        name="sub_category_name"
                                                         placeholder="Enter Sub Category Name"
-                                                        onChange={e =>
-                                                            setSubCategoryForm({
-                                                                ...SubCategoryForm,
-                                                                sub_category_name:
-                                                                    e.target
-                                                                        .value
-                                                            })
-                                                        }
+                                                        onChange={handleChange}
                                                     />
                                                     <span className="text-danger">
                                                         {
@@ -482,9 +468,10 @@ const SubCategory = () => {
                                                     <input
                                                         type="file"
                                                         className="form-control"
+                                                        name="sub_category_icon"
                                                         placeholder="Enter SubCategory Icon"
                                                         onChange={
-                                                            onEditImageChangeHandler
+                                                            EditHandleChange
                                                         }
                                                     />
                                                     <span className="text-danger">
@@ -501,13 +488,9 @@ const SubCategory = () => {
                                                 <div className="col-lg-12">
                                                     <select
                                                         className="form-control"
-                                                        onChange={e =>
-                                                            setEditForm({
-                                                                ...EditForm,
-                                                                menu_id:
-                                                                    e.target
-                                                                        .value
-                                                            })
+                                                        name="menu_id"
+                                                        onChange={
+                                                            EditHandleChange
                                                         }
                                                         value={EditForm.menu_id}
                                                     >
@@ -541,13 +524,9 @@ const SubCategory = () => {
                                                 <div className="col-lg-12">
                                                     <select
                                                         className="form-control"
-                                                        onChange={e =>
-                                                            setEditForm({
-                                                                ...EditForm,
-                                                                category_id:
-                                                                    e.target
-                                                                        .value
-                                                            })
+                                                        name="category_id"
+                                                        onChange={
+                                                            EditHandleChange
                                                         }
                                                         value={
                                                             EditForm.category_id
@@ -588,14 +567,10 @@ const SubCategory = () => {
                                                     <input
                                                         type="text"
                                                         className="form-control"
+                                                        name="sub_category_name"
                                                         placeholder="Enter Sub Category Name"
-                                                        onChange={e =>
-                                                            setEditForm({
-                                                                ...EditForm,
-                                                                sub_category_name:
-                                                                    e.target
-                                                                        .value
-                                                            })
+                                                        onChange={
+                                                            EditHandleChange
                                                         }
                                                         value={
                                                             EditForm.sub_category_name
