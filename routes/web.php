@@ -23,7 +23,7 @@ Route::get('/category/status/{id}', 'CategoryController@status');
 Route::resource('/sub_category', 'SubCategoryController');
 Route::get('/sub_category/status/{id}', 'SubCategoryController@status');
 Route::get('/all_menu_get', 'RelativeController@all_menu_get');
-Route::get('/all_category_get', 'RelativeController@all_category_get');
+Route::get('/all_category_get/{id}', 'RelativeController@all_category_get');
 Route::get('{ReactRoute}', function () {
     return view('index');
 })->where('ReactRoute', '.*');

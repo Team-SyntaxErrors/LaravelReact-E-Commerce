@@ -4,6 +4,7 @@ import React, { Fragment, useEffect, useState } from "react";
 
 import Axios from "axios";
 import Pagination from "react-js-pagination";
+import useForms from "../customHooks/useForms";
 
 const SubCategory = () => {
     const [SubCategoryList, setSubCategoryList] = useState([]);
@@ -35,6 +36,14 @@ const SubCategory = () => {
 
     const handlePageChange = pageNumber => {
         setPage(pageNumber);
+    };
+
+    const MenuChangeFunctions = e => {
+        setSubCategoryForm({
+            ...SubCategoryForm,
+            menu_id: e.target.value
+        });
+        GetCategory(e.target.value);
     };
 
     // Sub Category List
@@ -76,8 +85,8 @@ const SubCategory = () => {
     // Menu Data Get
 
     // Category Data Get
-    const GetCategory = () => {
-        Axios.get("/all_category_get")
+    const GetCategory = menu_id => {
+        Axios.get("/all_category_get/" + menu_id)
             .then(response => {
                 setCategory(response.data);
             })
@@ -85,10 +94,6 @@ const SubCategory = () => {
                 console.log(error);
             });
     };
-
-    useEffect(() => {
-        GetCategory();
-    }, []);
     // Category Data Get
 
     // Image Render
@@ -307,12 +312,9 @@ const SubCategory = () => {
                                                     <select
                                                         className="form-control"
                                                         onChange={e =>
-                                                            setSubCategoryForm({
-                                                                ...SubCategoryForm,
-                                                                menu_id:
-                                                                    e.target
-                                                                        .value
-                                                            })
+                                                            MenuChangeFunctions(
+                                                                e
+                                                            )
                                                         }
                                                     >
                                                         <option
