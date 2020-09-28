@@ -90,7 +90,7 @@ const Category = () => {
             });
     };
     // Category Delete
-    const DeleteHandler = id => {
+    const DeleteHandler = (id, index) => {
         swal({
             title: "Are you sure?",
             text: `Once deleted, you will not be able to recover this imaginary file!`,
@@ -102,6 +102,8 @@ const Category = () => {
                 Axios.delete("/category/" + id)
                     .then(response => {
                         if (response.status === 204) {
+                            // category_form.data.splice(index, 1);
+                            GetCategoryList();
                             swal(
                                 "Deleted!",
                                 "Category Has been Deleted",
@@ -110,7 +112,6 @@ const Category = () => {
                         } else {
                             swal("Opps", "Something Went Wrong", "warning");
                         }
-                        GetCategoryList();
                     })
                     .catch(error => {
                         console.log(error);
@@ -170,7 +171,7 @@ const Category = () => {
                 data-target="#add_modal"
                 onClick={ClearFrom}
             >
-                <i class="ik ik-clipboard"></i>
+                <i className="ik ik-clipboard"></i>
                 Add new
             </button>
 
@@ -451,219 +452,228 @@ const Category = () => {
                 </div>
             </form>
 
-            <div className="card custom-card">
-                <div className="card-header d-block">
-                    <h3>Category List</h3>
-                </div>
-                <div className="card-body">
-                    <div className="dt-responsive">
-                        <div
-                            id="simpletable_wrapper"
-                            className="dataTables_wrapper dt-bootstrap4"
-                        >
-                            <div className="row">
-                                <div className="col-sm-12 col-md-6">
-                                    <div
-                                        className="dataTables_length"
-                                        id="simpletable_length"
-                                    >
-                                        <label>
-                                            Show
-                                            <select
-                                                name="simpletable_length"
-                                                aria-controls="simpletable"
-                                                className="custom-select custom-select-sm form-control form-control-sm"
-                                                onChange={e =>
-                                                    setCurrentRaw(
-                                                        e.target.value
-                                                    )
-                                                }
-                                            >
-                                                {select_row.map((rows, i) => (
-                                                    <option
-                                                        key={i}
-                                                        value={rows}
-                                                    >
-                                                        {rows}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            entries
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="col-sm-12 col-md-6">
-                                    <div
-                                        id="simpletable_filter"
-                                        className="dataTables_filter"
-                                    >
-                                        <label>
-                                            Search:
-                                            <input
-                                                type="search"
-                                                className="form-control form-control-sm"
-                                                placeholder="Type to filter..."
-                                                aria-controls="simpletable"
-                                                onChange={e =>
-                                                    setSearch(e.target.value)
-                                                }
-                                                value={search}
-                                            />
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-sm-12">
-                                    <table
-                                        id="simpletable"
-                                        className="table"
-                                        role="grid"
-                                        aria-describedby="simpletable_info"
-                                    >
-                                        <thead>
-                                            <tr role="row">
-                                                <th
-                                                    className="custom-head text-center"
-                                                    style={{ width: "15%" }}
+            {CategoryList.length > 0 && (
+                <div className="card custom-card">
+                    <div className="card-header d-block">
+                        <h3>Category List</h3>
+                    </div>
+                    <div className="card-body">
+                        <div className="dt-responsive">
+                            <div
+                                id="simpletable_wrapper"
+                                className="dataTables_wrapper dt-bootstrap4"
+                            >
+                                <div className="row">
+                                    <div className="col-sm-12 col-md-6">
+                                        <div
+                                            className="dataTables_length"
+                                            id="simpletable_length"
+                                        >
+                                            <label>
+                                                Show
+                                                <select
+                                                    name="simpletable_length"
+                                                    aria-controls="simpletable"
+                                                    className="custom-select custom-select-sm form-control form-control-sm"
+                                                    onChange={e =>
+                                                        setCurrentRaw(
+                                                            e.target.value
+                                                        )
+                                                    }
                                                 >
-                                                    Category Icon
-                                                </th>
-                                                <th className="text-center">
-                                                    Menu Name
-                                                </th>
-                                                <th className="text-center">
-                                                    Category Name
-                                                </th>
-                                                <th className="text-center">
-                                                    Status
-                                                </th>
-                                                <th className="text-center">
-                                                    Action
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {CategoryList.map(
-                                                (category_data, i) => (
-                                                    <tr key={i}>
-                                                        <td className="text-center">
-                                                            <img
-                                                                className="image-list rounded-circle"
-                                                                src={
-                                                                    category_data.category_icon
+                                                    {select_row.map(
+                                                        (rows, i) => (
+                                                            <option
+                                                                key={i}
+                                                                value={rows}
+                                                            >
+                                                                {rows}
+                                                            </option>
+                                                        )
+                                                    )}
+                                                </select>
+                                                entries
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-12 col-md-6">
+                                        <div
+                                            id="simpletable_filter"
+                                            className="dataTables_filter"
+                                        >
+                                            <label>
+                                                Search:
+                                                <input
+                                                    type="search"
+                                                    className="form-control form-control-sm"
+                                                    placeholder="Type to filter..."
+                                                    aria-controls="simpletable"
+                                                    onChange={e =>
+                                                        setSearch(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    value={search}
+                                                />
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-sm-12">
+                                        <table
+                                            id="simpletable"
+                                            className="table"
+                                            role="grid"
+                                            aria-describedby="simpletable_info"
+                                        >
+                                            <thead>
+                                                <tr role="row">
+                                                    <th
+                                                        className="custom-head text-center"
+                                                        style={{ width: "15%" }}
+                                                    >
+                                                        Category Icon
+                                                    </th>
+                                                    <th className="text-center">
+                                                        Menu Name
+                                                    </th>
+                                                    <th className="text-center">
+                                                        Category Name
+                                                    </th>
+                                                    <th className="text-center">
+                                                        Status
+                                                    </th>
+                                                    <th className="text-center">
+                                                        Action
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {CategoryList.map(
+                                                    (category_data, i) => (
+                                                        <tr key={i}>
+                                                            <td className="text-center">
+                                                                <img
+                                                                    className="image-list rounded-circle"
+                                                                    src={
+                                                                        category_data.category_icon
+                                                                    }
+                                                                />
+                                                            </td>
+                                                            <td className="text-center">
+                                                                {category_data.menus
+                                                                    ? category_data
+                                                                          .menus
+                                                                          .menu_name
+                                                                    : "Null"}
+                                                            </td>
+                                                            <td className="text-center">
+                                                                {
+                                                                    category_data.category_name
                                                                 }
-                                                            />
-                                                        </td>
-                                                        <td className="text-center">
-                                                            {category_data.menus
-                                                                ? category_data
-                                                                      .menus
-                                                                      .menu_name
-                                                                : "Null"}
-                                                        </td>
-                                                        <td className="text-center">
-                                                            {
-                                                                category_data.category_name
-                                                            }
-                                                        </td>
-                                                        <td className="text-center">
-                                                            <center>
-                                                                <div
+                                                            </td>
+                                                            <td className="text-center">
+                                                                <center>
+                                                                    <div
+                                                                        className={
+                                                                            category_data.status ==
+                                                                            1
+                                                                                ? "p-status bg-green"
+                                                                                : "p-status bg-red"
+                                                                        }
+                                                                    ></div>
+                                                                </center>
+                                                            </td>
+                                                            <td className="text-center">
+                                                                <i
                                                                     className={
                                                                         category_data.status ==
                                                                         1
-                                                                            ? "p-status bg-green"
-                                                                            : "p-status bg-red"
+                                                                            ? "ik ik-repeat f-16 mr-15 text-green"
+                                                                            : "ik ik-repeat f-16 mr-15 text-red"
                                                                     }
-                                                                ></div>
-                                                            </center>
-                                                        </td>
-                                                        <td className="text-center">
-                                                            <i
-                                                                className={
-                                                                    category_data.status ==
-                                                                    1
-                                                                        ? "ik ik-repeat f-16 mr-15 text-green"
-                                                                        : "ik ik-repeat f-16 mr-15 text-red"
-                                                                }
-                                                                onClick={() =>
-                                                                    ChangeStatus(
-                                                                        category_data.category_id
-                                                                    )
-                                                                }
-                                                            ></i>{" "}
-                                                            <i
-                                                                className="ik ik-edit f-16 mr-15 text-blue"
-                                                                data-toggle="modal"
-                                                                data-target="#edit_modal"
-                                                                onClick={() =>
-                                                                    EditHandler(
-                                                                        category_data.category_id,
-                                                                        category_data,
-                                                                        i
-                                                                    )
-                                                                }
-                                                            ></i>{" "}
-                                                            <i
-                                                                className="ik ik-trash-2 f-16 text-red"
-                                                                onClick={() =>
-                                                                    DeleteHandler(
-                                                                        category_data.category_id
-                                                                    )
-                                                                }
-                                                            ></i>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            )}
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th className="text-center">
-                                                    Category Icon
-                                                </th>
-                                                <th className="text-center">
-                                                    Menu Name
-                                                </th>
-                                                <th className="text-center">
-                                                    Category Name
-                                                </th>
-                                                <th className="text-center">
-                                                    Status
-                                                </th>
-                                                <th className="text-center">
-                                                    Action
-                                                </th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
+                                                                    onClick={() =>
+                                                                        ChangeStatus(
+                                                                            category_data.category_id
+                                                                        )
+                                                                    }
+                                                                ></i>{" "}
+                                                                <i
+                                                                    className="ik ik-edit f-16 mr-15 text-blue"
+                                                                    data-toggle="modal"
+                                                                    data-target="#edit_modal"
+                                                                    onClick={() =>
+                                                                        EditHandler(
+                                                                            category_data.category_id,
+                                                                            category_data,
+                                                                            i
+                                                                        )
+                                                                    }
+                                                                ></i>{" "}
+                                                                <i
+                                                                    className="ik ik-trash-2 f-16 text-red"
+                                                                    onClick={() =>
+                                                                        DeleteHandler(
+                                                                            category_data.category_id,
+                                                                            i
+                                                                        )
+                                                                    }
+                                                                ></i>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                )}
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th className="text-center">
+                                                        Category Icon
+                                                    </th>
+                                                    <th className="text-center">
+                                                        Menu Name
+                                                    </th>
+                                                    <th className="text-center">
+                                                        Category Name
+                                                    </th>
+                                                    <th className="text-center">
+                                                        Status
+                                                    </th>
+                                                    <th className="text-center">
+                                                        Action
+                                                    </th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-sm-12 col-md-5"></div>
-                                <div className="col-sm-12 col-md-7">
-                                    {current_row >= totalItemsCount ? (
-                                        ""
-                                    ) : (
-                                        <Pagination
-                                            innerClass="btn-group"
-                                            linkClass="btn btn-outline-secondary"
-                                            activePage={activePage}
-                                            itemsCountPerPage={
-                                                itemsCountPerPage
-                                            }
-                                            totalItemsCount={totalItemsCount}
-                                            pageRangeDisplayed={3}
-                                            onChange={handlePageChange}
-                                        />
-                                    )}
+                                <div className="row">
+                                    <div className="col-sm-12 col-md-5"></div>
+                                    <div className="col-sm-12 col-md-7">
+                                        {current_row >= totalItemsCount ? (
+                                            ""
+                                        ) : (
+                                            <Pagination
+                                                innerClass="btn-group"
+                                                linkClass="btn btn-outline-secondary"
+                                                activePage={activePage}
+                                                itemsCountPerPage={
+                                                    itemsCountPerPage
+                                                }
+                                                totalItemsCount={
+                                                    totalItemsCount
+                                                }
+                                                pageRangeDisplayed={3}
+                                                onChange={handlePageChange}
+                                            />
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
         </Fragment>
     );
 };
