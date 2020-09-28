@@ -135,6 +135,22 @@ class MenuController extends Controller
             File::delete($menu->menu_icon);
         }
         $menu->delete();
-        return response()->json(null, 204);
+        $status = 204;
+        $response = ['status' => $status, 'data' => new MenuResource($menu)];
+        return response()->json($response, $status);
+    }
+
+    public function status($id)
+    {
+        $menu = Menu::findOrFail($id);
+        if ($menu->status == 0) {
+            $menu->status = 1;
+        } else {
+            $menu->status = 0;
+        }
+        $menu->save();
+        $status = 200;
+        $response = ['status' => $status, 'data' => new MenuResource($menu)];
+        return response()->json($response, $status);
     }
 }

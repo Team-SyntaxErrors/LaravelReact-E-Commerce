@@ -142,6 +142,25 @@ const Category = () => {
             });
     };
 
+    const ChangeStatus = id => {
+        Axios.get("/category/status/" + id)
+            .then(response => {
+                if (response.status === 200) {
+                    swal(
+                        "Status!",
+                        "Category status has been changed",
+                        "success"
+                    );
+                    GetCategoryList();
+                } else {
+                    swal("Opps", "Something Went Wrong", "warning");
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
+
     return (
         <Fragment>
             <button
@@ -562,6 +581,19 @@ const Category = () => {
                                                         </td>
                                                         <td className="text-center">
                                                             <i
+                                                                className={
+                                                                    category_data.status ==
+                                                                    1
+                                                                        ? "ik ik-repeat f-16 mr-15 text-green"
+                                                                        : "ik ik-repeat f-16 mr-15 text-red"
+                                                                }
+                                                                onClick={() =>
+                                                                    ChangeStatus(
+                                                                        category_data.category_id
+                                                                    )
+                                                                }
+                                                            ></i>{" "}
+                                                            <i
                                                                 className="ik ik-edit f-16 mr-15 text-blue"
                                                                 data-toggle="modal"
                                                                 data-target="#edit_modal"
@@ -573,7 +605,6 @@ const Category = () => {
                                                                     )
                                                                 }
                                                             ></i>{" "}
-                                                            <i className="ik ik-repeat f-16 mr-15 text-green"></i>{" "}
                                                             <i
                                                                 className="ik ik-trash-2 f-16 text-red"
                                                                 onClick={() =>
@@ -589,10 +620,21 @@ const Category = () => {
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th>Category Icon</th>
-                                                <th>Category Name</th>
-                                                <th>Category Slug</th>
-                                                <th>Action</th>
+                                                <th className="text-center">
+                                                    Category Icon
+                                                </th>
+                                                <th className="text-center">
+                                                    Menu Name
+                                                </th>
+                                                <th className="text-center">
+                                                    Category Name
+                                                </th>
+                                                <th className="text-center">
+                                                    Status
+                                                </th>
+                                                <th className="text-center">
+                                                    Action
+                                                </th>
                                             </tr>
                                         </tfoot>
                                     </table>

@@ -126,6 +126,22 @@ class CategoryController extends Controller
             File::delete($category->category_icon);
         }
         $category->delete();
-        return response()->json(null, 204);
+        $status = 204;
+        $response = ['status' => $status, 'message' => "Category Deleted Successfully"];
+        return response()->json($response, $status);
+    }
+
+    public function status($id)
+    {
+        $category = Category::findOrFail($id);
+        if ($category->status == 0) {
+            $category->status = 1;
+        } else {
+            $category->status = 0;
+        }
+        $category->save();
+        $status = 200;
+        $response = ['status' => $status, 'message' => "Category Status Changed Successfully"];
+        return response()->json($response, $status);
     }
 }
