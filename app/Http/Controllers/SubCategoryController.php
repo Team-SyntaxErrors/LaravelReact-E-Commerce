@@ -126,4 +126,18 @@ class SubCategoryController extends Controller
         $subcategory->delete();
         return response()->json(null, 204);
     }
+
+    public function status($id)
+    {
+        $subcategory = SubCategory::findOrFail($id);
+        if ($subcategory->status == 0) {
+            $subcategory->status = 1;
+        } else {
+            $subcategory->status = 0;
+        }
+        $subcategory->save();
+        $status = 200;
+        $response = ['status' => $status, 'message' => "Sub Category Status Changed Successfully"];
+        return response()->json($response, $status);
+    }
 }

@@ -195,6 +195,27 @@ const SubCategory = () => {
     };
     // Update Form Submit Handler
 
+    // Change Status Handler
+    const ChangeStatus = id => {
+        Axios.get("/sub_category/status/" + id)
+            .then(response => {
+                if (response.status === 200) {
+                    swal(
+                        "Status!",
+                        "Sub Category status has been changed",
+                        "success"
+                    );
+                    GetSubCategoryList();
+                } else {
+                    swal("Opps", "Something Went Wrong", "warning");
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
+    // Change Status Handler
+
     // Clear From
     const ClearFrom = () => {
         setErrors([]);
@@ -757,6 +778,19 @@ const SubCategory = () => {
                                                         </td>
                                                         <td className="text-center">
                                                             <i
+                                                                className={
+                                                                    subCategory.status ==
+                                                                    1
+                                                                        ? "ik ik-repeat f-16 mr-15 text-green"
+                                                                        : "ik ik-repeat f-16 mr-15 text-red"
+                                                                }
+                                                                onClick={() =>
+                                                                    ChangeStatus(
+                                                                        subCategory.sub_category_id
+                                                                    )
+                                                                }
+                                                            ></i>{" "}
+                                                            <i
                                                                 className="ik ik-edit f-16 mr-15 text-blue"
                                                                 data-toggle="modal"
                                                                 data-target="#edit_modal"
@@ -768,7 +802,6 @@ const SubCategory = () => {
                                                                     )
                                                                 }
                                                             ></i>{" "}
-                                                            <i className="ik ik-repeat f-16 mr-15 text-green"></i>{" "}
                                                             <i
                                                                 className="ik ik-trash-2 f-16 text-red"
                                                                 onClick={() =>

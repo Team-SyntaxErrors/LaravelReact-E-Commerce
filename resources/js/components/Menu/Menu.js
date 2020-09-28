@@ -129,6 +129,20 @@ const Menu = () => {
             });
     };
 
+    const ChangeStatus = id => {
+        Axios.get("/menu/status/" + id)
+            .then(response => {
+                if (response.status === 200) {
+                    swal("Status!", "Menu status has been changed", "success");
+                    GetMenuList();
+                } else {
+                    swal("Opps", "Something Went Wrong", "warning");
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
     return (
         <Fragment>
             <button
@@ -485,6 +499,18 @@ const Menu = () => {
                                                     </td>
                                                     <td className="text-center">
                                                         <i
+                                                            className={
+                                                                menu.status == 1
+                                                                    ? "ik ik-repeat f-16 mr-15 text-green"
+                                                                    : "ik ik-repeat f-16 mr-15 text-red"
+                                                            }
+                                                            onClick={() =>
+                                                                ChangeStatus(
+                                                                    menu.menu_id
+                                                                )
+                                                            }
+                                                        ></i>{" "}
+                                                        <i
                                                             className="ik ik-edit f-16 mr-15 text-blue"
                                                             data-toggle="modal"
                                                             data-target="#edit_modal"
@@ -496,7 +522,6 @@ const Menu = () => {
                                                                 )
                                                             }
                                                         ></i>{" "}
-                                                        <i className="ik ik-repeat f-16 mr-15 text-green"></i>{" "}
                                                         <i
                                                             className="ik ik-trash-2 f-16 text-red"
                                                             onClick={() =>

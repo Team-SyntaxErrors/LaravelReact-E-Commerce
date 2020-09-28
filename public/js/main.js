@@ -36474,6 +36474,19 @@ var Category = function Category() {
     });
   };
 
+  var ChangeStatus = function ChangeStatus(id) {
+    axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/category/status/" + id).then(function (response) {
+      if (response.status === 200) {
+        sweetalert__WEBPACK_IMPORTED_MODULE_4___default()("Status!", "Category status has been changed", "success");
+        GetCategoryList();
+      } else {
+        sweetalert__WEBPACK_IMPORTED_MODULE_4___default()("Opps", "Something Went Wrong", "warning");
+      }
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
     style: {
       "float": "right"
@@ -36773,6 +36786,11 @@ var Category = function Category() {
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
       className: "text-center"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+      className: category_data.status == 1 ? "ik ik-repeat f-16 mr-15 text-green" : "ik ik-repeat f-16 mr-15 text-red",
+      onClick: function onClick() {
+        return ChangeStatus(category_data.category_id);
+      }
+    }), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
       className: "ik ik-edit f-16 mr-15 text-blue",
       "data-toggle": "modal",
       "data-target": "#edit_modal",
@@ -36780,14 +36798,22 @@ var Category = function Category() {
         return EditHandler(category_data.category_id, category_data, i);
       }
     }), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
-      className: "ik ik-repeat f-16 mr-15 text-green"
-    }), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
       className: "ik ik-trash-2 f-16 text-red",
       onClick: function onClick() {
         return DeleteHandler(category_data.category_id);
       }
     })));
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tfoot", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Category Icon"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Category Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Category Slug"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", null, "Action")))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tfoot", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Category Icon"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Menu Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Category Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Status"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Action")))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "col-sm-12 col-md-5"
@@ -38541,6 +38567,19 @@ var Menu = function Menu() {
     });
   };
 
+  var ChangeStatus = function ChangeStatus(id) {
+    axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/menu/status/" + id).then(function (response) {
+      if (response.status === 200) {
+        sweetalert__WEBPACK_IMPORTED_MODULE_4___default()("Status!", "Menu status has been changed", "success");
+        GetMenuList();
+      } else {
+        sweetalert__WEBPACK_IMPORTED_MODULE_4___default()("Opps", "Something Went Wrong", "warning");
+      }
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
     style: {
       "float": "right"
@@ -38800,14 +38839,17 @@ var Menu = function Menu() {
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
       className: "text-center"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+      className: menu.status == 1 ? "ik ik-repeat f-16 mr-15 text-green" : "ik ik-repeat f-16 mr-15 text-red",
+      onClick: function onClick() {
+        return ChangeStatus(menu.menu_id);
+      }
+    }), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
       className: "ik ik-edit f-16 mr-15 text-blue",
       "data-toggle": "modal",
       "data-target": "#edit_modal",
       onClick: function onClick() {
         return EditHandler(menu.menu_id, menu, i);
       }
-    }), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
-      className: "ik ik-repeat f-16 mr-15 text-green"
     }), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
       className: "ik ik-trash-2 f-16 text-red",
       onClick: function onClick() {
@@ -39126,6 +39168,21 @@ var SubCategory = function SubCategory() {
       }
     });
   }; // Update Form Submit Handler
+  // Change Status Handler
+
+
+  var ChangeStatus = function ChangeStatus(id) {
+    axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/sub_category/status/" + id).then(function (response) {
+      if (response.status === 200) {
+        swal("Status!", "Sub Category status has been changed", "success");
+        GetSubCategoryList();
+      } else {
+        swal("Opps", "Something Went Wrong", "warning");
+      }
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  }; // Change Status Handler
   // Clear From
 
 
@@ -39499,14 +39556,17 @@ var SubCategory = function SubCategory() {
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
       className: "text-center"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+      className: subCategory.status == 1 ? "ik ik-repeat f-16 mr-15 text-green" : "ik ik-repeat f-16 mr-15 text-red",
+      onClick: function onClick() {
+        return ChangeStatus(subCategory.sub_category_id);
+      }
+    }), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
       className: "ik ik-edit f-16 mr-15 text-blue",
       "data-toggle": "modal",
       "data-target": "#edit_modal",
       onClick: function onClick() {
         return EditHandler(subCategory.sub_category_id, subCategory, i);
       }
-    }), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
-      className: "ik ik-repeat f-16 mr-15 text-green"
     }), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
       className: "ik ik-trash-2 f-16 text-red",
       onClick: function onClick() {
