@@ -451,7 +451,7 @@ const Menu = () => {
                                         <thead>
                                             <tr role="row">
                                                 <th
-                                                    className="custom-head"
+                                                    className="custom-head text-center"
                                                     style={{ width: "15%" }}
                                                 >
                                                     Menu Icon
@@ -473,7 +473,7 @@ const Menu = () => {
                                         <tbody>
                                             {menu_list.map((menu, i) => (
                                                 <tr key={i}>
-                                                    <td>
+                                                    <td className="text-center">
                                                         <img
                                                             className="image-list rounded-circle"
                                                             src={menu.menu_icon}
@@ -536,11 +536,21 @@ const Menu = () => {
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th>Menu Icon</th>
-                                                <th>Menu Name</th>
-                                                <th>Menu Slug</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
+                                                <th className="text-center">
+                                                    Menu Icon
+                                                </th>
+                                                <th className="text-center">
+                                                    Menu Name
+                                                </th>
+                                                <th className="text-center">
+                                                    Menu Slug
+                                                </th>
+                                                <th className="text-center">
+                                                    Status
+                                                </th>
+                                                <th className="text-center">
+                                                    Action
+                                                </th>
                                             </tr>
                                         </tfoot>
                                     </table>

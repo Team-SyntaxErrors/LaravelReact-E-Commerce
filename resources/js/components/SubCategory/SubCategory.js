@@ -705,7 +705,7 @@ const SubCategory = () => {
                                         <thead>
                                             <tr role="row">
                                                 <th
-                                                    className="custom-head"
+                                                    className="custom-head text-center"
                                                     style={{ width: "15%" }}
                                                 >
                                                     Sub Category Icon
@@ -734,7 +734,7 @@ const SubCategory = () => {
                                             {SubCategoryList.map(
                                                 (subCategory, i) => (
                                                     <tr key={i}>
-                                                        <td>
+                                                        <td className="text-center">
                                                             <img
                                                                 className="image-list rounded-circle"
                                                                 src={
@@ -819,13 +819,27 @@ const SubCategory = () => {
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th>Sub Category Icon</th>
-                                                <th>Sub Category Name</th>
-                                                <th>Sub Category Slug</th>
-                                                <th>Menu Name</th>
-                                                <th>Category Name</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
+                                                <th className="text-center">
+                                                    Sub Category Icon
+                                                </th>
+                                                <th className="text-center">
+                                                    Sub Category Name
+                                                </th>
+                                                <th className="text-center">
+                                                    Sub Category Slug
+                                                </th>
+                                                <th className="text-center">
+                                                    Menu Name
+                                                </th>
+                                                <th className="text-center">
+                                                    Category Name
+                                                </th>
+                                                <th className="text-center">
+                                                    Status
+                                                </th>
+                                                <th className="text-center">
+                                                    Action
+                                                </th>
                                             </tr>
                                         </tfoot>
                                     </table>
