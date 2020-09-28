@@ -38924,6 +38924,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-js-pagination */ "./node_modules/react-js-pagination/dist/Pagination.js");
 /* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_js_pagination__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _customHooks_useForms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../customHooks/useForms */ "./resources/js/components/customHooks/useForms.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -38941,6 +38942,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -39025,6 +39027,13 @@ var SubCategory = function SubCategory() {
 
   var handlePageChange = function handlePageChange(pageNumber) {
     setPage(pageNumber);
+  };
+
+  var MenuChangeFunctions = function MenuChangeFunctions(e) {
+    setSubCategoryForm(_objectSpread(_objectSpread({}, SubCategoryForm), {}, {
+      menu_id: e.target.value
+    }));
+    GetCategory(e.target.value);
   }; // Sub Category List
 
 
@@ -39061,18 +39070,15 @@ var SubCategory = function SubCategory() {
   }, []); // Menu Data Get
   // Category Data Get
 
-  var GetCategory = function GetCategory() {
-    axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/all_category_get").then(function (response) {
+  var GetCategory = function GetCategory(menu_id) {
+    axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/all_category_get/" + menu_id).then(function (response) {
       setCategory(response.data);
     })["catch"](function (error) {
       console.log(error);
     });
-  };
-
-  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
-    GetCategory();
-  }, []); // Category Data Get
+  }; // Category Data Get
   // Image Render
+
 
   var onImageChangeHandler = function onImageChangeHandler(e) {
     var files = e.target.files[0];
@@ -39267,9 +39273,7 @@ var SubCategory = function SubCategory() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("select", {
     className: "form-control",
     onChange: function onChange(e) {
-      return setSubCategoryForm(_objectSpread(_objectSpread({}, SubCategoryForm), {}, {
-        menu_id: e.target.value
-      }));
+      return MenuChangeFunctions(e);
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
     value: true,

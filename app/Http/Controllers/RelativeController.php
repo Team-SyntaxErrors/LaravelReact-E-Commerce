@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Menu;
+use App\SubCategory;
 
 class RelativeController extends Controller
 {
@@ -13,9 +14,15 @@ class RelativeController extends Controller
         return response()->json($menu, 201);
     }
 
-    public function all_category_get()
+    public function all_category_get($id)
     {
-        $category = Category::all();
+        $category = Category::where('menu_id', $id)->get();
         return response()->json($category, 201);
+    }
+
+    public function all_subcategory_get()
+    {
+        $subcategory = SubCategory::all();
+        return response()->json($subcategory, 201);
     }
 }
