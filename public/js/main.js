@@ -36480,7 +36480,7 @@ var Category = function Category() {
         sweetalert__WEBPACK_IMPORTED_MODULE_4___default()("Status!", "Category status has been changed", "success");
         GetCategoryList();
       } else {
-        sweetalert__WEBPACK_IMPORTED_MODULE_4___default()("Opps", "Something Went Wrong", "warning");
+        sweetalert__WEBPACK_IMPORTED_MODULE_4___default()("Oops", "Something Went Wrong", "warning");
       }
     })["catch"](function (error) {
       console.log(error);
@@ -39005,34 +39005,33 @@ var SubCategory = function SubCategory() {
       Category = _useState22[0],
       setCategory = _useState22[1];
 
-  var _useState23 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
+  var _useForms = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_4__["default"])({
     menu_id: "",
     category_id: "",
     sub_category_name: "",
     sub_category_icon: ""
   }),
-      _useState24 = _slicedToArray(_useState23, 2),
-      SubCategoryForm = _useState24[0],
-      setSubCategoryForm = _useState24[1];
+      _useForms2 = _slicedToArray(_useForms, 2),
+      SubCategoryForm = _useForms2[0],
+      handleChange = _useForms2[1];
 
-  var _useState25 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
+  var _useForms3 = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_4__["default"])({
     menu_id: "",
     category_id: "",
     sub_category_name: "",
     sub_category_icon: ""
   }),
-      _useState26 = _slicedToArray(_useState25, 2),
-      EditForm = _useState26[0],
-      setEditForm = _useState26[1];
+      _useForms4 = _slicedToArray(_useForms3, 3),
+      EditForm = _useForms4[0],
+      EditHandleChange = _useForms4[1],
+      setEditForm = _useForms4[2];
 
   var handlePageChange = function handlePageChange(pageNumber) {
     setPage(pageNumber);
   };
 
   var MenuChangeFunctions = function MenuChangeFunctions(e) {
-    setSubCategoryForm(_objectSpread(_objectSpread({}, SubCategoryForm), {}, {
-      menu_id: e.target.value
-    }));
+    handleChange(e);
     GetCategory(e.target.value);
   }; // Sub Category List
 
@@ -39158,6 +39157,7 @@ var SubCategory = function SubCategory() {
     SubCategoryList.sub_category_id = id;
     var value = JSON.parse(JSON.stringify(data));
     setEditForm(value);
+    GetCategory(value.menu_id);
   }; // Edit Data Get Handler
   // Update Form Submit Handler
 
@@ -39259,9 +39259,10 @@ var SubCategory = function SubCategory() {
     className: "col-lg-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
     type: "file",
+    name: "sub_category_icon",
     className: "form-control",
     placeholder: "Enter SubCategory Icon",
-    onChange: onImageChangeHandler
+    onChange: handleChange
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
     className: "text-danger"
   }, Errors.sub_category_icon))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -39271,6 +39272,7 @@ var SubCategory = function SubCategory() {
   }, "Menu:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "col-lg-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("select", {
+    name: "menu_id",
     className: "form-control",
     onChange: function onChange(e) {
       return MenuChangeFunctions(e);
@@ -39293,12 +39295,9 @@ var SubCategory = function SubCategory() {
   }, "Category:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "col-lg-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("select", {
+    name: "category_id",
     className: "form-control",
-    onChange: function onChange(e) {
-      return setSubCategoryForm(_objectSpread(_objectSpread({}, SubCategoryForm), {}, {
-        category_id: e.target.value
-      }));
-    }
+    onChange: handleChange
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
     value: true,
     defaultValue: true,
@@ -39319,12 +39318,9 @@ var SubCategory = function SubCategory() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
     type: "text",
     className: "form-control",
+    name: "sub_category_name",
     placeholder: "Enter Sub Category Name",
-    onChange: function onChange(e) {
-      return setSubCategoryForm(_objectSpread(_objectSpread({}, SubCategoryForm), {}, {
-        sub_category_name: e.target.value
-      }));
-    }
+    onChange: handleChange
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
     className: "text-danger"
   }, Errors.sub_category_name))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -39386,8 +39382,9 @@ var SubCategory = function SubCategory() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
     type: "file",
     className: "form-control",
+    name: "sub_category_icon",
     placeholder: "Enter SubCategory Icon",
-    onChange: onEditImageChangeHandler
+    onChange: EditHandleChange
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
     className: "text-danger"
   }, Errors.sub_category_icon))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -39398,11 +39395,8 @@ var SubCategory = function SubCategory() {
     className: "col-lg-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("select", {
     className: "form-control",
-    onChange: function onChange(e) {
-      return setEditForm(_objectSpread(_objectSpread({}, EditForm), {}, {
-        menu_id: e.target.value
-      }));
-    },
+    name: "menu_id",
+    onChange: EditHandleChange,
     value: EditForm.menu_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
     value: true,
@@ -39423,11 +39417,8 @@ var SubCategory = function SubCategory() {
     className: "col-lg-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("select", {
     className: "form-control",
-    onChange: function onChange(e) {
-      return setEditForm(_objectSpread(_objectSpread({}, EditForm), {}, {
-        category_id: e.target.value
-      }));
-    },
+    name: "category_id",
+    onChange: EditHandleChange,
     value: EditForm.category_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
     value: true,
@@ -39449,12 +39440,9 @@ var SubCategory = function SubCategory() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
     type: "text",
     className: "form-control",
+    name: "sub_category_name",
     placeholder: "Enter Sub Category Name",
-    onChange: function onChange(e) {
-      return setEditForm(_objectSpread(_objectSpread({}, EditForm), {}, {
-        sub_category_name: e.target.value
-      }));
-    },
+    onChange: EditHandleChange,
     value: EditForm.sub_category_name
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
     className: "text-danger"
