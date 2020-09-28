@@ -36427,7 +36427,7 @@ var Category = function Category() {
   }; // Category Delete
 
 
-  var DeleteHandler = function DeleteHandler(id) {
+  var DeleteHandler = function DeleteHandler(id, index) {
     sweetalert__WEBPACK_IMPORTED_MODULE_4___default()({
       title: "Are you sure?",
       text: "Once deleted, you will not be able to recover this imaginary file!",
@@ -36438,12 +36438,12 @@ var Category = function Category() {
       if (willDelete) {
         axios__WEBPACK_IMPORTED_MODULE_2___default.a["delete"]("/category/" + id).then(function (response) {
           if (response.status === 204) {
+            // category_form.data.splice(index, 1);
+            GetCategoryList();
             sweetalert__WEBPACK_IMPORTED_MODULE_4___default()("Deleted!", "Category Has been Deleted", "success");
           } else {
             sweetalert__WEBPACK_IMPORTED_MODULE_4___default()("Opps", "Something Went Wrong", "warning");
           }
-
-          GetCategoryList();
         })["catch"](function (error) {
           console.log(error);
         });
@@ -36496,7 +36496,7 @@ var Category = function Category() {
     "data-target": "#add_modal",
     onClick: ClearFrom
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
-    "class": "ik ik-clipboard"
+    className: "ik ik-clipboard"
   }), "Add new"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
     onSubmit: submitHandler
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -36699,7 +36699,7 @@ var Category = function Category() {
   }, "Close"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
     type: "submit",
     className: "btn btn-primary"
-  }, "Save changes")))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+  }, "Save changes")))))), CategoryList.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "card custom-card"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "card-header d-block"
@@ -36800,7 +36800,7 @@ var Category = function Category() {
     }), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
       className: "ik ik-trash-2 f-16 text-red",
       onClick: function onClick() {
-        return DeleteHandler(category_data.category_id);
+        return DeleteHandler(category_data.category_id, i);
       }
     })));
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tfoot", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
@@ -38589,7 +38589,7 @@ var Menu = function Menu() {
     "data-target": "#add_modal",
     onClick: ClearFrom
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
-    "class": "ik ik-clipboard"
+    className: "ik ik-clipboard"
   }), "Add new"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
     onSubmit: submitHandler
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -38617,7 +38617,7 @@ var Menu = function Menu() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
     "aria-hidden": "true"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
-    "class": "ik ik-x"
+    className: "ik ik-x"
   })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "modal-body"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -38700,7 +38700,7 @@ var Menu = function Menu() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
     "aria-hidden": "true"
   }, " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
-    "class": "ik ik-x"
+    className: "ik ik-x"
   })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "modal-body"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {

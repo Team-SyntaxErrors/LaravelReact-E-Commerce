@@ -152,7 +152,7 @@ const Menu = () => {
                 data-target="#add_modal"
                 onClick={ClearFrom}
             >
-                <i class="ik ik-clipboard"></i>
+                <i className="ik ik-clipboard"></i>
                 Add new
             </button>
 
@@ -181,7 +181,7 @@ const Menu = () => {
                                     aria-label="Close"
                                 >
                                     <span aria-hidden="true">
-                                        <i class="ik ik-x"></i>
+                                        <i className="ik ik-x"></i>
                                     </span>
                                 </button>
                             </div>
@@ -294,7 +294,7 @@ const Menu = () => {
                                 >
                                     <span aria-hidden="true">
                                         {" "}
-                                        <i class="ik ik-x"></i>
+                                        <i className="ik ik-x"></i>
                                     </span>
                                 </button>
                             </div>
