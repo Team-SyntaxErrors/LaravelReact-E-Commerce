@@ -36507,12 +36507,12 @@ var Category = function Category() {
     "aria-labelledby": "exampleModalLongLabel",
     "aria-hidden": "true"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "modal-dialog modal-lg",
+    className: "modal-dialog",
     role: "document"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "modal-content"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "modal-header"
+    className: "modal-header bg-dark"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", {
     className: "modal-title",
     id: "exampleModalLongLabel"
@@ -36608,12 +36608,12 @@ var Category = function Category() {
     "aria-labelledby": "exampleModalLongLabel",
     "aria-hidden": "true"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "modal-dialog modal-lg",
+    className: "modal-dialog",
     role: "document"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "modal-content"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "modal-header"
+    className: "modal-header bg-dark"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", {
     className: "modal-title",
     id: "exampleModalLongLabel"
@@ -38683,7 +38683,7 @@ var Menu = function Menu() {
     "aria-labelledby": "exampleModalLongLabel",
     "aria-hidden": "true"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "modal-dialog modal-lg",
+    className: "modal-dialog",
     role: "document"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "modal-content"
@@ -39232,12 +39232,12 @@ var SubCategory = function SubCategory() {
     role: "dialog",
     "aria-hidden": "true"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "modal-dialog modal-lg",
+    className: "modal-dialog",
     role: "document"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "modal-content"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "modal-header"
+    className: "modal-header bg-dark"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", {
     className: "modal-title",
     id: "exampleModalLongLabel"
@@ -39354,12 +39354,12 @@ var SubCategory = function SubCategory() {
     role: "dialog",
     "aria-hidden": "true"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "modal-dialog modal-lg",
+    className: "modal-dialog",
     role: "document"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "modal-content"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-    className: "modal-header"
+    className: "modal-header bg-dark"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", {
     className: "modal-title",
     id: "exampleModalLongLabel"
