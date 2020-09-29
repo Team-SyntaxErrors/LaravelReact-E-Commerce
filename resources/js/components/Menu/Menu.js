@@ -277,7 +277,7 @@ const Menu = () => {
                     aria-labelledby="exampleModalLongLabel"
                     aria-hidden="true"
                 >
-                    <div className="modal-dialog modal-lg" role="document">
+                    <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header bg-dark">
                                 <h5
