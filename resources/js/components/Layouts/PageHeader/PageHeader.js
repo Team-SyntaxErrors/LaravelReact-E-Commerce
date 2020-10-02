@@ -9,13 +9,10 @@ function PageHeader() {
                 <div className="row align-items-end">
                     <div className="col-lg-8">
                         <div className="page-header-title">
-                            <i className="ik ik-edit bg-blue" />
+                            <i className="ik ik-home bg-blue" />
                             <div className="d-inline">
                                 <h5>{useLocation().state}</h5>
-                                <span>
-                                    lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit
-                                </span>
+
                             </div>
                         </div>
                     </div>
@@ -31,14 +28,9 @@ function PageHeader() {
                                     </a>
                                 </li>
                                 <li className="breadcrumb-item">
-                                    <a href="#">Forms</a>
+                                    <a href="#">{useLocation().state}</a>
                                 </li>
-                                <li
-                                    className="breadcrumb-item active"
-                                    aria-current="page"
-                                >
-                                    Group Add-Ons
-                                </li>
+
                             </ol>
                         </nav>
                     </div>
