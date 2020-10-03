@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UnitFormRequest;
 use App\Unit;
 use Illuminate\Http\Request;
-use App\Http\Requests\UnitFormRequest;
 use Illuminate\Http\Response;
+
 class UnitController extends Controller
 {
     /**
@@ -16,7 +17,7 @@ class UnitController extends Controller
     public function index(Request $request)
     {
         $unit_data = Unit::search($request->q)->paginate($request->row);
-        return response()->json($unit_data, 200);
+        return $this->successResponse($unit_data, "Unit Get Successfully", Response::HTTP_OK);
     }
 
     /**
@@ -37,11 +38,11 @@ class UnitController extends Controller
      */
     public function store(UnitFormRequest $request)
     {
-        try{
+        try {
             $unit_model = new Unit;
             $unit_model->fill($request->all())->save();
             return $this->successResponse($unit_model, "Unit Saved Successfully", Response::HTTP_CREATED);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
@@ -93,7 +94,6 @@ class UnitController extends Controller
             $unit_model = Unit::findOrFail($id);
             $unit_model->fill($request->all())->save();
             return $this->successResponse($unit_model, "Unit Update Successfully", Response::HTTP_CREATED);
-            
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
@@ -110,7 +110,7 @@ class UnitController extends Controller
         try {
             Unit::findOrFail($id)->delete();
             return $this->successResponse(null, "Unit Delete Successfully", Response::HTTP_NO_CONTENT);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }

@@ -1,15 +1,13 @@
 import "./Unit.css";
 
 import React, { Fragment, useEffect, useState } from "react";
-import useForms from "../customHooks/useForms";
-import { useForm } from "react-hook-form";
 
 import Axios from "axios";
 import Pagination from "react-js-pagination";
 import swal from "sweetalert";
+import { useForm } from "react-hook-form";
 
 const Unit = () => {
-
     const [search, setSearch] = useState("");
     const [select_row, setSelectRow] = useState([8, 10, 20, 30, 40, 50]);
     const [current_row, setCurrentRaw] = useState(8);
@@ -19,26 +17,27 @@ const Unit = () => {
     const [activePage, setActivePage] = useState(1);
     const [itemsCountPerPage, setItemsCountPerPage] = useState(8);
     const [totalItemsCount, setTotalItemsCount] = useState(450);
-    const handlePageChange = (pageNumber) => {
+    const { register, errors, handleSubmit } = useForm();
+    const {
+        register: register2,
+        errors: errors2,
+        handleSubmit: handleSubmit2,
+        setValue
+    } = useForm();
+
+    const handlePageChange = pageNumber => {
         setPage(pageNumber);
     };
-    const [UnitForm, handleChange] = useForms({
-        name: "",
-        short_name: "",
-        status: ""
-    });
-    const { register, errors, handleSubmit } = useForm();
-    const { register: register2, errors: errors2, handleSubmit: handleSubmit2, setValue } = useForm();
     const GetUnitList = () => {
         const main_url = `units?q=${search}&row=${current_row}&page=${page}`;
         Axios.get(main_url)
-            .then((response) => {
-                setUnitList(response.data.data);
-                setActivePage(response.data.current_page);
-                setItemsCountPerPage(parseInt(response.data.per_page));
-                setTotalItemsCount(response.data.total);
+            .then(response => {
+                setUnitList(response.data.data.data);
+                setActivePage(response.data.data.current_page);
+                setItemsCountPerPage(parseInt(response.data.data.per_page));
+                setTotalItemsCount(response.data.data.total);
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log(error);
             });
     };
@@ -47,43 +46,45 @@ const Unit = () => {
         GetUnitList();
     }, [current_row, search, page]);
 
-
-    const onAddSubmit = (data,e) => {
+    const onAddSubmit = (data, e) => {
         console.log(data);
         Axios.post("/units", data)
-            .then((response) => {
+            .then(response => {
                 e.target.reset();
                 setError([]);
                 GetUnitList();
                 $("#close").click();
-                
             })
-            .catch((error) => {
+            .catch(error => {
                 if (error.response.status == 422) {
                     setError(error.response.data.errors);
                 }
             });
     };
 
-    const DeleteHandler = (id) => {
+    const DeleteHandler = id => {
         swal({
             title: "Are you sure?",
             text: `Once deleted, you will not be able to recover this imaginary file!`,
             icon: "warning",
             buttons: true,
-            dangerMode: true,
-        }).then((willDelete) => {
+            dangerMode: true
+        }).then(willDelete => {
             if (willDelete) {
                 Axios.delete("/units/" + id)
-                    .then((response) => {
+                    .then(response => {
                         if (response.status === 204) {
-                            swal("Deleted!", "Unit Has been Deleted", "success");
+                            swal(
+                                "Deleted!",
+                                "Unit Has been Deleted",
+                                "success"
+                            );
                             GetUnitList();
                         } else {
                             swal("Opps", "Something Went Wrong", "warning");
                         }
                     })
-                    .catch((error) => {
+                    .catch(error => {
                         console.log(error);
                     });
             } else {
@@ -97,29 +98,28 @@ const Unit = () => {
         let value = JSON.parse(JSON.stringify(data));
         Object.entries(value).forEach(([name, value]) => {
             setValue(name, value);
-          });
-
+        });
     };
 
-        const onUpdateSubmit = data => {
-            console.log(data);
-            Axios.put("/units/" + data.unit_id, data)
-                .then((response) => {
-                    GetUnitList();
-                    $("#edit_close").click();
-                    setError([]);
-                })
-                .catch((error) => {
-                    if (error.response.status == 422) {
-                        setError(error.response.data.errors);
-                    }
-                });
+    const onUpdateSubmit = data => {
+        console.log(data);
+        Axios.put("/units/" + data.unit_id, data)
+            .then(response => {
+                GetUnitList();
+                $("#edit_close").click();
+                setError([]);
+            })
+            .catch(error => {
+                if (error.response.status == 422) {
+                    setError(error.response.data.errors);
+                }
+            });
     };
 
-    const ChangeStatus = (id) => {
+    const ChangeStatus = id => {
         Axios.get("/units/" + id)
-            .then((response) => {
-                console.log(response)
+            .then(response => {
+                console.log(response);
                 if (response.data.code === 200) {
                     swal("Status!", "Unit Status Active", "success");
                     GetUnitList();
@@ -129,26 +129,46 @@ const Unit = () => {
                     GetUnitList();
                 }
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log(error);
             });
     };
     return (
         <Fragment>
-            <button style={{ float: "right" }} className="btn btn-secondary" data-toggle="modal" data-target="#add_modal">
+            <button
+                style={{ float: "right" }}
+                className="btn btn-secondary"
+                data-toggle="modal"
+                data-target="#add_modal"
+            >
                 <i className="ik ik-clipboard"></i>
                 Add new
             </button>
 
             <form onSubmit={handleSubmit(onAddSubmit)}>
-                <div className="modal fade" id="add_modal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLongLabel" aria-hidden="true">
+                <div
+                    className="modal fade"
+                    id="add_modal"
+                    tabIndex={-1}
+                    role="dialog"
+                    aria-labelledby="exampleModalLongLabel"
+                    aria-hidden="true"
+                >
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header bg-dark">
-                                <h5 className="modal-title" id="exampleModalLongLabel">
+                                <h5
+                                    className="modal-title"
+                                    id="exampleModalLongLabel"
+                                >
                                     Add Unit
                                 </h5>
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <button
+                                    type="button"
+                                    className="close"
+                                    data-dismiss="modal"
+                                    aria-label="Close"
+                                >
                                     <span aria-hidden="true">
                                         <i className="ik ik-x"></i>
                                     </span>
@@ -159,31 +179,84 @@ const Unit = () => {
                                     <div className="row">
                                         <div className="col-md-12 col-sm-12 ">
                                             <div className="form-group ">
-                                                <label className="col-lg-6 control-label">Name:</label>
+                                                <label className="col-lg-6 control-label">
+                                                    Name:
+                                                </label>
                                                 <div className="col-lg-12">
-                                                    <input type="text" className="form-control" name="unit_name" ref={register({ required: true })} placeholder="Enter Unit Name" />
-                                                    <span className="text-danger">{errors.unit_name && "Unit name is required"}</span>
-                                                    <span className="text-danger">{error.unit_name}</span>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        name="unit_name"
+                                                        ref={register({
+                                                            required: true
+                                                        })}
+                                                        placeholder="Enter Unit Name"
+                                                    />
+                                                    <span className="text-danger">
+                                                        {errors.unit_name &&
+                                                            "Unit name is required"}
+                                                    </span>
+                                                    <span className="text-danger">
+                                                        {error.unit_name}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="form-group ">
-                                                <label className="col-lg-6 control-label">Short Name:</label>
+                                                <label className="col-lg-6 control-label">
+                                                    Short Name:
+                                                </label>
                                                 <div className="col-lg-12">
-                                                    <input type="text" className="form-control" name="short_name" ref={register({ required: true })} placeholder="Enter Unit Short Name" />
-                                                    <span className="text-danger">{errors.short_name && "Unit short name is required"}</span>
-                                                    <span className="text-danger">{error.short_name}</span>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        name="short_name"
+                                                        ref={register({
+                                                            required: true
+                                                        })}
+                                                        placeholder="Enter Unit Short Name"
+                                                    />
+                                                    <span className="text-danger">
+                                                        {errors.short_name &&
+                                                            "Unit short name is required"}
+                                                    </span>
+                                                    <span className="text-danger">
+                                                        {error.short_name}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="form-group ">
-                                                <label className="col-lg-6 control-label">Status:</label>
+                                                <label className="col-lg-6 control-label">
+                                                    Status:
+                                                </label>
                                                 <div className="col-lg-12">
-                                                    <select className="form-control" name="status" ref={register({required: true})}>
-                                                        <option value="" defaultValue disabled>--Select--</option>
-                                                        <option value="1">Active</option>
-                                                        <option value="0">Inactive</option>
-                                                    </select> 
-                                                    <span className="text-danger">{errors.status && "Select unit status"}</span>
-                                                    <span className="text-danger">{error.status}</span>
+                                                    <select
+                                                        className="form-control"
+                                                        name="status"
+                                                        ref={register({
+                                                            required: true
+                                                        })}
+                                                    >
+                                                        <option
+                                                            value=""
+                                                            defaultValue
+                                                            hidden
+                                                        >
+                                                            --Select--
+                                                        </option>
+                                                        <option value="1">
+                                                            Active
+                                                        </option>
+                                                        <option value="0">
+                                                            Inactive
+                                                        </option>
+                                                    </select>
+                                                    <span className="text-danger">
+                                                        {errors.status &&
+                                                            "Select unit status"}
+                                                    </span>
+                                                    <span className="text-danger">
+                                                        {error.status}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -191,11 +264,19 @@ const Unit = () => {
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" id="close" data-dismiss="modal">
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    id="close"
+                                    data-dismiss="modal"
+                                >
                                     Close
                                 </button>
-                                <button type="submit" className="btn btn-primary">
-                                    Submit
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary"
+                                >
+                                    Save
                                 </button>
                             </div>
                         </div>
@@ -206,15 +287,30 @@ const Unit = () => {
             <br />
             <br />
 
-            <form  onSubmit={handleSubmit2(onUpdateSubmit)}>
-                <div className="modal fade" id="edit_modal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLongLabel" aria-hidden="true">
+            <form onSubmit={handleSubmit2(onUpdateSubmit)}>
+                <div
+                    className="modal fade"
+                    id="edit_modal"
+                    tabIndex={-1}
+                    role="dialog"
+                    aria-labelledby="exampleModalLongLabel"
+                    aria-hidden="true"
+                >
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header bg-dark">
-                                <h5 className="modal-title" id="exampleModalLongLabel">
+                                <h5
+                                    className="modal-title"
+                                    id="exampleModalLongLabel"
+                                >
                                     Edit Unit
                                 </h5>
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <button
+                                    type="button"
+                                    className="close"
+                                    data-dismiss="modal"
+                                    aria-label="Close"
+                                >
                                     <span aria-hidden="true">
                                         {" "}
                                         <i className="ik ik-x"></i>
@@ -223,35 +319,94 @@ const Unit = () => {
                             </div>
                             <div className="modal-body">
                                 <div className="form-group">
-                                <div className="row">
+                                    <div className="row">
                                         <div className="col-md-12 col-sm-12 ">
                                             <div className="form-group ">
-                                                <label className="col-lg-6 control-label">Name:</label>
+                                                <label className="col-lg-6 control-label">
+                                                    Name:
+                                                </label>
                                                 <div className="col-lg-12">
-                                                    <input type="text" className="form-control" name="unit_name" ref={register2({ required: true })} placeholder="Enter Unit Name" />
-                                                    <span className="text-danger">{errors2.unit_name && "Unit name is required"}</span>
-                                                    <span className="text-danger">{error.unit_name}</span>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        name="unit_name"
+                                                        ref={register2({
+                                                            required: true
+                                                        })}
+                                                        placeholder="Enter Unit Name"
+                                                    />
+                                                    <span className="text-danger">
+                                                        {errors2.unit_name &&
+                                                            "Unit name is required"}
+                                                    </span>
+                                                    <span className="text-danger">
+                                                        {error.unit_name}
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <input name="unit_id" type="hidden" ref={register2({ required: true })} ></input>  
+                                            <input
+                                                name="unit_id"
+                                                type="hidden"
+                                                ref={register2({
+                                                    required: true
+                                                })}
+                                            ></input>
                                             <div className="form-group ">
-                                                <label className="col-lg-6 control-label">Short Name:</label>
+                                                <label className="col-lg-6 control-label">
+                                                    Short Name:
+                                                </label>
                                                 <div className="col-lg-12">
-                                                    <input type="text" className="form-control" name="short_name"  ref={register2({ required: true })} placeholder="Enter Unit Short Name" />
-                                                    <span className="text-danger">{errors2.short_name && "Unit Short Name is required"}</span>
-                                                    <span className="text-danger">{error.short_name}</span>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        name="short_name"
+                                                        ref={register2({
+                                                            required: true
+                                                        })}
+                                                        placeholder="Enter Unit Short Name"
+                                                    />
+                                                    <span className="text-danger">
+                                                        {errors2.short_name &&
+                                                            "Unit Short Name is required"}
+                                                    </span>
+                                                    <span className="text-danger">
+                                                        {error.short_name}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="form-group ">
-                                                <label className="col-lg-6 control-label">Status:</label>
+                                                <label className="col-lg-6 control-label">
+                                                    Status:
+                                                </label>
                                                 <div className="col-lg-12">
-                                                    <select className="form-control" name="status" ref={register2({ required: true })} >
-                                                        <option value=""  defaultValue disabled>--Select--</option>
-                                                        <option value="1">Active</option>
-                                                        <option value="0">Inactive</option>
-                                                    </select> 
-                                                    <span className="text-danger">{errors2.status && "Select Unit Status"}</span>
-                                                    <span className="text-danger">{error.status}</span>
+                                                    <select
+                                                        className="form-control"
+                                                        name="status"
+                                                        ref={register2({
+                                                            required: true
+                                                        })}
+                                                    >
+                                                        <option
+                                                            value=""
+                                                            defaultValue
+                                                            disabled
+                                                        >
+                                                            --Select--
+                                                        </option>
+                                                        <option value="1">
+                                                            Active
+                                                        </option>
+                                                        <option value="0">
+                                                            Inactive
+                                                        </option>
+                                                    </select>
+                                                    <span className="text-danger">
+                                                        {errors2.status &&
+                                                            "Select Unit Status"}
+                                                    </span>
+                                                    <span className="text-danger">
+                                                        {error.status}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -259,10 +414,18 @@ const Unit = () => {
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" id="edit_close" data-dismiss="modal">
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    id="edit_close"
+                                    data-dismiss="modal"
+                                >
                                     Close
                                 </button>
-                                <button type="submit" className="btn btn-primary">
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary"
+                                >
                                     Save changes
                                 </button>
                             </div>
@@ -277,15 +440,33 @@ const Unit = () => {
                 </div>
                 <div className="card-body">
                     <div className="dt-responsive">
-                        <div id="simpletable_wrapper" className="dataTables_wrapper dt-bootstrap4">
+                        <div
+                            id="simpletable_wrapper"
+                            className="dataTables_wrapper dt-bootstrap4"
+                        >
                             <div className="row">
                                 <div className="col-sm-12 col-md-6">
-                                    <div className="dataTables_length" id="simpletable_length">
+                                    <div
+                                        className="dataTables_length"
+                                        id="simpletable_length"
+                                    >
                                         <label>
                                             Show
-                                            <select name="simpletable_length" aria-controls="simpletable" className="custom-select custom-select-sm form-control form-control-sm" onChange={(e) => setCurrentRaw(e.target.value)}>
+                                            <select
+                                                name="simpletable_length"
+                                                aria-controls="simpletable"
+                                                className="custom-select custom-select-sm form-control form-control-sm"
+                                                onChange={e =>
+                                                    setCurrentRaw(
+                                                        e.target.value
+                                                    )
+                                                }
+                                            >
                                                 {select_row.map((rows, i) => (
-                                                    <option key={i} value={rows}>
+                                                    <option
+                                                        key={i}
+                                                        value={rows}
+                                                    >
                                                         {rows}
                                                     </option>
                                                 ))}
@@ -295,44 +476,108 @@ const Unit = () => {
                                     </div>
                                 </div>
                                 <div className="col-sm-12 col-md-6">
-                                    <div id="simpletable_filter" className="dataTables_filter">
+                                    <div
+                                        id="simpletable_filter"
+                                        className="dataTables_filter"
+                                    >
                                         <label>
                                             Search:
-                                            <input type="search" className="form-control form-control-sm" placeholder="Type to filter..." aria-controls="simpletable" onChange={(e) => setSearch(e.target.value)} value={search} />
+                                            <input
+                                                type="search"
+                                                className="form-control form-control-sm"
+                                                placeholder="Type to filter..."
+                                                aria-controls="simpletable"
+                                                onChange={e =>
+                                                    setSearch(e.target.value)
+                                                }
+                                                value={search}
+                                            />
                                         </label>
                                     </div>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-sm-12">
-                                    <table id="simpletable" className="table" role="grid" aria-describedby="simpletable_info">
+                                    <table
+                                        id="simpletable"
+                                        className="table"
+                                        role="grid"
+                                        aria-describedby="simpletable_info"
+                                    >
                                         <thead>
                                             <tr role="row">
-                                                <th className="text-center">Unit Name</th>
-                                                <th className="text-center">Unit Short Name</th>
-                                                <th className="text-center">Status</th>
-                                                <th className="text-center">Action</th>
+                                                <th className="text-center">
+                                                    Unit Name
+                                                </th>
+                                                <th className="text-center">
+                                                    Unit Short Name
+                                                </th>
+                                                <th className="text-center">
+                                                    Status
+                                                </th>
+                                                <th className="text-center">
+                                                    Action
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {unit_list.map((unit, i) => (
                                                 <tr key={i}>
-                                                    <td className="text-center">{unit.unit_name}</td>
-                                                    <td className="text-center">{unit.short_name}</td>
+                                                    <td className="text-center">
+                                                        {unit.unit_name}
+                                                    </td>
+                                                    <td className="text-center">
+                                                        {unit.short_name}
+                                                    </td>
                                                     <td>
                                                         <center>
-                                                            <div className={unit.status == 1 ? "p-status bg-green" : "p-status bg-red"}></div>
+                                                            <div
+                                                                className={
+                                                                    unit.status ==
+                                                                    1
+                                                                        ? "p-status bg-green"
+                                                                        : "p-status bg-red"
+                                                                }
+                                                            ></div>
                                                         </center>
                                                     </td>
                                                     <td className="text-center">
-                                                        <i className={unit.status == 1 ? "ik ik-repeat f-16 mr-15 text-green" : "ik ik-repeat f-16 mr-15 text-red"} onClick={() => ChangeStatus(unit.unit_id)}></i>{" "}
-                                                        <i className="ik ik-edit f-16 mr-15 text-blue" data-toggle="modal" data-target="#edit_modal" onClick={() => EditHandler(unit.unit_id, unit, i)}></i>{" "}
-                                                        <i className="ik ik-trash-2 f-16 text-red" onClick={() => DeleteHandler(unit.unit_id)}></i>
+                                                        <i
+                                                            className={
+                                                                unit.status == 1
+                                                                    ? "ik ik-repeat f-16 mr-15 text-green"
+                                                                    : "ik ik-repeat f-16 mr-15 text-red"
+                                                            }
+                                                            onClick={() =>
+                                                                ChangeStatus(
+                                                                    unit.unit_id
+                                                                )
+                                                            }
+                                                        ></i>{" "}
+                                                        <i
+                                                            className="ik ik-edit f-16 mr-15 text-blue"
+                                                            data-toggle="modal"
+                                                            data-target="#edit_modal"
+                                                            onClick={() =>
+                                                                EditHandler(
+                                                                    unit.unit_id,
+                                                                    unit,
+                                                                    i
+                                                                )
+                                                            }
+                                                        ></i>{" "}
+                                                        <i
+                                                            className="ik ik-trash-2 f-16 text-red"
+                                                            onClick={() =>
+                                                                DeleteHandler(
+                                                                    unit.unit_id
+                                                                )
+                                                            }
+                                                        ></i>
                                                     </td>
                                                 </tr>
                                             ))}
                                         </tbody>
-
                                     </table>
                                 </div>
                             </div>
@@ -346,7 +591,9 @@ const Unit = () => {
                                             innerClass="btn-group"
                                             linkClass="btn btn-outline-secondary"
                                             activePage={activePage}
-                                            itemsCountPerPage={itemsCountPerPage}
+                                            itemsCountPerPage={
+                                                itemsCountPerPage
+                                            }
                                             totalItemsCount={totalItemsCount}
                                             pageRangeDisplayed={3}
                                             onChange={handlePageChange}

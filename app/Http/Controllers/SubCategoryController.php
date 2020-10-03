@@ -5,15 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SubCategoryRequest;
 use App\Http\Resources\SubCategoryResource;
 use App\SubCategory;
-use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
-use Str;
+use Illuminate\Support\Str;
 
 class SubCategoryController extends Controller
 {
-    use ImageUpload;
     /**
      * Display a listing of the resource.
      *

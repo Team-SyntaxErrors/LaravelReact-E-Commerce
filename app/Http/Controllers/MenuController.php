@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MenuRequest;
 use App\Http\Resources\MenuResource;
 use App\Menu;
-use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
@@ -13,7 +12,6 @@ use Illuminate\Support\Str;
 
 class MenuController extends Controller
 {
-    use ImageUpload;
     /**
      * Display a listing of the resource.
      *
