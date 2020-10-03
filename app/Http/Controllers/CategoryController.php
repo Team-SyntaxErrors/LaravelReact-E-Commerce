@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
-use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
@@ -13,7 +12,6 @@ use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
-    use ImageUpload;
     /**
      * Display a listing of the resource.
      *

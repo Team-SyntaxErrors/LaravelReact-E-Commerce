@@ -12,7 +12,6 @@ function PageHeader() {
                             <i className="ik ik-home bg-blue" />
                             <div className="d-inline">
                                 <h5>{useLocation().state}</h5>
-
                             </div>
                         </div>
                     </div>
@@ -23,14 +22,13 @@ function PageHeader() {
                         >
                             <ol className="breadcrumb">
                                 <li className="breadcrumb-item">
-                                    <a href="../index.html">
+                                    <a href="/">
                                         <i className="ik ik-home" />
                                     </a>
                                 </li>
                                 <li className="breadcrumb-item">
                                     <a href="#">{useLocation().state}</a>
                                 </li>
-
                             </ol>
                         </nav>
                     </div>
