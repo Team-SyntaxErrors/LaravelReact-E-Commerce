@@ -38232,10 +38232,10 @@ var Category = function Category() {
   var GetCategoryList = function GetCategoryList() {
     var main_url = "category?q=".concat(search, "&row=").concat(current_row, "&page=").concat(page);
     axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(main_url).then(function (response) {
-      setCategoryList(response.data.data);
-      setActivePage(response.data.current_page);
-      setItemsCountPerPage(parseInt(response.data.per_page));
-      setTotalItemsCount(response.data.total);
+      setCategoryList(response.data.data.data);
+      setActivePage(response.data.data.current_page);
+      setItemsCountPerPage(parseInt(response.data.data.per_page));
+      setTotalItemsCount(response.data.data.total);
     })["catch"](function (error) {
       console.log(error);
     });
@@ -38321,12 +38321,17 @@ var Category = function Category() {
 
   var ChangeStatus = function ChangeStatus(id) {
     axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/category/status/" + id).then(function (response) {
-      if (response.status === 200) {
+      console.log(response);
+
+      if (response.data.code === 200) {
         sweetalert__WEBPACK_IMPORTED_MODULE_4___default()("Status!", "Category status has been changed", "success");
-        GetCategoryList();
-      } else {
-        sweetalert__WEBPACK_IMPORTED_MODULE_4___default()("Oops", "Something Went Wrong", "warning");
       }
+
+      if (response.data.code === 201) {
+        sweetalert__WEBPACK_IMPORTED_MODULE_4___default()("Status!", "Category status has been changed", "success");
+      }
+
+      GetCategoryList();
     })["catch"](function (error) {
       console.log(error);
     });

@@ -50,10 +50,10 @@ const Category = () => {
         const main_url = `category?q=${search}&row=${current_row}&page=${page}`;
         Axios.get(main_url)
             .then(response => {
-                setCategoryList(response.data.data);
-                setActivePage(response.data.current_page);
-                setItemsCountPerPage(parseInt(response.data.per_page));
-                setTotalItemsCount(response.data.total);
+                setCategoryList(response.data.data.data);
+                setActivePage(response.data.data.current_page);
+                setItemsCountPerPage(parseInt(response.data.data.per_page));
+                setTotalItemsCount(response.data.data.total);
             })
             .catch(error => {
                 console.log(error);
@@ -146,16 +146,22 @@ const Category = () => {
     const ChangeStatus = id => {
         Axios.get("/category/status/" + id)
             .then(response => {
-                if (response.status === 200) {
+                console.log(response);
+                if (response.data.code === 200) {
                     swal(
                         "Status!",
                         "Category status has been changed",
                         "success"
                     );
-                    GetCategoryList();
-                } else {
-                    swal("Oops", "Something Went Wrong", "warning");
                 }
+                if (response.data.code === 201) {
+                    swal(
+                        "Status!",
+                        "Category status has been changed",
+                        "success"
+                    );
+                }
+                GetCategoryList();
             })
             .catch(error => {
                 console.log(error);
