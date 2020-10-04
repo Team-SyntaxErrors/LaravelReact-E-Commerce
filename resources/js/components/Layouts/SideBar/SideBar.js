@@ -47,71 +47,79 @@ function SideBar() {
                             </div>
 
                             <div className="nav-item has-sub">
-                                <a href="#">
+                                <a>
                                     <i className="ik ik-layers" />
                                     <span>Web Settings</span>{" "}
                                 </a>
                                 <div className="submenu-content">
-                                <div>
-                                    <Link className="menu-item" className={
-                                        useLocation().pathname == "/menu_list"
-                                            ? "menu-item active"
-                                            : "menu-item"
-                                    }
-                                        to={{
-                                            pathname: "/menu_list",
-                                            state: "Menu"
-                                        }}
-                                    >
-                                       
-                                        <span>Menu</span>{" "}
-                                    </Link>
-                                </div>
-                                <div>
-                                    <Link className="menu-item" className={
-                                        useLocation().pathname == "/categories"
-                                            ? "menu-item active"
-                                            : "menu-item"
-                                    }
-                                        to={{
-                                            pathname: "/categories",
-                                            state: "Category"
-                                        }}
-                                    >
-                                       
-                                        <span>Category</span>{" "}
-                                    </Link>
-                                </div>
-                                <div>
-                                    <Link className="menu-item" className={
-                                        useLocation().pathname == "/subcategories"
-                                            ? "menu-item active"
-                                            : "menu-item"
-                                    }
-                                        to={{
-                                            pathname: "/subcategories",
-                                            state: "SubCategory"
-                                        }}
-                                    >
-                                       
-                                        <span>SubCategory</span>{" "}
-                                    </Link>
-                                </div>
-                                <div>
-                                    <Link className="menu-item" className={
-                                        useLocation().pathname == "/unit"
-                                            ? "menu-item active"
-                                            : "menu-item"
-                                    }
-                                        to={{
-                                            pathname: "/unit",
-                                            state: "Unit"
-                                        }}
-                                    >
-                                       
-                                        <span>Unit</span>{" "}
-                                    </Link>
-                                </div>
+                                    <div>
+                                        <Link
+                                            className="menu-item"
+                                            className={
+                                                useLocation().pathname ==
+                                                "/menu_list"
+                                                    ? "menu-item active"
+                                                    : "menu-item"
+                                            }
+                                            to={{
+                                                pathname: "/menu_list",
+                                                state: "Menu"
+                                            }}
+                                        >
+                                            <span>Menu</span>{" "}
+                                        </Link>
+                                    </div>
+                                    <div>
+                                        <Link
+                                            className="menu-item"
+                                            className={
+                                                useLocation().pathname ==
+                                                "/categories"
+                                                    ? "menu-item active"
+                                                    : "menu-item"
+                                            }
+                                            to={{
+                                                pathname: "/categories",
+                                                state: "Category"
+                                            }}
+                                        >
+                                            <span>Category</span>{" "}
+                                        </Link>
+                                    </div>
+                                    <div>
+                                        <Link
+                                            className="menu-item"
+                                            className={
+                                                useLocation().pathname ==
+                                                "/subcategories"
+                                                    ? "menu-item active"
+                                                    : "menu-item"
+                                            }
+                                            to={{
+                                                pathname: "/subcategories",
+                                                state: "SubCategory"
+                                            }}
+                                        >
+                                            <span>SubCategory</span>{" "}
+                                        </Link>
+                                    </div>
+                                    <div>
+                                        <Link
+                                            className="menu-item"
+                                            className={
+                                                useLocation().pathname ==
+                                                "/unit"
+                                                    ? "menu-item active"
+                                                    : "menu-item"
+                                            }
+                                            to={{
+                                                pathname: "/unit",
+                                                state: "Unit"
+                                            }}
+                                        >
+                                            <span>Unit</span>{" "}
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
                         </nav>

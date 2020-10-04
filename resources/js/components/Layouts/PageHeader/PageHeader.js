@@ -26,8 +26,12 @@ function PageHeader() {
                                         <i className="ik ik-home" />
                                     </a>
                                 </li>
-                                <li className="breadcrumb-item">
-                                    <a href="#">{useLocation().state}</a>
+                                <li
+                                    className={
+                                        useLocation().state && "breadcrumb-item"
+                                    }
+                                >
+                                    <a>{useLocation().state}</a>
                                 </li>
                             </ol>
                         </nav>
