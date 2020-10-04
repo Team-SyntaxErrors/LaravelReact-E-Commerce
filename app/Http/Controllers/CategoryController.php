@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Http\Requests\CategoryRequest;
-use App\Http\Resources\CategoryResource;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -20,7 +20,7 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $category = Category::with("menus")->Search($request->q)->paginate($request->row);
-        return response()->json($category, 201);
+        return $this->successResponse($category, "Category Get Successfully", Response::HTTP_OK);
     }
 
     /**
@@ -41,22 +41,20 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        $category_model = new Category();
-        $requested_data = $request->all();
-        if ($request->category_icon) {
-            $upload_path = $this->VerifyStore($request, 'category_icon', 'category_icon');
-            $requested_data = Arr::set($requested_data, "category_icon", $upload_path);
-            $category_slug = Str::slug($request->category_name, '-');
-            $requested_data = Arr::set($requested_data, "category_slug", $category_slug);
-            $category_model->fill($requested_data)->save();
-            $status = 201;
-            $response = [
-                "status" => $status,
-                "data"   => new CategoryResource($category_model),
-            ];
-
+        try {
+            $category_model = new Category();
+            $requested_data = $request->all();
+            if ($request->category_icon) {
+                $upload_path = $this->VerifyStore($request, 'category_icon', 'category_icon');
+                $requested_data = Arr::set($requested_data, "category_icon", $upload_path);
+                $category_slug = Str::slug($request->category_name, '-');
+                $requested_data = Arr::set($requested_data, "category_slug", $category_slug);
+                $category_model->fill($requested_data)->save();
+            }
+            return $this->successResponse($category_model, "Category Saved Successfully", Response::HTTP_CREATED);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-        return response()->json($response, $status);
     }
 
     /**
@@ -90,25 +88,23 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, $id)
     {
-        // dd($request->all());
-        $category_model = Category::findOrFail($id);
-        $requested_data = $request->all();
-        if ($request->category_icon != $category_model->category_icon) {
-            if (File::exists($category_model->category_icon)) {
-                File::delete($category_model->category_icon);
+        try {
+            $category_model = Category::findOrFail($id);
+            $requested_data = $request->all();
+            if ($request->category_icon != $category_model->category_icon) {
+                if (File::exists($category_model->category_icon)) {
+                    File::delete($category_model->category_icon);
+                }
+                $upload_path = $this->VerifyStore($request, 'category_icon', 'category_icon');
+                $requested_data = Arr::set($requested_data, "category_icon", $upload_path);
             }
-            $upload_path = $this->VerifyStore($request, 'category_icon', 'category_icon');
-            $requested_data = Arr::set($requested_data, "category_icon", $upload_path);
+            $category_slug = Str::slug($request->category_name, '-');
+            $requested_data = Arr::set($requested_data, "category_slug", $category_slug);
+            $category_model->fill($requested_data)->save();
+            return $this->successResponse($category_model, "Category Update Successfully", Response::HTTP_CREATED);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-        $category_slug = Str::slug($request->category_name, '-');
-        $requested_data = Arr::set($requested_data, "category_slug", $category_slug);
-        $category_model->fill($requested_data)->save();
-        $status = 201;
-        $response = [
-            "status" => $status,
-            "data"   => new CategoryResource($category_model),
-        ];
-        return response()->json($response, $status);
     }
 
     /**
@@ -119,27 +115,32 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::findOrFail($id);
-        if (File::exists($category->category_icon)) {
-            File::delete($category->category_icon);
+        try {
+            $category = Category::findOrFail($id);
+            if (File::exists($category->category_icon)) {
+                File::delete($category->category_icon);
+            }
+            $category->delete();
+            return $this->successResponse(null, "Unit Delete Successfully", Response::HTTP_NO_CONTENT);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-        $category->delete();
-        $status = 204;
-        $response = ['status' => $status, 'message' => "Category Deleted Successfully"];
-        return response()->json($response, $status);
     }
 
     public function status($id)
     {
-        $category = Category::findOrFail($id);
-        if ($category->status == 0) {
-            $category->status = 1;
-        } else {
-            $category->status = 0;
+        try {
+            $category = Category::findOrFail($id);
+            if ($category->status == 1):
+                $category->update(['status' => 0]);
+                $status = Response::HTTP_CREATED;
+            else:
+                $category->update(['status' => 1]);
+                $status = Response::HTTP_OK;
+            endif;
+            return $this->successResponse($category, "Category Status Change Successfully", $status);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-        $category->save();
-        $status = 200;
-        $response = ['status' => $status, 'message' => "Category Status Changed Successfully"];
-        return response()->json($response, $status);
     }
 }
