@@ -86,17 +86,6 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./resources/js/app.js":
-/*!*****************************!*\
-  !*** ./resources/js/app.js ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nError: ENOENT: no such file or directory, open '/home/ridoy/Documents/My Project/LaravelReact-E-Commerce/resources/js/app.js'");
-
-/***/ }),
-
 /***/ "./resources/sass/app.scss":
 /*!*********************************!*\
   !*** ./resources/sass/app.scss ***!
@@ -115,8 +104,8 @@ throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/ridoy/Documents/My Project/LaravelReact-E-Commerce/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/ridoy/Documents/My Project/LaravelReact-E-Commerce/resources/sass/app.scss */"./resources/sass/app.scss");
+!(function webpackMissingModule() { var e = new Error("Cannot find module '/home/tanvir/Work/LaravelReact-E-Commerce/resources/js/app.js'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+module.exports = __webpack_require__(/*! /home/tanvir/Work/LaravelReact-E-Commerce/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

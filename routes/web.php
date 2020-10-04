@@ -15,16 +15,23 @@ use Illuminate\Support\Facades\Route;
  */
 
 Auth::routes();
-Route::get('/home', 'HomeController@index')->name('home');
-Route::resource('/menu', 'MenuController');
-Route::get('/menu/status/{id}', 'MenuController@status');
-Route::resource('/category', 'CategoryController');
-Route::get('/category/status/{id}', 'CategoryController@status');
-Route::resource('/sub_category', 'SubCategoryController');
-Route::get('/sub_category/status/{id}', 'SubCategoryController@status');
-Route::get('/all_menu_get', 'RelativeController@all_menu_get');
-Route::get('/all_category_get/{id}', 'RelativeController@all_category_get');
-Route::resource('/units', 'UnitController');
+Route::middleware('auth')->group(function () {
+    Route::get("/", function () {
+        return view("index");
+    });
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::resource('/menu', 'MenuController');
+    Route::get('/menu/status/{id}', 'MenuController@status');
+    Route::resource('/category', 'CategoryController');
+    Route::get('/category/status/{id}', 'CategoryController@status');
+    Route::resource('/sub_category', 'SubCategoryController');
+    Route::get('/sub_category/status/{id}', 'SubCategoryController@status');
+    Route::get('/all_menu_get', 'RelativeController@all_menu_get');
+    Route::get('/all_category_get/{id}', 'RelativeController@all_category_get');
+    Route::resource('/units', 'UnitController');
+
+    Route::get('/home', 'HomeController@index')->name('home');
+});
 Route::get('{ReactRoute}', function () {
     return view('index');
 })->where('ReactRoute', '.*');
