@@ -1,6 +1,14 @@
 import React, { Fragment } from "react";
 
-function NavBar() {
+import Axios from "axios";
+
+const NavBar = () => {
+    const logout = () => {
+        Axios.post("/logout").then(response => {
+            window.location = "/login";
+        });
+    };
+
     return (
         <Fragment>
             <header className="header-top" header-theme="light">
@@ -289,13 +297,13 @@ function NavBar() {
                                         <i className="ik ik-navigation dropdown-icon" />{" "}
                                         Message
                                     </a>
-                                    <a
+                                    <button
                                         className="dropdown-item"
-                                        href="login.html"
+                                        onClick={logout}
                                     >
                                         <i className="ik ik-power dropdown-icon" />{" "}
                                         Logout
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -304,6 +312,6 @@ function NavBar() {
             </header>
         </Fragment>
     );
-}
+};
 
 export default NavBar;
