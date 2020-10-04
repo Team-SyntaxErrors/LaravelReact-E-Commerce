@@ -135,16 +135,6 @@ const Unit = () => {
     };
     return (
         <Fragment>
-            <button
-                style={{ float: "right" }}
-                className="btn btn-secondary"
-                data-toggle="modal"
-                data-target="#add_modal"
-            >
-                <i className="ik ik-clipboard"></i>
-                Add new
-            </button>
-
             <form onSubmit={handleSubmit(onAddSubmit)}>
                 <div
                     className="modal fade"
@@ -283,9 +273,6 @@ const Unit = () => {
                     </div>
                 </div>
             </form>
-            <br />
-            <br />
-            <br />
 
             <form onSubmit={handleSubmit2(onUpdateSubmit)}>
                 <div
@@ -437,6 +424,14 @@ const Unit = () => {
             <div className="card">
                 <div className="card-header d-block">
                     <h3>Unit List</h3>
+                    <button
+                        className="btn btn-info table-button"
+                        data-toggle="modal"
+                        data-target="#add_modal"
+                    >
+                        <i className="ik ik-clipboard"></i>
+                        Add new
+                    </button>
                 </div>
                 <div className="card-body">
                     <div className="dt-responsive">
@@ -578,6 +573,22 @@ const Unit = () => {
                                                 </tr>
                                             ))}
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th className="text-center">
+                                                    Unit Name
+                                                </th>
+                                                <th className="text-center">
+                                                    Unit Short Name
+                                                </th>
+                                                <th className="text-center">
+                                                    Status
+                                                </th>
+                                                <th className="text-center">
+                                                    Action
+                                                </th>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
