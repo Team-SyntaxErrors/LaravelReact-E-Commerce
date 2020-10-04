@@ -119,7 +119,7 @@
                         <div class="logo-centered">
                             <a href="../index.html"><img src="../src/img/brand.svg" alt=""></a>
                         </div>
-                        <h3>Sign In to ThemeKit</h3>
+                        <h3>Sign In to Laravel React Glossary</h3>
                         <p>Happy to see you again!</p>
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
