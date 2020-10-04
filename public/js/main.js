@@ -40070,10 +40070,8 @@ function PageHeader() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "ik ik-home"
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-    className: "breadcrumb-item"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    href: "#"
-  }, Object(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["useLocation"])().state))))))));
+    className: Object(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["useLocation"])().state && "breadcrumb-item"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", null, Object(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["useLocation"])().state))))))));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (PageHeader);
@@ -40143,9 +40141,7 @@ function SideBar() {
     className: "ik ik-bar-chart-2"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", null, "Dashboard"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "nav-item has-sub"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("a", {
-    href: "#"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("a", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
     className: "ik ik-layers"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", null, "Web Settings"), " "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "submenu-content"
