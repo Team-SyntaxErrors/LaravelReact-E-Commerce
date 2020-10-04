@@ -17,7 +17,6 @@ function App() {
                         <PageHeader/>
                         <AppRoute/>
                     </div>
-
                         <Footer/>
                     </div>
                 </div>

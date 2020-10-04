@@ -164,17 +164,6 @@ const Category = () => {
 
     return (
         <Fragment>
-            <button
-                style={{ float: "right" }}
-                className="btn btn-secondary"
-                data-toggle="modal"
-                data-target="#add_modal"
-                onClick={ClearFrom}
-            >
-                <i className="ik ik-clipboard"></i>
-                Add new
-            </button>
-
             <form onSubmit={submitHandler}>
                 <div
                     className="modal fade"
@@ -453,9 +442,18 @@ const Category = () => {
             </form>
 
             {CategoryList.length > 0 && (
-                <div className="card custom-card">
+                <div className="card">
                     <div className="card-header d-block">
                         <h3>Category List</h3>
+                        <button
+                            className="btn btn-info table-button"
+                            data-toggle="modal"
+                            data-target="#add_modal"
+                            onClick={ClearFrom}
+                        >
+                            <i className="ik ik-clipboard"></i>
+                            Add new
+                        </button>
                     </div>
                     <div className="card-body">
                         <div className="dt-responsive">
