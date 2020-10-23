@@ -44,7 +44,10 @@ git clone https://github.com/Team-SyntaxErrors/LaravelReact-E-Commerce.git
 ```sh
 composer update
 ```
-3. Set Database name to "grocerydb"
+3. Update Node Package Manager
+```sh
+npm udate
+```
 
 <!-- CONTRIBUTING -->
 ## Contributing
