@@ -572,6 +572,16 @@ const Unit = () => {
                                                     </td>
                                                 </tr>
                                             ))}
+                                            {totalItemsCount === 0 && (
+                                                <tr>
+                                                    <td
+                                                        colSpan="4"
+                                                        className="text-center"
+                                                    >
+                                                        <b>No Data Found</b>
+                                                    </td>
+                                                </tr>
+                                            )}
                                         </tbody>
                                         <tfoot>
                                             <tr>
