@@ -46,7 +46,7 @@ composer update
 ```
 3. Update Node Package Manager
 ```sh
-npm udate
+npm update
 ```
 
 <!-- CONTRIBUTING -->
