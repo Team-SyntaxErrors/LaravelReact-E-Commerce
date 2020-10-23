@@ -30085,7 +30085,7 @@ function deepEqual(object1 = [], object2 = [], isErrorObject) {
     return true;
 }
 
-function shouldRenderBasedOnError({ errors, name, error, validFields, fieldsWithValidation, }) {
+function isErrorStateChanged({ errors, name, error, validFields, fieldsWithValidation, }) {
     const isValid = isUndefined(error);
     const previousError = get(errors, name);
     return ((isValid && !!previousError) ||
@@ -30387,7 +30387,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         setFormState(Object.assign(Object.assign({}, formStateRef.current), state)), []);
     const shouldRenderBaseOnError = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, error, shouldRender = false, state = {}, isValid) => {
         let shouldReRender = shouldRender ||
-            shouldRenderBasedOnError({
+            isErrorStateChanged({
                 errors: formStateRef.current.errors,
                 error,
                 name,
@@ -30444,31 +30444,30 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         ? defaultValuesAtRenderRef.current
         : defaultValuesRef.current) || !isEmptyObject(formStateRef.current.dirtyFields);
     const updateAndGetDirtyState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, shouldRender = true) => {
-        if (!fieldsRef.current[name] ||
-            (!readFormStateRef.current.isDirty &&
-                !readFormStateRef.current.dirtyFields)) {
-            return {};
+        if (readFormStateRef.current.isDirty ||
+            readFormStateRef.current.dirtyFields) {
+            const isFieldDirty = get(defaultValuesAtRenderRef.current, name) !==
+                getFieldValue(fieldsRef, name, shallowFieldsStateRef);
+            const isDirtyFieldExist = get(formStateRef.current.dirtyFields, name);
+            const previousIsDirty = formStateRef.current.isDirty;
+            isFieldDirty
+                ? set(formStateRef.current.dirtyFields, name, true)
+                : unset(formStateRef.current.dirtyFields, name);
+            const state = {
+                isDirty: isFormDirty(),
+                dirtyFields: formStateRef.current.dirtyFields,
+            };
+            const isChanged = (readFormStateRef.current.isDirty &&
+                previousIsDirty !== state.isDirty) ||
+                (readFormStateRef.current.dirtyFields &&
+                    isDirtyFieldExist !== get(formStateRef.current.dirtyFields, name));
+            if (isChanged && shouldRender) {
+                formStateRef.current = Object.assign(Object.assign({}, formStateRef.current), state);
+                updateFormState(Object.assign({}, state));
+            }
+            return isChanged ? state : {};
         }
-        const isFieldDirty = get(defaultValuesAtRenderRef.current, name) !==
-            getFieldValue(fieldsRef, name, shallowFieldsStateRef);
-        const isDirtyFieldExist = get(formStateRef.current.dirtyFields, name);
-        const previousIsDirty = formStateRef.current.isDirty;
-        isFieldDirty
-            ? set(formStateRef.current.dirtyFields, name, true)
-            : unset(formStateRef.current.dirtyFields, name);
-        const state = {
-            isDirty: isFormDirty(),
-            dirtyFields: formStateRef.current.dirtyFields,
-        };
-        const isChanged = (readFormStateRef.current.isDirty &&
-            previousIsDirty !== state.isDirty) ||
-            (readFormStateRef.current.dirtyFields &&
-                isDirtyFieldExist !== get(formStateRef.current.dirtyFields, name));
-        if (isChanged && shouldRender) {
-            formStateRef.current = Object.assign(Object.assign({}, formStateRef.current), state);
-            updateFormState(Object.assign({}, state));
-        }
-        return isChanged ? state : {};
+        return {};
     }, []);
     const executeValidation = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(async (name, skipReRender) => {
         if (fieldsRef.current[name]) {
@@ -30516,20 +30515,15 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         return await executeValidation(fields, readFormStateRef.current.isValid);
     }, [executeSchemaOrResolverValidation, executeValidation]);
     const setInternalValues = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, value, { shouldDirty, shouldValidate }) => {
-        getPath(name, value).forEach((fieldName) => {
-            const data = {};
-            const field = fieldsRef.current[fieldName];
-            if (field) {
-                set(data, name, value);
+        const data = {};
+        set(data, name, value);
+        for (const fieldName of getPath(name, value)) {
+            if (fieldsRef.current[fieldName]) {
                 setFieldValue(fieldName, get(data, fieldName));
-                if (shouldDirty) {
-                    updateAndGetDirtyState(fieldName);
-                }
-                if (shouldValidate) {
-                    trigger(fieldName);
-                }
+                shouldDirty && updateAndGetDirtyState(fieldName);
+                shouldValidate && trigger(fieldName);
             }
-        });
+        }
     }, [trigger, setFieldValue, updateAndGetDirtyState]);
     const setInternalValue = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, value, config = {}) => {
         if (fieldsRef.current[name]) {
@@ -30562,9 +30556,9 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         if (!isEmptyObject(useWatchFieldsRef.current)) {
             for (const key in useWatchFieldsRef.current) {
                 if (!name ||
+                    !useWatchFieldsRef.current[key].size ||
                     useWatchFieldsRef.current[key].has(name) ||
-                    useWatchFieldsRef.current[key].has(getFieldArrayParentName(name)) ||
-                    !useWatchFieldsRef.current[key].size) {
+                    useWatchFieldsRef.current[key].has(getFieldArrayParentName(name))) {
                     useWatchRenderFunctionsRef.current[key]();
                     found = false;
                 }
@@ -30574,13 +30568,9 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
     };
     function setValue(name, value, config) {
         setInternalValue(name, value, config);
-        if (isFieldWatched(name)) {
-            updateFormState();
-        }
+        isFieldWatched(name) && updateFormState();
         renderWatchedInputs(name);
-        if ((config || {}).shouldValidate) {
-            trigger(name);
-        }
+        (config || {}).shouldValidate && trigger(name);
     }
     handleChangeRef.current = handleChangeRef.current
         ? handleChangeRef.current
@@ -30624,6 +30614,16 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 shouldRenderBaseOnError(name, error, shouldRender, state, isValid);
             }
         };
+    function setFieldArrayDefaultValues(data) {
+        if (!shouldUnregister) {
+            for (const value of fieldArrayNamesRef.current) {
+                if (isKey(value) && !data[value]) {
+                    data = Object.assign(Object.assign({}, data), { [value]: [] });
+                }
+            }
+        }
+        return data;
+    }
     function getValues(payload) {
         if (isString(payload)) {
             return getFieldValue(fieldsRef, payload, shallowFieldsStateRef);
@@ -30635,17 +30635,16 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             }
             return data;
         }
-        return getFieldsValues(fieldsRef, shallowFieldsStateRef);
+        return setFieldArrayDefaultValues(getFieldsValues(fieldsRef, shallowFieldsStateRef));
     }
     const validateResolver = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(async (values = {}) => {
         const { errors } = await resolverRef.current(Object.assign(Object.assign(Object.assign({}, defaultValuesRef.current), getValues()), values), contextRef.current, isValidateAllFieldCriteria);
-        const previousFormIsValid = formStateRef.current.isValid;
         const isValid = isEmptyObject(errors);
-        if (previousFormIsValid !== isValid) {
+        formStateRef.current.isValid !== isValid &&
             updateFormState({
                 isValid,
+                errors,
             });
-        }
     }, [isValidateAllFieldCriteria]);
     const removeFieldEventListener = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((field, forceDelete) => findRemovedFieldAndRemoveListener(fieldsRef, handleChangeRef.current, field, shallowFieldsStateRef, shouldUnregister, forceDelete), [shouldUnregister]);
     const removeFieldEventListenerAndRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((field, forceDelete) => {
@@ -30702,9 +30701,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         if (isArray(fieldNames)) {
             return fieldNames.reduce((previous, name) => (Object.assign(Object.assign({}, previous), { [name]: assignWatchFields(fieldValues, name, watchFields, combinedDefaultValues) })), {});
         }
-        if (isUndefined(watchId)) {
-            isWatchAllRef.current = true;
-        }
+        isWatchAllRef.current = isUndefined(watchId);
         return transformToNestObject((!isEmptyObject(fieldValues) && fieldValues) ||
             combinedDefaultValues);
     }, []);
@@ -30712,7 +30709,9 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         return watchInternal(fieldNames, defaultValue);
     }
     function unregister(name) {
-        (isArray(name) ? name : [name]).forEach((fieldName) => removeFieldEventListenerAndRef(fieldsRef.current[fieldName], true));
+        for (const fieldName of isArray(name) ? name : [name]) {
+            removeFieldEventListenerAndRef(fieldsRef.current[fieldName], true);
+        }
     }
     function registerFieldRef(ref, validateOptions = {}) {
         if (true) {
@@ -30768,7 +30767,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 setFieldValue(name, defaultValue);
             }
         }
-        if (resolver && !isFieldArray && readFormStateRef.current.isValid) {
+        if (resolver && readFormStateRef.current.isValid) {
             validateResolver();
         }
         else if (!isEmptyObject(validateOptions)) {
@@ -30820,7 +30819,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             e.persist();
         }
         let fieldErrors = {};
-        let fieldValues = getFieldsValues(fieldsRef, shallowFieldsStateRef, true);
+        let fieldValues = setFieldArrayDefaultValues(getFieldsValues(fieldsRef, shallowFieldsStateRef, true));
         if (readFormStateRef.current.isSubmitting) {
             updateFormState({
                 isSubmitting: true,
@@ -30859,12 +30858,8 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             }
             else {
                 formStateRef.current.errors = Object.assign(Object.assign({}, formStateRef.current.errors), fieldErrors);
-                if (onInvalid) {
-                    await onInvalid(fieldErrors, e);
-                }
-                if (shouldFocusError) {
-                    focusOnErrorField(fieldsRef.current, fieldErrors);
-                }
+                onInvalid && (await onInvalid(fieldErrors, e));
+                shouldFocusError && focusOnErrorField(fieldsRef.current, fieldErrors);
             }
         }
         finally {
@@ -30887,15 +30882,15 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         watchFieldsRef.current = new Set();
         isWatchAllRef.current = false;
         updateFormState({
+            submitCount: submitCount ? formStateRef.current.submitCount : 0,
             isDirty: isDirty ? formStateRef.current.isDirty : false,
             isSubmitted: isSubmitted ? formStateRef.current.isSubmitted : false,
-            isSubmitting: false,
-            isSubmitSuccessful: false,
-            submitCount: submitCount ? formStateRef.current.submitCount : 0,
-            isValid: isValid ? formStateRef.current.isValid : true,
+            isValid: isValid ? formStateRef.current.isValid : false,
             dirtyFields: dirtyFields ? formStateRef.current.dirtyFields : {},
             touched: touched ? formStateRef.current.touched : {},
             errors: errors ? formStateRef.current.errors : {},
+            isSubmitting: false,
+            isSubmitSuccessful: false,
         });
     };
     const reset = (values, omitResetState = {}) => {
@@ -30954,8 +30949,9 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         register: Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(register, [defaultValuesRef.current]),
         unregister: Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(unregister, []),
     };
-    const control = Object.assign({ removeFieldEventListener,
-        renderWatchedInputs,
+    const control = Object.assign({ renderWatchedInputs,
+        shouldUnregister,
+        removeFieldEventListener,
         watchInternal, mode: modeRef.current, reValidateMode: {
             isReValidateOnBlur,
             isReValidateOnChange,
@@ -30973,16 +30969,15 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         formStateRef,
         defaultValuesRef,
         shallowFieldsStateRef,
-        updateFormState,
-        shouldUnregister, validateResolver: resolver ? validateResolver : undefined }, commonProps);
+        updateFormState, validateResolver: resolver ? validateResolver : undefined }, commonProps);
     return Object.assign({ watch,
         control, formState: isProxyEnabled
             ? new Proxy(formState, {
                 get: (obj, prop) => {
-                    if ( true &&
-                        prop === 'isValid' &&
-                        isOnSubmit) {
-                        console.warn('📋 `formState.isValid` is applicable with `onTouched`, `onChange` or `onBlur` mode. https://react-hook-form.com/api#formState');
+                    if (true) {
+                        if (prop === 'isValid' && isOnSubmit) {
+                            console.warn('📋 `formState.isValid` is applicable with `onTouched`, `onChange` or `onBlur` mode. https://react-hook-form.com/api#formState');
+                        }
                     }
                     if (prop in obj) {
                         readFormStateRef.current[prop] = true;
@@ -31114,7 +31109,9 @@ const useFieldArray = ({ control, name, keyName = 'id', }) => {
     const getDefaultValues = () => [
         ...(get(fieldArrayDefaultValuesRef.current, fieldArrayParentName)
             ? get(fieldArrayDefaultValuesRef.current, name, [])
-            : get(defaultValuesRef.current, name, [])),
+            : get(shouldUnregister
+                ? defaultValuesRef.current
+                : shallowFieldsStateRef.current, name, [])),
     ];
     const memoizedDefaultValues = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(getDefaultValues());
     const [fields, setFields] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(mapIds(memoizedDefaultValues.current, keyName));
@@ -42133,8 +42130,8 @@ __webpack_require__(/*! ./index */ "./resources/js/index.js");
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /media/ridoy/Work/Documents/Team SyntaxErrors/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
-module.exports = __webpack_require__(/*! /media/ridoy/Work/Documents/Team SyntaxErrors/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
+__webpack_require__(/*! /home/professor/Documents/Laravel_Projects/Laravel + React_js/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /home/professor/Documents/Laravel_Projects/Laravel + React_js/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
 
 
 /***/ })
