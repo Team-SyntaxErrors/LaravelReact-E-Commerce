@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SubCategoryRequest;
-use App\Http\Resources\SubCategoryResource;
 use App\SubCategory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -20,7 +20,7 @@ class SubCategoryController extends Controller
     public function index(Request $request)
     {
         $subcategory = SubCategory::with('categories', 'menus')->Search($request->q)->paginate($request->row);
-        return response()->json($subcategory, 200);
+        return $this->successResponse($subcategory, "SubCategory Get Successfully", Response::HTTP_OK);
     }
 
     /**
@@ -41,21 +41,22 @@ class SubCategoryController extends Controller
      */
     public function store(SubCategoryRequest $request)
     {
-        $sub_category = new SubCategory();
-        $requested_data = $request->all();
-        if ($request->sub_category_icon) {
-            $upload_path = $this->VerifyStore($request, 'sub_category_icon', 'sub_category_icon');
-            $requested_data = Arr::set($requested_data, "sub_category_icon", $upload_path);
-            $sub_category_slug = Str::slug($request->sub_category_name, '-');
-            $requested_data = Arr::set($requested_data, "sub_category_slug", $sub_category_slug);
-            $sub_category->fill($requested_data)->save();
-            $status = 201;
-            $response = [
-                "status" => $status,
-                "data"   => new SubCategoryResource($sub_category),
-            ];
+        try {
+            $sub_category = new SubCategory();
+            $requested_data = $request->all();
+            if ($request->sub_category_icon) {
+                $upload_path = $this->VerifyStore($request, 'sub_category_icon', 'sub_category_icon');
+                $requested_data = Arr::set($requested_data, "sub_category_icon", $upload_path);
+                $sub_category_slug = Str::slug($request->sub_category_name, '-');
+                $requested_data = Arr::set($requested_data, "sub_category_slug", $sub_category_slug);
+                $sub_category->fill($requested_data)->save();
+            }
+
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+        } finally {
+            return $this->successResponse($sub_category, "Sub Category Saved Successfully", Response::HTTP_CREATED);
         }
-        return response()->json($response, $status);
     }
 
     /**
@@ -89,24 +90,24 @@ class SubCategoryController extends Controller
      */
     public function update(SubCategoryRequest $request, $id)
     {
-        $sub_category = SubCategory::findOrFail($id);
-        $requested_data = $request->all();
-        if ($request->sub_category_icon != $sub_category->sub_category_icon) {
-            if (File::exists($sub_category->sub_category_icon)) {
-                File::delete($sub_category->sub_category_icon);
+        try {
+            $sub_category = SubCategory::findOrFail($id);
+            $requested_data = $request->all();
+            if ($request->sub_category_icon != $sub_category->sub_category_icon) {
+                if (File::exists($sub_category->sub_category_icon)) {
+                    File::delete($sub_category->sub_category_icon);
+                }
+                $upload_path = $this->VerifyStore($request, 'sub_category_icon', 'sub_category_icon');
+                $requested_data = Arr::set($requested_data, "sub_category_icon", $upload_path);
             }
-            $upload_path = $this->VerifyStore($request, 'sub_category_icon', 'sub_category_icon');
-            $requested_data = Arr::set($requested_data, "sub_category_icon", $upload_path);
+            $sub_category_slug = Str::slug($request->sub_category_name, '-');
+            $requested_data = Arr::set($requested_data, "sub_category_slug", $sub_category_slug);
+            $sub_category->fill($requested_data)->save();
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+        } finally {
+            return $this->successResponse($sub_category, "Sub Category Successfully Updated", Response::HTTP_CREATED);
         }
-        $sub_category_slug = Str::slug($request->sub_category_name, '-');
-        $requested_data = Arr::set($requested_data, "sub_category_slug", $sub_category_slug);
-        $sub_category->fill($requested_data)->save();
-        $status = 201;
-        $response = [
-            "status" => $status,
-            "data"   => new SubCategoryResource($sub_category),
-        ];
-        return response()->json($response, $status);
     }
 
     /**
@@ -117,25 +118,36 @@ class SubCategoryController extends Controller
      */
     public function destroy($id)
     {
-        $subcategory = SubCategory::findOrFail($id);
-        if (File::exists($subcategory->sub_category_icon)) {
-            File::delete($subcategory->sub_category_icon);
+        try {
+            $subcategory = SubCategory::findOrFail($id);
+            if (File::exists($subcategory->sub_category_icon)) {
+                File::delete($subcategory->sub_category_icon);
+            }
+            $subcategory->delete();
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+        } finally {
+            return $this->successResponse(null, "Sub Category Delete Successfully", Response::HTTP_NO_CONTENT);
         }
-        $subcategory->delete();
-        return response()->json(null, 204);
+
     }
 
     public function status($id)
     {
-        $subcategory = SubCategory::findOrFail($id);
-        if ($subcategory->status == 0) {
-            $subcategory->status = 1;
-        } else {
-            $subcategory->status = 0;
+        try {
+            $subcategory = SubCategory::findOrFail($id);
+            if ($subcategory->status == 0):
+                $subcategory->status = 1;
+                $status = Response::HTTP_CREATED;
+            else:
+                $subcategory->status = 0;
+                $status = Response::HTTP_OK;
+            endif;
+            $subcategory->save();
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+        } finally {
+            return $this->successResponse($subcategory, "Sub Category Status Change Successfully", $status);
         }
-        $subcategory->save();
-        $status = 200;
-        $response = ['status' => $status, 'message' => "Sub Category Status Changed Successfully"];
-        return response()->json($response, $status);
     }
 }

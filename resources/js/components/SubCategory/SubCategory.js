@@ -49,10 +49,10 @@ const SubCategory = () => {
 
         Axios.get(main_url)
             .then(response => {
-                setSubCategoryList(response.data.data);
-                setActivePage(response.data.current_page);
-                setItemsCountPerPage(parseInt(response.data.per_page));
-                setTotalItemsCount(response.data.total);
+                setSubCategoryList(response.data.data.data);
+                setActivePage(response.data.data.current_page);
+                setItemsCountPerPage(parseInt(response.data.data.per_page));
+                setTotalItemsCount(response.data.data.total);
             })
             .catch(error => console.log(error));
     };
@@ -789,6 +789,16 @@ const SubCategory = () => {
                                                         </td>
                                                     </tr>
                                                 )
+                                            )}
+                                            {totalItemsCount === 0 && (
+                                                <tr>
+                                                    <td
+                                                        colSpan="7"
+                                                        className="text-center"
+                                                    >
+                                                        <b>No Data Found</b>
+                                                    </td>
+                                                </tr>
                                             )}
                                         </tbody>
                                         <tfoot>

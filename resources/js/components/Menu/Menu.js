@@ -28,10 +28,10 @@ const Menu = () => {
         const main_url = `menu?q=${search}&row=${current_row}&page=${page}`;
         Axios.get(main_url)
             .then(response => {
-                setMenuList(response.data.data);
-                setActivePage(response.data.meta.current_page);
-                setItemsCountPerPage(parseInt(response.data.meta.per_page));
-                setTotalItemsCount(response.data.meta.total);
+                setMenuList(response.data.data.data);
+                setActivePage(response.data.data.current_page);
+                setItemsCountPerPage(parseInt(response.data.data.per_page));
+                setTotalItemsCount(response.data.data.total);
             })
             .catch(error => {
                 console.log(error);
@@ -528,6 +528,16 @@ const Menu = () => {
                                                     </td>
                                                 </tr>
                                             ))}
+                                            {totalItemsCount === 0 && (
+                                                <tr>
+                                                    <td
+                                                        colSpan="4"
+                                                        className="text-center"
+                                                    >
+                                                        <b>No Data Found</b>
+                                                    </td>
+                                                </tr>
+                                            )}
                                         </tbody>
                                         <tfoot>
                                             <tr>
