@@ -1,10 +1,12 @@
 import "./Unit.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import React, { Fragment, useEffect, useState } from "react";
 
 import Axios from "axios";
 import Pagination from "react-js-pagination";
 import swal from "sweetalert";
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 
 const Unit = () => {
@@ -54,6 +56,7 @@ const Unit = () => {
                 setError([]);
                 GetUnitList();
                 $("#close").click();
+                toast.success("Unit Data Inserted Successfully!");
             })
             .catch(error => {
                 if (error.response.status == 422) {
@@ -108,6 +111,7 @@ const Unit = () => {
                 GetUnitList();
                 $("#edit_close").click();
                 setError([]);
+                toast.success("Unit Data Update Successfully!");
             })
             .catch(error => {
                 if (error.response.status == 422) {
@@ -121,13 +125,12 @@ const Unit = () => {
             .then(response => {
                 console.log(response);
                 if (response.data.code === 200) {
-                    swal("Status!", "Unit Status Active", "success");
-                    GetUnitList();
+                    toast.success("This unit is active successfully!");
                 }
                 if (response.data.code === 201) {
-                    swal("Status!", "Unit Status Inactive", "success");
-                    GetUnitList();
+                    toast.warning("This unit is inactive successfully!");
                 }
+                GetUnitList();
             })
             .catch(error => {
                 console.log(error);
