@@ -136,14 +136,13 @@ class SubCategoryController extends Controller
     {
         try {
             $subcategory = SubCategory::findOrFail($id);
-            if ($subcategory->status == 0):
-                $subcategory->status = 1;
+            if ($subcategory->status == 1):
+                $subcategory->update(['status' => 0]);
                 $status = Response::HTTP_CREATED;
             else:
-                $subcategory->status = 0;
+                $subcategory->update(['status' => 1]);
                 $status = Response::HTTP_OK;
             endif;
-            $subcategory->save();
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         } finally {

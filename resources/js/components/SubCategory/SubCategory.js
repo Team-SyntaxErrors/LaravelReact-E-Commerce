@@ -1,9 +1,11 @@
 import "./SubCategory.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import React, { Fragment, useEffect, useState } from "react";
 
 import Axios from "axios";
 import Pagination from "react-js-pagination";
+import { toast } from "react-toastify";
 import useForms from "../customHooks/useForms";
 
 const SubCategory = () => {
@@ -130,6 +132,7 @@ const SubCategory = () => {
                 $(".close").click();
                 GetSubCategoryList();
                 ClearFrom();
+                toast.success("Sub Category Data Inserted Successfully!");
             })
             .catch(error => {
                 if (error.response.status == 422) {
@@ -189,6 +192,7 @@ const SubCategory = () => {
                 $(".close").click();
                 GetSubCategoryList();
                 ClearFrom();
+                toast.success("Sub Category Data Update Successfully!");
             })
             .catch(error => {
                 if (error.response.status == 422) {
@@ -202,16 +206,15 @@ const SubCategory = () => {
     const ChangeStatus = id => {
         Axios.get("/sub_category/status/" + id)
             .then(response => {
-                if (response.status === 200) {
-                    swal(
-                        "Status!",
-                        "Sub Category status has been changed",
-                        "success"
-                    );
-                    GetSubCategoryList();
-                } else {
-                    swal("Opps", "Something Went Wrong", "warning");
+                if (response.data.code === 200) {
+                    toast.success("This sub category is active successfully!");
                 }
+                if (response.data.code === 201) {
+                    toast.warning(
+                        "This sub category is inactive successfully!"
+                    );
+                }
+                GetSubCategoryList();
             })
             .catch(error => {
                 console.log(error);

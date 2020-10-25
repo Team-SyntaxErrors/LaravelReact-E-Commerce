@@ -1,10 +1,12 @@
 import "./Category.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import React, { Fragment, useEffect, useState } from "react";
 
 import Axios from "axios";
 import Pagination from "react-js-pagination";
 import swal from "sweetalert";
+import { toast } from "react-toastify";
 import useForms from "../customHooks/useForms";
 
 const Category = () => {
@@ -78,10 +80,10 @@ const Category = () => {
         e.preventDefault();
         Axios.post("/category", category_form)
             .then(response => {
-                console.log(response);
                 $(".close").click();
                 GetCategoryList();
                 ClearFrom();
+                toast.success("Category Data Inserted Successfully!");
             })
             .catch(error => {
                 if (error.response.status == 422) {
@@ -102,7 +104,7 @@ const Category = () => {
                 Axios.delete("/category/" + id)
                     .then(response => {
                         if (response.status === 204) {
-                            // category_form.data.splice(index, 1);
+                            CategoryList.splice(index, 1);
                             GetCategoryList();
                             swal(
                                 "Deleted!",
@@ -135,6 +137,7 @@ const Category = () => {
                 $(".close").click();
                 GetCategoryList();
                 ClearFrom();
+                toast.success("Category Data Update Successfully!");
             })
             .catch(error => {
                 if (error.response.status == 422) {
@@ -146,20 +149,11 @@ const Category = () => {
     const ChangeStatus = id => {
         Axios.get("/category/status/" + id)
             .then(response => {
-                console.log(response);
                 if (response.data.code === 200) {
-                    swal(
-                        "Status!",
-                        "Category status has been changed",
-                        "success"
-                    );
+                    toast.success("This category is active successfully!");
                 }
                 if (response.data.code === 201) {
-                    swal(
-                        "Status!",
-                        "Category status has been changed",
-                        "success"
-                    );
+                    toast.warning("This category is inactive successfully!");
                 }
                 GetCategoryList();
             })
