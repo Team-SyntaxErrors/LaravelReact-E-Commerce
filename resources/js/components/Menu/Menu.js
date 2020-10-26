@@ -1,10 +1,12 @@
 import "./Menu.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import React, { Fragment, useEffect, useState } from "react";
 
 import Axios from "axios";
 import Pagination from "react-js-pagination";
 import swal from "sweetalert";
+import { toast } from "react-toastify";
 
 const Menu = () => {
     const [menu_id, setMenuId] = useState("");
@@ -66,6 +68,7 @@ const Menu = () => {
                 $("#close").click();
                 GetMenuList();
                 ClearFrom();
+                toast.success("Menu Data Inserted Successfully!");
             })
             .catch(error => {
                 if (error.response.status == 422) {
@@ -121,6 +124,7 @@ const Menu = () => {
                 $("#edit_close").click();
                 GetMenuList();
                 ClearFrom();
+                toast.success("Menu Data Update Successfully!");
             })
             .catch(error => {
                 if (error.response.status == 422) {
@@ -132,12 +136,13 @@ const Menu = () => {
     const ChangeStatus = id => {
         Axios.get("/menu/status/" + id)
             .then(response => {
-                if (response.status === 200) {
-                    swal("Status!", "Menu status has been changed", "success");
-                    GetMenuList();
-                } else {
-                    swal("Opps", "Something Went Wrong", "warning");
+                if (response.data.code === 200) {
+                    toast.success("This menu is active successfully!");
                 }
+                if (response.data.code === 201) {
+                    toast.warning("This menu is inactive successfully!");
+                }
+                GetMenuList();
             })
             .catch(error => {
                 console.log(error);

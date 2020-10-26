@@ -1,10 +1,12 @@
 import "./Brand.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import React, { Fragment, useEffect, useState } from "react";
 
 import Axios from "axios";
 import Pagination from "react-js-pagination";
 import swal from "sweetalert";
+import { toast } from "react-toastify";
 import useForms from "../customHooks/useForms";
 
 const Brand = () => {
@@ -69,6 +71,7 @@ const Brand = () => {
                 $(".close").click();
                 GetBrandList();
                 ClearFrom();
+                toast.success("Brand Data Inserted Successfully!");
             })
             .catch(error => {
                 if (error.response.status == 422) {
@@ -124,10 +127,10 @@ const Brand = () => {
             .then(response => {
                 console.log(response);
                 if (response.data.code === 200) {
-                    swal("Status!", "Brand status has been changed", "success");
+                    toast.success("This brand is active successfully!");
                 }
                 if (response.data.code === 201) {
-                    swal("Status!", "Brand status has been changed", "success");
+                    toast.warning("This Brand is inactive successfully!");
                 }
                 GetBrandList();
             })
@@ -150,6 +153,7 @@ const Brand = () => {
                 $(".close").click();
                 GetBrandList();
                 ClearFrom();
+                toast.success("Brand Data Update Successfully!");
             })
             .catch(error => {
                 if (error.response.status == 422) {

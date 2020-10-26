@@ -144,11 +144,13 @@ class MenuController extends Controller
             $menu = Menu::findOrFail($id);
             if ($menu->status == 0) {
                 $menu->status = 1;
+                $status = Response::HTTP_CREATED;
             } else {
                 $menu->status = 0;
+                $status = Response::HTTP_OK;
             }
             $menu->save();
-            return $this->successResponse($menu, "Menu Status Change Successf-ully", $status);
+            return $this->successResponse($menu, "Menu Status Change Successfully", $status);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
