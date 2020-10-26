@@ -78,6 +78,7 @@ const Category = () => {
     // Data Submit
     const submitHandler = e => {
         e.preventDefault();
+        console.log(category_form);
         Axios.post("/category", category_form)
             .then(response => {
                 $(".close").click();

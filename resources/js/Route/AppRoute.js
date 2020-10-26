@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { Route, Switch } from "react-router";
 
+import Brand from "../components/Brand/Brand";
 import Category from "../components/Category/Category";
 import DashBoard from "../components/DashBoard/DashBoard";
 import Menu from "../components/Menu/Menu";
@@ -16,6 +17,7 @@ function AppRoute() {
                 <Route exact path="/categories" component={Category} />
                 <Route exact path="/subcategories" component={SubCategory} />
                 <Route exact path="/unit" component={Unit} />
+                <Route exact path="/brand" component={Brand} />
             </Switch>
         </Fragment>
     );

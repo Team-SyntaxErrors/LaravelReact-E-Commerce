@@ -51,10 +51,9 @@ class CategoryController extends Controller
                 $requested_data = Arr::set($requested_data, "category_slug", $category_slug);
                 $category_model->fill($requested_data)->save();
             }
+            return $this->successResponse($category_model, "Category Saved Successfully", Response::HTTP_CREATED);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
-        } finally {
-            return $this->successResponse($category_model, "Category Saved Successfully", Response::HTTP_CREATED);
         }
     }
 
@@ -122,10 +121,9 @@ class CategoryController extends Controller
                 File::delete($category->category_icon);
             }
             $category->delete();
+            return $this->successResponse(null, "Category Delete Successfully", Response::HTTP_NO_CONTENT);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
-        } finally {
-            return $this->successResponse(null, "Category Delete Successfully", Response::HTTP_NO_CONTENT);
         }
     }
 
@@ -140,10 +138,9 @@ class CategoryController extends Controller
                 $category->update(['status' => 1]);
                 $status = Response::HTTP_OK;
             endif;
+            return $this->successResponse($category, "Category Status Change Successfully", $status);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
-        } finally {
-            return $this->successResponse($category, "Category Status Change Successfully", $status);
         }
     }
 }
