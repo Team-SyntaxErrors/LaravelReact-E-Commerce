@@ -52,10 +52,9 @@ class SubCategoryController extends Controller
                 $sub_category->fill($requested_data)->save();
             }
 
+            return $this->successResponse($sub_category, "Sub Category Saved Successfully", Response::HTTP_CREATED);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
-        } finally {
-            return $this->successResponse($sub_category, "Sub Category Saved Successfully", Response::HTTP_CREATED);
         }
     }
 
@@ -103,10 +102,9 @@ class SubCategoryController extends Controller
             $sub_category_slug = Str::slug($request->sub_category_name, '-');
             $requested_data = Arr::set($requested_data, "sub_category_slug", $sub_category_slug);
             $sub_category->fill($requested_data)->save();
+            return $this->successResponse($sub_category, "Sub Category Successfully Updated", Response::HTTP_CREATED);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
-        } finally {
-            return $this->successResponse($sub_category, "Sub Category Successfully Updated", Response::HTTP_CREATED);
         }
     }
 
@@ -124,10 +122,9 @@ class SubCategoryController extends Controller
                 File::delete($subcategory->sub_category_icon);
             }
             $subcategory->delete();
+            return $this->successResponse(null, "Sub Category Delete Successfully", Response::HTTP_NO_CONTENT);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
-        } finally {
-            return $this->successResponse(null, "Sub Category Delete Successfully", Response::HTTP_NO_CONTENT);
         }
 
     }
@@ -144,10 +141,9 @@ class SubCategoryController extends Controller
                 $status = Response::HTTP_OK;
             endif;
             $subcategory->save();
+            return $this->successResponse($subcategory, "Sub Category Status Change Successfully", $status);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
-        } finally {
-            return $this->successResponse($subcategory, "Sub Category Status Change Successfully", $status);
         }
     }
 }

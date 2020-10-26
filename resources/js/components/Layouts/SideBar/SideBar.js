@@ -120,6 +120,23 @@ function SideBar() {
                                             <span>Unit</span>{" "}
                                         </Link>
                                     </div>
+                                    <div>
+                                        <Link
+                                            className="menu-item"
+                                            className={
+                                                useLocation().pathname ==
+                                                "/brand"
+                                                    ? "menu-item active"
+                                                    : "menu-item"
+                                            }
+                                            to={{
+                                                pathname: "/brand",
+                                                state: "Brand"
+                                            }}
+                                        >
+                                            <span>Brand</span>{" "}
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
                         </nav>

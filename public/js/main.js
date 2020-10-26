@@ -2036,6 +2036,25 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./resources/js/components/Brand/Brand.css":
+/*!*********************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/src??ref--6-2!./resources/js/components/Brand/Brand.css ***!
+  \*********************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "ul {\n    list-style-type: none;\n}\n\n.table-button {\n    float: right;\n    margin-top: -30px;\n}\n.image-list {\n    width: 10%;\n}", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./resources/js/components/Category/Category.css":
 /*!***************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/src??ref--6-2!./resources/js/components/Category/Category.css ***!
@@ -4625,7 +4644,7 @@ module.exports = ReactPropTypesSecret;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/** @license React v16.13.1
+/** @license React v16.14.0
  * react-dom.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -29195,7 +29214,7 @@ function injectIntoDevTools(devToolsConfig) {
     // Enables DevTools to append owner stacks to error messages in DEV mode.
     getCurrentFiber:  function () {
       return current;
-    } 
+    }
   }));
 }
 var IsSomeRendererActing$1 = ReactSharedInternals.IsSomeRendererActing;
@@ -29547,7 +29566,7 @@ implementation) {
   };
 }
 
-var ReactVersion = '16.13.1';
+var ReactVersion = '16.14.0';
 
 setAttemptUserBlockingHydration(attemptUserBlockingHydration$1);
 setAttemptContinuousHydration(attemptContinuousHydration$1);
@@ -29744,27 +29763,23 @@ function attachEventListeners({ ref }, shouldAttachChangeEvent, handleChange) {
 
 var isNullOrUndefined = (value) => value == null;
 
-var isArray = (value) => Array.isArray(value);
-
 const isObjectType = (value) => typeof value === 'object';
 var isObject = (value) => !isNullOrUndefined(value) &&
-    !isArray(value) &&
+    !Array.isArray(value) &&
     isObjectType(value) &&
     !(value instanceof Date);
 
-var isKey = (value) => !isArray(value) &&
+var isKey = (value) => !Array.isArray(value) &&
     (/^\w*$/.test(value) ||
         !/\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/.test(value));
 
-var stringToPath = (input) => {
-    const result = [];
-    input.replace(/[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g, (match, mathNumber, mathQuote, originalString) => {
-        result.push(mathQuote
-            ? originalString.replace(/\\(\\)?/g, '$1')
-            : mathNumber || match);
-    });
-    return result;
-};
+var compact = (value) => value.filter(Boolean);
+
+var stringToPath = (input) => compact(input
+    .replace(/["|']/g, '')
+    .replace(/\[/g, '.')
+    .replace(/\]/g, '')
+    .split('.'));
 
 function set(object, path, value) {
     let index = -1;
@@ -29777,7 +29792,7 @@ function set(object, path, value) {
         if (index !== lastIndex) {
             const objValue = object[key];
             newValue =
-                isObject(objValue) || isArray(objValue)
+                isObject(objValue) || Array.isArray(objValue)
                     ? objValue
                     : !isNaN(+tempPath[index + 1])
                         ? []
@@ -29789,20 +29804,17 @@ function set(object, path, value) {
     return object;
 }
 
-var transformToNestObject = (data) => Object.entries(data).reduce((previous, [key, value]) => {
-    if (!isKey(key)) {
-        set(previous, key, value);
-        return previous;
+var transformToNestObject = (data, value = {}) => {
+    for (const key in data) {
+        !isKey(key) ? set(value, key, data[key]) : (value[key] = data[key]);
     }
-    return Object.assign(Object.assign({}, previous), { [key]: value });
-}, {});
+    return value;
+};
 
 var isUndefined = (val) => val === undefined;
 
-var filterOutFalsy = (value) => value.filter(Boolean);
-
 var get = (obj, path, defaultValue) => {
-    const result = filterOutFalsy(path.split(/[,[\].]+?/)).reduce((result, key) => (isNullOrUndefined(result) ? result : result[key]), obj);
+    const result = compact(path.split(/[,[\].]+?/)).reduce((result, key) => (isNullOrUndefined(result) ? result : result[key]), obj);
     return isUndefined(result) || result === obj
         ? isUndefined(obj[path])
             ? defaultValue
@@ -29840,7 +29852,7 @@ const defaultReturn = {
     isValid: false,
     value: '',
 };
-var getRadioValue = (options) => isArray(options)
+var getRadioValue = (options) => Array.isArray(options)
     ? options.reduce((previous, option) => option && option.ref.checked
         ? {
             isValid: true,
@@ -29867,7 +29879,7 @@ const defaultResult = {
 };
 const validResult = { value: true, isValid: true };
 var getCheckboxValue = (options) => {
-    if (isArray(options)) {
+    if (Array.isArray(options)) {
         if (options.length > 1) {
             const values = options
                 .filter((option) => option && option.ref.checked)
@@ -29957,7 +29969,7 @@ function unset(object, path) {
             objectRef = objectRef ? objectRef[item] : object[item];
             if (currentPathsLength === index &&
                 ((isObject(objectRef) && isEmptyObject(objectRef)) ||
-                    (isArray(objectRef) &&
+                    (Array.isArray(objectRef) &&
                         !objectRef.filter((data) => (isObject(data) && !isEmptyObject(data)) || isBoolean(data)).length))) {
                 previousObjRef ? delete previousObjRef[item] : delete object[item];
             }
@@ -29983,15 +29995,15 @@ function findRemovedFieldAndRemoveListener(fieldsRef, handleChange, field, shall
     }
     if ((isRadioInput(ref) || isCheckBoxInput(ref)) && fieldRef) {
         const { options } = fieldRef;
-        if (isArray(options) && options.length) {
-            filterOutFalsy(options).forEach((option, index) => {
+        if (Array.isArray(options) && options.length) {
+            compact(options).forEach((option, index) => {
                 const { ref } = option;
                 if ((ref && isDetached(ref) && isSameRef(option, ref)) || forceDelete) {
                     removeAllEventListeners(ref, handleChange);
                     unset(options, `[${index}]`);
                 }
             });
-            if (options && !filterOutFalsy(options).length) {
+            if (options && !compact(options).length) {
                 delete fieldsRef.current[name];
             }
         }
@@ -30009,7 +30021,7 @@ function setFieldArrayDirtyFields(values, defaultValues, dirtyFields, parentNode
     let index = -1;
     while (++index < values.length) {
         for (const key in values[index]) {
-            if (isArray(values[index][key])) {
+            if (Array.isArray(values[index][key])) {
                 !dirtyFields[index] && (dirtyFields[index] = {});
                 dirtyFields[index][key] = [];
                 setFieldArrayDirtyFields(values[index][key], get(defaultValues[index] || {}, key, []), dirtyFields[index][key], dirtyFields[index], key);
@@ -30039,13 +30051,11 @@ function deepMerge(target, source) {
         const targetValue = target[key];
         const sourceValue = source[key];
         try {
-            if ((isObject(targetValue) && isObject(sourceValue)) ||
-                (isArray(targetValue) && isArray(sourceValue))) {
-                target[key] = deepMerge(targetValue, sourceValue);
-            }
-            else {
-                target[key] = sourceValue;
-            }
+            target[key] =
+                (isObject(targetValue) && isObject(sourceValue)) ||
+                    (Array.isArray(targetValue) && Array.isArray(sourceValue))
+                    ? deepMerge(targetValue, sourceValue)
+                    : sourceValue;
         }
         catch (_a) { }
     }
@@ -30058,11 +30068,11 @@ var getFieldsValues = (fieldsRef, shallowFieldsStateRef, excludeDisabled, search
         if (isUndefined(search) ||
             (isString(search)
                 ? name.startsWith(search)
-                : isArray(search) && search.find((data) => name.startsWith(data)))) {
+                : Array.isArray(search) && search.find((data) => name.startsWith(data)))) {
             output[name] = getFieldValue(fieldsRef, name, undefined, excludeDisabled);
         }
     }
-    return deepMerge(Object.assign({}, ((shallowFieldsStateRef || {}).current || {})), transformToNestObject(output));
+    return deepMerge(transformToNestObject(Object.assign({}, ((shallowFieldsStateRef || {}).current || {}))), transformToNestObject(output));
 };
 
 function deepEqual(object1 = [], object2 = [], isErrorObject) {
@@ -30075,7 +30085,8 @@ function deepEqual(object1 = [], object2 = [], isErrorObject) {
         if (!(isErrorObject && ['ref', 'context'].includes(key))) {
             const val1 = object1[key];
             const val2 = object2[key];
-            if ((isObject(val1) || isArray(val1)) && (isObject(val2) || isArray(val2))
+            if ((isObject(val1) || Array.isArray(val1)) &&
+                (isObject(val2) || Array.isArray(val2))
                 ? !deepEqual(val1, val2, isErrorObject)
                 : val1 !== val2) {
                 return false;
@@ -30267,7 +30278,7 @@ var assignWatchFields = (fieldValues, fieldName, watchFields, inputValue, isSing
     }
     else {
         value = get(fieldValues, fieldName);
-        if (isObject(value) || isArray(value)) {
+        if (isObject(value) || Array.isArray(value)) {
             getPath(fieldName, value).forEach((name) => watchFields.add(name));
         }
     }
@@ -30323,6 +30334,22 @@ function onDomRemove(fieldsRef, removeFieldEventListenerAndRef) {
     return observer;
 }
 
+function cloneObject(object) {
+    let copy;
+    if (isPrimitive(object)) {
+        return object;
+    }
+    if (object instanceof Date) {
+        copy = new Date(object.getTime());
+        return copy;
+    }
+    copy = Array.isArray(object) ? [] : {};
+    for (const key in object) {
+        copy[key] = cloneObject(object[key]);
+    }
+    return copy;
+}
+
 var modeChecker = (mode) => ({
     isOnSubmit: !mode || mode === VALIDATION_MODE.onSubmit,
     isOnBlur: mode === VALIDATION_MODE.onBlur,
@@ -30351,7 +30378,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
     const isUnMount = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(false);
     const isWatchAllRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(false);
     const handleChangeRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])();
-    const shallowFieldsStateRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(shouldUnregister ? {} : Object.assign({}, defaultValues));
+    const shallowFieldsStateRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(shouldUnregister ? {} : cloneObject(defaultValues));
     const resetFieldArrayFunctionRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])({});
     const contextRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(context);
     const resolverRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(resolver);
@@ -30431,7 +30458,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         }
         else if (isCheckBoxInput(ref) && options) {
             options.length > 1
-                ? options.forEach(({ ref: checkboxRef }) => (checkboxRef.checked = isArray(value)
+                ? options.forEach(({ ref: checkboxRef }) => (checkboxRef.checked = Array.isArray(value)
                     ? !!value.find((data) => data === checkboxRef.value)
                     : value === checkboxRef.value))
                 : (options[0].ref.checked = !!value);
@@ -30442,7 +30469,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
     }, []);
     const isFormDirty = () => !deepEqual(getValues(), isEmptyObject(defaultValuesRef.current)
         ? defaultValuesAtRenderRef.current
-        : defaultValuesRef.current) || !isEmptyObject(formStateRef.current.dirtyFields);
+        : defaultValuesRef.current);
     const updateAndGetDirtyState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, shouldRender = true) => {
         if (readFormStateRef.current.isDirty ||
             readFormStateRef.current.dirtyFields) {
@@ -30480,7 +30507,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
     const executeSchemaOrResolverValidation = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(async (names) => {
         const { errors } = await resolverRef.current(getValues(), contextRef.current, isValidateAllFieldCriteria);
         const previousFormIsValid = formStateRef.current.isValid;
-        if (isArray(names)) {
+        if (Array.isArray(names)) {
             const isInputsValid = names
                 .map((name) => {
                 const error = get(errors, name);
@@ -30507,7 +30534,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         if (resolverRef.current) {
             return executeSchemaOrResolverValidation(fields);
         }
-        if (isArray(fields)) {
+        if (Array.isArray(fields)) {
             const result = await Promise.all(fields.map(async (data) => await executeValidation(data, null)));
             updateFormState();
             return result.every(Boolean);
@@ -30537,8 +30564,9 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 resetFieldArrayFunctionRef.current[name]({
                     [name]: value,
                 });
-                if (readFormStateRef.current.isDirty ||
-                    readFormStateRef.current.dirtyFields) {
+                if ((readFormStateRef.current.isDirty ||
+                    readFormStateRef.current.dirtyFields) &&
+                    config.shouldDirty) {
                     set(formStateRef.current.dirtyFields, name, setFieldArrayDirtyFields(value, get(defaultValuesRef.current, name, []), get(formStateRef.current.dirtyFields, name, [])));
                     updateFormState({
                         isDirty: !deepEqual(Object.assign(Object.assign({}, getValues()), { [name]: value }), defaultValuesRef.current),
@@ -30616,11 +30644,13 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         };
     function setFieldArrayDefaultValues(data) {
         if (!shouldUnregister) {
+            let copy = cloneObject(data);
             for (const value of fieldArrayNamesRef.current) {
-                if (isKey(value) && !data[value]) {
-                    data = Object.assign(Object.assign({}, data), { [value]: [] });
+                if (isKey(value) && !copy[value]) {
+                    copy = Object.assign(Object.assign({}, copy), { [value]: [] });
                 }
             }
+            return copy;
         }
         return data;
     }
@@ -30628,7 +30658,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         if (isString(payload)) {
             return getFieldValue(fieldsRef, payload, shallowFieldsStateRef);
         }
-        if (isArray(payload)) {
+        if (Array.isArray(payload)) {
             const data = {};
             for (const name of payload) {
                 set(data, name, getFieldValue(fieldsRef, name, shallowFieldsStateRef));
@@ -30643,14 +30673,29 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         formStateRef.current.isValid !== isValid &&
             updateFormState({
                 isValid,
-                errors,
             });
     }, [isValidateAllFieldCriteria]);
     const removeFieldEventListener = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((field, forceDelete) => findRemovedFieldAndRemoveListener(fieldsRef, handleChangeRef.current, field, shallowFieldsStateRef, shouldUnregister, forceDelete), [shouldUnregister]);
+    const updateWatchedValue = (name) => {
+        if (isWatchAllRef.current) {
+            updateFormState();
+        }
+        else if (watchFieldsRef) {
+            let shouldRenderUseWatch = true;
+            for (const watchField of watchFieldsRef.current) {
+                if (watchField.startsWith(name)) {
+                    updateFormState();
+                    shouldRenderUseWatch = false;
+                    break;
+                }
+            }
+            shouldRenderUseWatch && renderWatchedInputs(name);
+        }
+    };
     const removeFieldEventListenerAndRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((field, forceDelete) => {
         if (field) {
             removeFieldEventListener(field, forceDelete);
-            if (shouldUnregister && !filterOutFalsy(field.options || []).length) {
+            if (shouldUnregister && !compact(field.options || []).length) {
                 unset(defaultValuesAtRenderRef.current, field.ref.name);
                 unset(validFieldsRef.current, field.ref.name);
                 unset(fieldsWithValidationRef.current, field.ref.name);
@@ -30662,12 +30707,13 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                     dirtyFields: formStateRef.current.dirtyFields,
                 });
                 resolverRef.current && validateResolver();
+                updateWatchedValue(field.ref.name);
             }
         }
     }, [validateResolver, removeFieldEventListener]);
     function clearErrors(name) {
         name &&
-            (isArray(name) ? name : [name]).forEach((inputName) => fieldsRef.current[inputName]
+            (Array.isArray(name) ? name : [name]).forEach((inputName) => fieldsRef.current[inputName]
                 ? isKey(inputName)
                     ? delete formStateRef.current.errors[inputName]
                     : set(formStateRef.current.errors, inputName, undefined)
@@ -30698,7 +30744,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 ? get(combinedDefaultValues, fieldNames)
                 : defaultValue, true);
         }
-        if (isArray(fieldNames)) {
+        if (Array.isArray(fieldNames)) {
             return fieldNames.reduce((previous, name) => (Object.assign(Object.assign({}, previous), { [name]: assignWatchFields(fieldValues, name, watchFields, combinedDefaultValues) })), {});
         }
         isWatchAllRef.current = isUndefined(watchId);
@@ -30709,7 +30755,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         return watchInternal(fieldNames, defaultValue);
     }
     function unregister(name) {
-        for (const fieldName of isArray(name) ? name : [name]) {
+        for (const fieldName of Array.isArray(name) ? name : [name]) {
             removeFieldEventListenerAndRef(fieldsRef.current[fieldName], true);
         }
     }
@@ -30736,8 +30782,8 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         let defaultValue;
         if (field &&
             (isRadioOrCheckbox
-                ? isArray(field.options) &&
-                    filterOutFalsy(field.options).find((option) => {
+                ? Array.isArray(field.options) &&
+                    compact(field.options).find((option) => {
                         return value === option.ref.value && compareRef(option.ref);
                     })
                 : compareRef(field.ref))) {
@@ -30747,7 +30793,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         if (type) {
             field = isRadioOrCheckbox
                 ? Object.assign({ options: [
-                        ...filterOutFalsy((field && field.options) || []),
+                        ...compact((field && field.options) || []),
                         {
                             ref,
                         },
@@ -30767,10 +30813,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 setFieldValue(name, defaultValue);
             }
         }
-        if (resolver && readFormStateRef.current.isValid) {
-            validateResolver();
-        }
-        else if (!isEmptyObject(validateOptions)) {
+        if (!isEmptyObject(validateOptions)) {
             set(fieldsWithValidationRef.current, name, true);
             if (!isOnSubmit && readFormStateRef.current.isValid) {
                 validateField(fieldsRef, isValidateAllFieldCriteria, field, shallowFieldsStateRef).then((error) => {
@@ -30820,16 +30863,14 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         }
         let fieldErrors = {};
         let fieldValues = setFieldArrayDefaultValues(getFieldsValues(fieldsRef, shallowFieldsStateRef, true));
-        if (readFormStateRef.current.isSubmitting) {
+        readFormStateRef.current.isSubmitting &&
             updateFormState({
                 isSubmitting: true,
             });
-        }
         try {
             if (resolverRef.current) {
                 const { errors, values } = await resolverRef.current(fieldValues, contextRef.current, isValidateAllFieldCriteria);
-                formStateRef.current.errors = errors;
-                fieldErrors = errors;
+                formStateRef.current.errors = fieldErrors = errors;
                 fieldValues = values;
             }
             else {
@@ -30898,7 +30939,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             for (const field of Object.values(fieldsRef.current)) {
                 if (field) {
                     const { ref, options } = field;
-                    const inputRef = isRadioOrCheckboxFunction(ref) && isArray(options)
+                    const inputRef = isRadioOrCheckboxFunction(ref) && Array.isArray(options)
                         ? options[0].ref
                         : ref;
                     if (isHTMLElement(inputRef)) {
@@ -30912,20 +30953,21 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             }
         }
         fieldsRef.current = {};
-        defaultValuesRef.current = Object.assign({}, (values || defaultValuesRef.current));
-        if (values) {
-            renderWatchedInputs('');
-        }
-        shallowFieldsStateRef.current = shouldUnregister ? {} : Object.assign({}, values) || {};
+        defaultValuesRef.current = cloneObject(values || defaultValuesRef.current);
+        values && renderWatchedInputs('');
         Object.values(resetFieldArrayFunctionRef.current).forEach((resetFieldArray) => isFunction(resetFieldArray) && resetFieldArray());
+        shallowFieldsStateRef.current = shouldUnregister
+            ? {}
+            : cloneObject(values) || {};
         resetRefs(omitResetState);
     };
-    observerRef.current =
-        observerRef.current || !isWeb
-            ? observerRef.current
-            : onDomRemove(fieldsRef, removeFieldEventListenerAndRef);
     Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
         isUnMount.current = false;
+        resolver && readFormStateRef.current.isValid && validateResolver();
+        observerRef.current =
+            observerRef.current || !isWeb
+                ? observerRef.current
+                : onDomRemove(fieldsRef, removeFieldEventListenerAndRef);
         return () => {
             isUnMount.current = true;
             observerRef.current && observerRef.current.disconnect();
@@ -30933,8 +30975,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             if (true) {
                 return;
             }
-            fieldsRef.current &&
-                Object.values(fieldsRef.current).forEach((field) => removeFieldEventListenerAndRef(field, true));
+            Object.values(fieldsRef.current).forEach((field) => removeFieldEventListenerAndRef(field, true));
         };
     }, [removeFieldEventListenerAndRef]);
     if (!resolver && readFormStateRef.current.isValid) {
@@ -30949,15 +30990,13 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         register: Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(register, [defaultValuesRef.current]),
         unregister: Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(unregister, []),
     };
-    const control = Object.assign({ renderWatchedInputs,
+    const control = Object.assign({ updateWatchedValue,
         shouldUnregister,
         removeFieldEventListener,
         watchInternal, mode: modeRef.current, reValidateMode: {
             isReValidateOnBlur,
             isReValidateOnChange,
         }, fieldsRef,
-        isWatchAllRef,
-        watchFieldsRef,
         resetFieldArrayFunctionRef,
         useWatchFieldsRef,
         useWatchRenderFunctionsRef,
@@ -31043,16 +31082,16 @@ function removeAtIndexes(data, index) {
             delete data[k];
         }
     }
-    return filterOutFalsy(data);
+    return compact(data);
 }
 var removeArrayAt = (data, index) => isUndefined(index)
     ? []
-    : isArray(index)
+    : Array.isArray(index)
         ? removeAtIndexes(data, index)
         : removeAt(data, index);
 
 var moveArrayAt = (data, from, to) => {
-    if (isArray(data)) {
+    if (Array.isArray(data)) {
         if (isUndefined(data[to])) {
             data[to] = undefined;
         }
@@ -31069,18 +31108,18 @@ var swapArrayAt = (data, indexA, indexB) => {
 };
 
 function prepend(data, value) {
-    return [...(isArray(value) ? value : [value || undefined]), ...data];
+    return [...(Array.isArray(value) ? value : [value || undefined]), ...data];
 }
 
 function insert(data, index, value) {
     return [
         ...data.slice(0, index),
-        ...(isArray(value) ? value : [value || undefined]),
+        ...(Array.isArray(value) ? value : [value || undefined]),
         ...data.slice(index),
     ];
 }
 
-var fillEmptyArray = (value) => isArray(value) ? Array(value.length).fill(undefined) : undefined;
+var fillEmptyArray = (value) => Array.isArray(value) ? Array(value.length).fill(undefined) : undefined;
 
 function mapValueToBoolean(value) {
     if (isObject(value)) {
@@ -31092,10 +31131,11 @@ function mapValueToBoolean(value) {
     }
     return [true];
 }
-var filterBooleanArray = (value) => (isArray(value) ? value : [value]).map(mapValueToBoolean).flat();
+var fillBooleanArray = (value) => (Array.isArray(value) ? value : [value])
+    .map(mapValueToBoolean)
+    .flat();
 
-const appendId = (value, keyName) => (Object.assign({ [keyName]: generateId() }, value));
-const mapIds = (data, keyName) => (isArray(data) ? data : []).map((value) => appendId(value, keyName));
+const mapIds = (values, keyName) => values.map((value) => (Object.assign({ [keyName]: generateId() }, value)));
 const useFieldArray = ({ control, name, keyName = 'id', }) => {
     const methods = useFormContext();
     if (true) {
@@ -31104,29 +31144,27 @@ const useFieldArray = ({ control, name, keyName = 'id', }) => {
         }
     }
     const focusIndexRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(-1);
-    const { isWatchAllRef, resetFieldArrayFunctionRef, fieldArrayNamesRef, fieldsRef, defaultValuesRef, removeFieldEventListener, formStateRef, formStateRef: { current: { dirtyFields, touched }, }, shallowFieldsStateRef, updateFormState, readFormStateRef, watchFieldsRef, validFieldsRef, fieldsWithValidationRef, fieldArrayDefaultValuesRef, validateResolver, renderWatchedInputs, getValues, shouldUnregister, } = control || methods.control;
+    const { updateWatchedValue, resetFieldArrayFunctionRef, fieldArrayNamesRef, fieldsRef, defaultValuesRef, removeFieldEventListener, formStateRef, shallowFieldsStateRef, updateFormState, readFormStateRef, validFieldsRef, fieldsWithValidationRef, fieldArrayDefaultValuesRef, validateResolver, getValues, shouldUnregister, } = control || methods.control;
     const fieldArrayParentName = getFieldArrayParentName(name);
-    const getDefaultValues = () => [
+    const memoizedDefaultValues = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])([
         ...(get(fieldArrayDefaultValuesRef.current, fieldArrayParentName)
             ? get(fieldArrayDefaultValuesRef.current, name, [])
             : get(shouldUnregister
                 ? defaultValuesRef.current
                 : shallowFieldsStateRef.current, name, [])),
-    ];
-    const memoizedDefaultValues = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(getDefaultValues());
+    ]);
     const [fields, setFields] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(mapIds(memoizedDefaultValues.current, keyName));
     const allFields = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(fields);
-    const getCurrentFieldsValues = () => get(getValues() || {}, name, allFields.current).map((item, index) => (Object.assign(Object.assign({}, allFields.current[index]), item)));
+    const getCurrentFieldsValues = () => get(getValues(), name, allFields.current).map((item, index) => (Object.assign(Object.assign({}, allFields.current[index]), item)));
     allFields.current = fields;
     fieldArrayNamesRef.current.add(name);
     if (!get(fieldArrayDefaultValuesRef.current, fieldArrayParentName)) {
         set(fieldArrayDefaultValuesRef.current, fieldArrayParentName, get(defaultValuesRef.current, fieldArrayParentName));
     }
-    const appendValueWithKey = (values) => values.map((value) => appendId(value, keyName));
     const setFieldAndValidState = (fieldsValues) => {
         setFields(fieldsValues);
         if (readFormStateRef.current.isValid && validateResolver) {
-            const values = {};
+            const values = getValues();
             set(values, name, fieldsValues);
             validateResolver(values);
         }
@@ -31140,38 +31178,57 @@ const useFieldArray = ({ control, name, keyName = 'id', }) => {
             }), get(defaultValuesRef.current, name)));
     const resetFields = () => {
         for (const key in fieldsRef.current) {
-            if (isMatchFieldArrayName(key, name) && fieldsRef.current[key]) {
+            isMatchFieldArrayName(key, name) &&
                 removeFieldEventListener(fieldsRef.current[key], true);
-            }
         }
     };
-    const cleanup = (ref) => !filterOutFalsy(get(ref, name, [])).length && unset(ref, name);
-    const batchStateUpdate = (method, args, isDirty = true, shouldSet = true, shouldUpdateValid = false) => {
+    const cleanup = (ref) => !compact(get(ref, name, [])).length && unset(ref, name);
+    const updateDirtyFieldsWithDefaultValues = (updatedFieldArrayValues) => {
+        const defaultFieldArrayValues = get(defaultValuesRef.current, name, []);
+        const updateDirtyFieldsBaseOnDefaultValues = (base, target) => {
+            for (const key in base) {
+                for (const innerKey in base[key]) {
+                    if (innerKey !== keyName &&
+                        (!target[key] ||
+                            !base[key] ||
+                            base[key][innerKey] !== target[key][innerKey])) {
+                        set(formStateRef.current.dirtyFields, `${name}[${key}]`, Object.assign(Object.assign({}, get(formStateRef.current.dirtyFields, `${name}[${key}]`, {})), { [innerKey]: true }));
+                    }
+                }
+            }
+        };
+        if (updatedFieldArrayValues) {
+            updateDirtyFieldsBaseOnDefaultValues(defaultFieldArrayValues, updatedFieldArrayValues);
+            updateDirtyFieldsBaseOnDefaultValues(updatedFieldArrayValues, defaultFieldArrayValues);
+        }
+    };
+    const batchStateUpdate = (method, args, updatedFieldValues, isDirty = true, shouldSet = true, shouldUpdateValid = false) => {
         if (get(shallowFieldsStateRef.current, name)) {
             const output = method(get(shallowFieldsStateRef.current, name), args.argA, args.argB);
             shouldSet && set(shallowFieldsStateRef.current, name, output);
-            cleanup(shallowFieldsStateRef.current);
         }
         if (get(fieldArrayDefaultValuesRef.current, name)) {
             const output = method(get(fieldArrayDefaultValuesRef.current, name), args.argA, args.argB);
             shouldSet && set(fieldArrayDefaultValuesRef.current, name, output);
             cleanup(fieldArrayDefaultValuesRef.current);
         }
-        if (isArray(get(formStateRef.current.errors, name))) {
+        if (Array.isArray(get(formStateRef.current.errors, name))) {
             const output = method(get(formStateRef.current.errors, name), args.argA, args.argB);
             shouldSet && set(formStateRef.current.errors, name, output);
             cleanup(formStateRef.current.errors);
         }
-        if (readFormStateRef.current.touched && get(touched, name)) {
-            const output = method(get(touched, name), args.argA, args.argB);
-            shouldSet && set(touched, name, output);
-            cleanup(touched);
+        if (readFormStateRef.current.touched &&
+            get(formStateRef.current.touched, name)) {
+            const output = method(get(formStateRef.current.touched, name), args.argA, args.argB);
+            shouldSet && set(formStateRef.current.touched, name, output);
+            cleanup(formStateRef.current.touched);
         }
         if (readFormStateRef.current.dirtyFields ||
             readFormStateRef.current.isDirty) {
-            const output = method(get(dirtyFields, name, []), args.argC, args.argD);
-            shouldSet && set(dirtyFields, name, output);
-            cleanup(dirtyFields);
+            const output = method(get(formStateRef.current.dirtyFields, name, []), args.argC, args.argD);
+            shouldSet && set(formStateRef.current.dirtyFields, name, output);
+            updateDirtyFieldsWithDefaultValues(updatedFieldValues);
+            cleanup(formStateRef.current.dirtyFields);
         }
         if (shouldUpdateValid &&
             readFormStateRef.current.isValid &&
@@ -31183,66 +31240,66 @@ const useFieldArray = ({ control, name, keyName = 'id', }) => {
         }
         updateFormState({
             errors: formStateRef.current.errors,
-            dirtyFields,
+            dirtyFields: formStateRef.current.dirtyFields,
             isDirty,
-            touched,
+            touched: formStateRef.current.touched,
         });
     };
     const append = (value, shouldFocus = true) => {
-        setFieldAndValidState([
+        const updateFormValues = [
             ...allFields.current,
-            ...(isArray(value)
-                ? appendValueWithKey(value)
-                : [appendId(value, keyName)]),
-        ]);
+            ...mapIds(Array.isArray(value) ? value : [value], keyName),
+        ];
+        setFieldAndValidState(updateFormValues);
         if (readFormStateRef.current.dirtyFields ||
             readFormStateRef.current.isDirty) {
-            set(dirtyFields, name, [
-                ...(isArray(get(dirtyFields, name))
-                    ? get(dirtyFields, name)
-                    : fillEmptyArray(allFields.current)),
-                ...filterBooleanArray(value),
-            ]);
+            updateDirtyFieldsWithDefaultValues(updateFormValues);
             updateFormState({
                 isDirty: true,
-                dirtyFields,
+                dirtyFields: formStateRef.current.dirtyFields,
             });
         }
         if (!shouldUnregister) {
-            shallowFieldsStateRef.current[name] = [value];
+            shallowFieldsStateRef.current[name] = [
+                ...(shallowFieldsStateRef.current[name] || []),
+                value,
+            ];
         }
         focusIndexRef.current = shouldFocus ? allFields.current.length : -1;
     };
     const prepend$1 = (value, shouldFocus = true) => {
         const emptyArray = fillEmptyArray(value);
-        setFieldAndValidState(prepend(getCurrentFieldsValues(), isArray(value) ? appendValueWithKey(value) : [appendId(value, keyName)]));
+        const updatedFieldArrayValues = prepend(getCurrentFieldsValues(), mapIds(Array.isArray(value) ? value : [value], keyName));
+        setFieldAndValidState(updatedFieldArrayValues);
         resetFields();
         batchStateUpdate(prepend, {
             argA: emptyArray,
-            argC: filterBooleanArray(value),
-        });
+            argC: fillBooleanArray(value),
+        }, updatedFieldArrayValues);
         focusIndexRef.current = shouldFocus ? 0 : -1;
     };
     const remove = (index) => {
         const fieldValues = getCurrentFieldsValues();
-        setFieldAndValidState(removeArrayAt(fieldValues, index));
+        const updatedFieldValues = removeArrayAt(fieldValues, index);
+        setFieldAndValidState(updatedFieldValues);
         resetFields();
         batchStateUpdate(removeArrayAt, {
             argA: index,
             argC: index,
-        }, getIsDirtyState(removeArrayAt(fieldValues, index)), true, true);
+        }, updatedFieldValues, getIsDirtyState(removeArrayAt(fieldValues, index)), true, true);
     };
     const insert$1 = (index, value, shouldFocus = true) => {
         const emptyArray = fillEmptyArray(value);
         const fieldValues = getCurrentFieldsValues();
-        setFieldAndValidState(insert(fieldValues, index, isArray(value) ? appendValueWithKey(value) : [appendId(value, keyName)]));
+        const updatedFieldArrayValues = insert(fieldValues, index, mapIds(Array.isArray(value) ? value : [value], keyName));
+        setFieldAndValidState(updatedFieldArrayValues);
         resetFields();
         batchStateUpdate(insert, {
             argA: index,
             argB: emptyArray,
             argC: index,
-            argD: filterBooleanArray(value),
-        }, getIsDirtyState(insert(fieldValues, index)));
+            argD: fillBooleanArray(value),
+        }, updatedFieldArrayValues, getIsDirtyState(insert(fieldValues, index)));
         focusIndexRef.current = shouldFocus ? index : -1;
     };
     const swap = (indexA, indexB) => {
@@ -31255,7 +31312,7 @@ const useFieldArray = ({ control, name, keyName = 'id', }) => {
             argB: indexB,
             argC: indexA,
             argD: indexB,
-        }, getIsDirtyState(fieldValues), false);
+        }, undefined, getIsDirtyState(fieldValues), false);
     };
     const move = (from, to) => {
         const fieldValues = getCurrentFieldsValues();
@@ -31267,7 +31324,7 @@ const useFieldArray = ({ control, name, keyName = 'id', }) => {
             argB: to,
             argC: from,
             argD: to,
-        }, getIsDirtyState(fieldValues), false);
+        }, undefined, getIsDirtyState(fieldValues), false);
     };
     const reset = (data) => {
         resetFields();
@@ -31287,20 +31344,7 @@ const useFieldArray = ({ control, name, keyName = 'id', }) => {
             defaultValues.pop();
             set(fieldArrayDefaultValuesRef.current, name, defaultValues);
         }
-        if (isWatchAllRef.current) {
-            updateFormState();
-        }
-        else if (watchFieldsRef) {
-            let shouldRenderUseWatch = true;
-            for (const watchField of watchFieldsRef.current) {
-                if (watchField.startsWith(name)) {
-                    updateFormState();
-                    shouldRenderUseWatch = false;
-                    break;
-                }
-            }
-            shouldRenderUseWatch && renderWatchedInputs(name);
-        }
+        updateWatchedValue(name);
         if (focusIndexRef.current > -1) {
             for (const key in fieldsRef.current) {
                 const field = fieldsRef.current[key];
@@ -31347,7 +31391,7 @@ function useWatch({ control, name, defaultValue, }) {
     const [value, setValue] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(isUndefined(defaultValue)
         ? isString(name)
             ? get(defaultValuesRef.current, name)
-            : isArray(name)
+            : Array.isArray(name)
                 ? name.reduce((previous, inputName) => (Object.assign(Object.assign({}, previous), { [inputName]: get(defaultValuesRef.current, inputName) })), {})
                 : defaultValuesRef.current
         : defaultValue);
@@ -31355,7 +31399,10 @@ function useWatch({ control, name, defaultValue, }) {
     const defaultValueRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(defaultValue);
     const updateWatchValue = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(() => {
         const value = watchInternal(name, defaultValueRef.current, idRef.current);
-        setValue(isObject(value) ? Object.assign({}, value) : isArray(value) ? [...value] : value);
+        setValue(isObject(value)
+            ? Object.assign({}, value) : Array.isArray(value)
+            ? [...value]
+            : value);
     }, [setValue, watchInternal, defaultValueRef, name, idRef]);
     Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
         if (true) {
@@ -31442,9 +31489,7 @@ const Controller = (_a) => {
             }
         }
     }, [rules, name, register]);
-    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => () => {
-        !isNameInFieldArray(fieldArrayNamesRef.current, name) && unregister(name);
-    }, [unregister, name, fieldArrayNamesRef]);
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => () => unregister(name), [unregister, name]);
     Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
         if (true) {
             if (isUndefined(value)) {
@@ -33762,7 +33807,7 @@ function pathToRegexp (path, keys, options) {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/** @license React v16.13.1
+/** @license React v16.14.0
  * react.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -33782,7 +33827,7 @@ if (true) {
 var _assign = __webpack_require__(/*! object-assign */ "./node_modules/object-assign/index.js");
 var checkPropTypes = __webpack_require__(/*! prop-types/checkPropTypes */ "./node_modules/prop-types/checkPropTypes.js");
 
-var ReactVersion = '16.13.1';
+var ReactVersion = '16.14.0';
 
 // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
 // nor polyfill, then a plain number is used for performance.
@@ -38032,11 +38077,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
-/* harmony import */ var _components_Category_Category__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Category/Category */ "./resources/js/components/Category/Category.js");
-/* harmony import */ var _components_DashBoard_DashBoard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/DashBoard/DashBoard */ "./resources/js/components/DashBoard/DashBoard.js");
-/* harmony import */ var _components_Menu_Menu__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Menu/Menu */ "./resources/js/components/Menu/Menu.js");
-/* harmony import */ var _components_SubCategory_SubCategory__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/SubCategory/SubCategory */ "./resources/js/components/SubCategory/SubCategory.js");
-/* harmony import */ var _components_Unit_Unit__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/Unit/Unit */ "./resources/js/components/Unit/Unit.js");
+/* harmony import */ var _components_Brand_Brand__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Brand/Brand */ "./resources/js/components/Brand/Brand.js");
+/* harmony import */ var _components_Category_Category__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Category/Category */ "./resources/js/components/Category/Category.js");
+/* harmony import */ var _components_DashBoard_DashBoard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/DashBoard/DashBoard */ "./resources/js/components/DashBoard/DashBoard.js");
+/* harmony import */ var _components_Menu_Menu__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/Menu/Menu */ "./resources/js/components/Menu/Menu.js");
+/* harmony import */ var _components_SubCategory_SubCategory__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/SubCategory/SubCategory */ "./resources/js/components/SubCategory/SubCategory.js");
+/* harmony import */ var _components_Unit_Unit__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/Unit/Unit */ "./resources/js/components/Unit/Unit.js");
+
 
 
 
@@ -38049,27 +38096,711 @@ function AppRoute() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Switch"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Route"], {
     exact: true,
     path: "/",
-    component: _components_DashBoard_DashBoard__WEBPACK_IMPORTED_MODULE_3__["default"]
+    component: _components_DashBoard_DashBoard__WEBPACK_IMPORTED_MODULE_4__["default"]
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Route"], {
     exact: true,
     path: "/menu_list",
-    component: _components_Menu_Menu__WEBPACK_IMPORTED_MODULE_4__["default"]
+    component: _components_Menu_Menu__WEBPACK_IMPORTED_MODULE_5__["default"]
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Route"], {
     exact: true,
     path: "/categories",
-    component: _components_Category_Category__WEBPACK_IMPORTED_MODULE_2__["default"]
+    component: _components_Category_Category__WEBPACK_IMPORTED_MODULE_3__["default"]
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Route"], {
     exact: true,
     path: "/subcategories",
-    component: _components_SubCategory_SubCategory__WEBPACK_IMPORTED_MODULE_5__["default"]
+    component: _components_SubCategory_SubCategory__WEBPACK_IMPORTED_MODULE_6__["default"]
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Route"], {
     exact: true,
     path: "/unit",
-    component: _components_Unit_Unit__WEBPACK_IMPORTED_MODULE_6__["default"]
+    component: _components_Unit_Unit__WEBPACK_IMPORTED_MODULE_7__["default"]
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Route"], {
+    exact: true,
+    path: "/brand",
+    component: _components_Brand_Brand__WEBPACK_IMPORTED_MODULE_2__["default"]
   })));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (AppRoute);
+
+/***/ }),
+
+/***/ "./resources/js/components/Brand/Brand.css":
+/*!*************************************************!*\
+  !*** ./resources/js/components/Brand/Brand.css ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/postcss-loader/src??ref--6-2!./Brand.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./resources/js/components/Brand/Brand.css");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./resources/js/components/Brand/Brand.js":
+/*!************************************************!*\
+  !*** ./resources/js/components/Brand/Brand.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Brand_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Brand.css */ "./resources/js/components/Brand/Brand.css");
+/* harmony import */ var _Brand_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_Brand_css__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-js-pagination */ "./node_modules/react-js-pagination/dist/Pagination.js");
+/* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_js_pagination__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var sweetalert__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! sweetalert */ "./node_modules/sweetalert/dist/sweetalert.min.js");
+/* harmony import */ var sweetalert__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(sweetalert__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _customHooks_useForms__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../customHooks/useForms */ "./resources/js/components/customHooks/useForms.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+
+
+var Brand = function Brand() {
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      Brand = _useState2[0],
+      setBrand = _useState2[1];
+
+  var _useForms = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_5__["default"])({
+    brand_name: "",
+    contact_person: "",
+    phone_number: "",
+    brand_address: "",
+    brand_logo: "",
+    status: 1
+  }),
+      _useForms2 = _slicedToArray(_useForms, 2),
+      brand_form = _useForms2[0],
+      handleChange = _useForms2[1];
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      Errors = _useState4[0],
+      setErrors = _useState4[1];
+
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
+      _useState6 = _slicedToArray(_useState5, 2),
+      BrandList = _useState6[0],
+      setBrandList = _useState6[1];
+
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(""),
+      _useState8 = _slicedToArray(_useState7, 2),
+      search = _useState8[0],
+      setSearch = _useState8[1];
+
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([8, 10, 20, 30, 40, 50]),
+      _useState10 = _slicedToArray(_useState9, 2),
+      select_row = _useState10[0],
+      setSelectRow = _useState10[1];
+
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(8),
+      _useState12 = _slicedToArray(_useState11, 2),
+      current_row = _useState12[0],
+      setCurrentRaw = _useState12[1];
+
+  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(1),
+      _useState14 = _slicedToArray(_useState13, 2),
+      page = _useState14[0],
+      setPage = _useState14[1];
+
+  var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(1),
+      _useState16 = _slicedToArray(_useState15, 2),
+      activePage = _useState16[0],
+      setActivePage = _useState16[1];
+
+  var _useState17 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(8),
+      _useState18 = _slicedToArray(_useState17, 2),
+      itemsCountPerPage = _useState18[0],
+      setItemsCountPerPage = _useState18[1];
+
+  var _useState19 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(450),
+      _useState20 = _slicedToArray(_useState19, 2),
+      totalItemsCount = _useState20[0],
+      setTotalItemsCount = _useState20[1];
+
+  var _useForms3 = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_5__["default"])({
+    brand_name: "",
+    contact_person: "",
+    phone_number: "",
+    brand_address: "",
+    brand_logo: "",
+    status: 1
+  }),
+      _useForms4 = _slicedToArray(_useForms3, 3),
+      EditForm = _useForms4[0],
+      EditHandleChange = _useForms4[1],
+      setEditForm = _useForms4[2];
+
+  var handlePageChange = function handlePageChange(pageNumber) {
+    setPage(pageNumber);
+  }; // Brand List Get
+
+
+  var GetBrandList = function GetBrandList() {
+    var main_url = "brands?q=".concat(search, "&row=").concat(current_row, "&page=").concat(page);
+    axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(main_url).then(function (response) {
+      setBrandList(response.data.data.data);
+      setActivePage(response.data.data.current_page);
+      setItemsCountPerPage(parseInt(response.data.data.per_page));
+      setTotalItemsCount(response.data.data.total);
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  };
+
+  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
+    GetBrandList();
+    return function () {
+      setBrandList([]);
+    };
+  }, [current_row, search, page]); // Data Submit
+
+  var onAddSubmit = function onAddSubmit(e) {
+    e.preventDefault();
+    axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("/brands", brand_form).then(function (response) {
+      $(".close").click();
+      GetBrandList();
+      ClearFrom();
+    })["catch"](function (error) {
+      if (error.response.status == 422) {
+        setErrors(error.response.data.errors);
+      }
+    });
+  }; // Brand Delete
+
+
+  var DeleteHandler = function DeleteHandler(id, index) {
+    sweetalert__WEBPACK_IMPORTED_MODULE_4___default()({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this imaginary file!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true
+    }).then(function (willDelete) {
+      if (willDelete) {
+        axios__WEBPACK_IMPORTED_MODULE_2___default.a["delete"]("/brands/" + id).then(function (response) {
+          if (response.status === 204) {
+            GetBrandList();
+            sweetalert__WEBPACK_IMPORTED_MODULE_4___default()("Deleted!", "Brand Has been Deleted", "success");
+          } else {
+            sweetalert__WEBPACK_IMPORTED_MODULE_4___default()("Opps", "Something Went Wrong", "warning");
+          }
+        })["catch"](function (error) {
+          console.log(error);
+        });
+      } else {
+        sweetalert__WEBPACK_IMPORTED_MODULE_4___default()("Your imaginary file is safe!");
+      }
+    });
+  }; // Clear From
+
+
+  var ClearFrom = function ClearFrom() {
+    setErrors([]);
+    var FORM = brand_form;
+    Object.keys(FORM).forEach(function (key, index) {
+      FORM[key] = "";
+    });
+  }; // Brand Status Change
+
+
+  var ChangeStatus = function ChangeStatus(id) {
+    axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/brands/status/" + id).then(function (response) {
+      console.log(response);
+
+      if (response.data.code === 200) {
+        sweetalert__WEBPACK_IMPORTED_MODULE_4___default()("Status!", "Brand status has been changed", "success");
+      }
+
+      if (response.data.code === 201) {
+        sweetalert__WEBPACK_IMPORTED_MODULE_4___default()("Status!", "Brand status has been changed", "success");
+      }
+
+      GetBrandList();
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  }; // Brand Edit
+
+
+  var EditHandler = function EditHandler(id, data, index) {
+    BrandList.brand_id = id;
+    var value = JSON.parse(JSON.stringify(data));
+    setEditForm(value);
+  }; // Category Data Update
+
+
+  var updateHandler = function updateHandler(e) {
+    e.preventDefault();
+    axios__WEBPACK_IMPORTED_MODULE_2___default.a.put("/brands/" + EditForm.brand_id, EditForm).then(function (response) {
+      $(".close").click();
+      GetBrandList();
+      ClearFrom();
+    })["catch"](function (error) {
+      if (error.response.status == 422) {
+        setError(error.response.data.errors);
+      }
+    });
+  };
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
+    onSubmit: onAddSubmit
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "modal fade",
+    id: "add_modal",
+    tabIndex: -1,
+    role: "dialog",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "modal-dialog",
+    role: "document"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "modal-content"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "modal-header bg-dark"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", {
+    className: "modal-title",
+    id: "exampleModalLongLabel"
+  }, "Add Brand"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+    type: "button",
+    className: "close",
+    "data-dismiss": "modal",
+    "aria-label": "Close"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
+    "aria-hidden": "true"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+    className: "ik ik-x"
+  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "modal-body"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "form-group"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-md-12 col-sm-12 "
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "form-group "
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    className: "col-lg-6 control-label"
+  }, "Name:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-lg-12"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+    type: "text",
+    className: "form-control",
+    name: "brand_name",
+    placeholder: "Enter Brand Name",
+    onChange: handleChange,
+    value: brand_form.brand_name
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "form-group "
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    className: "col-lg-6 control-label"
+  }, "Contact Person:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-lg-12"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+    type: "text",
+    className: "form-control",
+    name: "contact_person",
+    placeholder: "Enter Brand Contact Person",
+    onChange: handleChange,
+    value: brand_form.contact_person
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "form-group "
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    className: "col-lg-6 control-label"
+  }, "Contact Number:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-lg-12"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+    type: "text",
+    className: "form-control",
+    name: "phone_number",
+    placeholder: "Enter Brand Phone Number",
+    onChange: handleChange,
+    value: brand_form.phone_number
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "form-group "
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    className: "col-lg-6 control-label"
+  }, "Address:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-lg-12"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("textarea", {
+    type: "text",
+    className: "form-control",
+    name: "brand_address",
+    placeholder: "Enter Brand Address",
+    onChange: handleChange,
+    value: brand_form.brand_address
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-md-3 col-sm-12 mt-3 text-center"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
+    className: "custom-icon rounded-circle",
+    src: !brand_form.brand_logo ? "backend_assets/img/menu-icon.png" : brand_form.brand_logo
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
+    className: "text-danger"
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "form-group "
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    className: "col-lg-6 control-label"
+  }, "Logo:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-lg-12"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+    type: "file",
+    className: "form-control",
+    name: "brand_logo",
+    onChange: handleChange
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "form-group "
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    className: "col-lg-6 control-label"
+  }, "Status:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-lg-12"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("select", {
+    className: "form-control",
+    name: "status",
+    onChange: handleChange,
+    value: brand_form.status
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+    value: "",
+    defaultValue: true,
+    hidden: true
+  }, "--Select--"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+    value: "1"
+  }, "Active"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+    value: "0"
+  }, "Inactive")))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "modal-footer"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+    type: "button",
+    className: "btn btn-secondary",
+    id: "close",
+    "data-dismiss": "modal"
+  }, "Close"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+    type: "submit",
+    className: "btn btn-primary"
+  }, "Save")))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
+    onSubmit: updateHandler
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "modal fade",
+    id: "edit_modal",
+    tabIndex: -1,
+    role: "dialog",
+    "aria-labelledby": "exampleModalLongLabel",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "modal-dialog",
+    role: "document"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "modal-content"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "modal-header bg-dark"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h5", {
+    className: "modal-title",
+    id: "exampleModalLongLabel"
+  }, "Edit Brand"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+    type: "button",
+    className: "close",
+    "data-dismiss": "modal",
+    "aria-label": "Close"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
+    "aria-hidden": "true"
+  }, " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+    className: "ik ik-x"
+  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "modal-body"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "form-group"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-md-12 col-sm-12 "
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "form-group "
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    className: "col-lg-6 control-label"
+  }, "Name:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-lg-12"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+    type: "text",
+    className: "form-control",
+    name: "brand_name",
+    placeholder: "Enter Brand Name",
+    onChange: EditHandleChange,
+    value: EditForm.brand_name
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "form-group "
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    className: "col-lg-6 control-label"
+  }, "Contact Person:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-lg-12"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+    type: "text",
+    className: "form-control",
+    name: "contact_person",
+    placeholder: "Enter Brand Contact Person",
+    onChange: EditHandleChange,
+    value: EditForm.contact_person
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "form-group "
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    className: "col-lg-6 control-label"
+  }, "Contact Number:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-lg-12"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+    type: "text",
+    className: "form-control",
+    name: "phone_number",
+    placeholder: "Enter Brand Phone Number",
+    onChange: EditHandleChange,
+    value: EditForm.phone_number
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "form-group "
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    className: "col-lg-6 control-label"
+  }, "Address:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-lg-12"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("textarea", {
+    type: "text",
+    className: "form-control",
+    name: "brand_address",
+    placeholder: "Enter Brand Address",
+    onChange: EditHandleChange,
+    value: EditForm.brand_address
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-md-3 col-sm-12 mt-3 text-center"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
+    className: "custom-icon rounded-circle",
+    src: !EditForm.brand_logo ? "backend_assets/img/menu-icon.png" : EditForm.brand_logo
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
+    className: "text-danger"
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "form-group "
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    className: "col-lg-6 control-label"
+  }, "Logo:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-lg-12"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+    type: "file",
+    className: "form-control",
+    name: "brand_logo",
+    onChange: EditHandleChange
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "form-group "
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+    className: "col-lg-6 control-label"
+  }, "Status:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-lg-12"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("select", {
+    className: "form-control",
+    name: "status",
+    onChange: EditHandleChange,
+    value: EditForm.status
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+    value: "",
+    defaultValue: true,
+    hidden: true
+  }, "--Select--"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+    value: "1"
+  }, "Active"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+    value: "0"
+  }, "Inactive")))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "modal-footer"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+    type: "button",
+    className: "btn btn-secondary",
+    id: "edit_close",
+    "data-dismiss": "modal"
+  }, "Close"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+    type: "submit",
+    className: "btn btn-primary"
+  }, "Save changes")))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "card"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "card-header d-block"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h3", null, "Brand List"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+    className: "btn btn-info table-button",
+    "data-toggle": "modal",
+    "data-target": "#add_modal"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+    className: "ik ik-clipboard"
+  }), "Add new")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "card-body"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "dt-responsive"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    id: "simpletable_wrapper",
+    className: "dataTables_wrapper dt-bootstrap4"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-sm-12 col-md-6"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "dataTables_length",
+    id: "simpletable_length"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, "Show", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("select", {
+    name: "simpletable_length",
+    "aria-controls": "simpletable",
+    className: "custom-select custom-select-sm form-control form-control-sm",
+    onChange: function onChange(e) {
+      return setCurrentRaw(e.target.value);
+    }
+  }, select_row.map(function (rows, i) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+      key: i,
+      value: rows
+    }, rows);
+  })), "entries"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-sm-12 col-md-6"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    id: "simpletable_filter",
+    className: "dataTables_filter"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, "Search:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+    type: "search",
+    className: "form-control form-control-sm",
+    placeholder: "Type to filter...",
+    "aria-controls": "simpletable",
+    onChange: function onChange(e) {
+      return setSearch(e.target.value);
+    },
+    value: search
+  }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-sm-12"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("table", {
+    id: "simpletable",
+    className: "table",
+    role: "grid",
+    "aria-describedby": "simpletable_info"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", {
+    role: "row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Brand Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "custom-head text-center",
+    style: {
+      width: "15%"
+    }
+  }, "Brand Logo"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Contact Person"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Phone"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Brand Address"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Status"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Action"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tbody", null, BrandList.map(function (brand, i) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", {
+      key: i
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
+      className: "text-center"
+    }, brand.brand_name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
+      className: "text-center"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("img", {
+      className: "image-list rounded-circle",
+      src: brand.brand_logo ? brand.brand_logo : "backend_assets/img/menu-icon.png"
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
+      className: "text-center"
+    }, brand.contact_person), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
+      className: "text-center"
+    }, brand.phone_number), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
+      className: "text-center"
+    }, brand.brand_address), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("center", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: brand.status == 1 ? "p-status bg-green" : "p-status bg-red"
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
+      className: "text-center"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+      className: brand.status == 1 ? "ik ik-repeat f-16 mr-15 text-green" : "ik ik-repeat f-16 mr-15 text-red",
+      onClick: function onClick() {
+        return ChangeStatus(brand.brand_id);
+      }
+    }), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+      className: "ik ik-edit f-16 mr-15 text-blue",
+      "data-toggle": "modal",
+      "data-target": "#edit_modal",
+      onClick: function onClick() {
+        return EditHandler(brand.brand_id, brand, i);
+      }
+    }), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+      className: "ik ik-trash-2 f-16 text-red",
+      onClick: function onClick() {
+        return DeleteHandler(brand.brand_id);
+      }
+    })));
+  }), totalItemsCount === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
+    colSpan: "4",
+    className: "text-center"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("b", null, "No Data Found")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tfoot", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Brand Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Brand Logo"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Contact Person"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Phone Number"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Brand Address"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Status"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("th", {
+    className: "text-center"
+  }, "Action")))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-sm-12 col-md-5"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    className: "col-sm-12 col-md-7"
+  }, current_row >= totalItemsCount ? "" : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_3___default.a, {
+    innerClass: "btn-group",
+    linkClass: "btn btn-outline-secondary",
+    activePage: activePage,
+    itemsCountPerPage: itemsCountPerPage,
+    totalItemsCount: totalItemsCount,
+    pageRangeDisplayed: 3,
+    onChange: handlePageChange
+  }))))))));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Brand);
 
 /***/ }),
 
@@ -38259,6 +38990,7 @@ var Category = function Category() {
 
   var submitHandler = function submitHandler(e) {
     e.preventDefault();
+    console.log(category_form);
     axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("/category", category_form).then(function (response) {
       console.log(response);
       $(".close").click();
@@ -40096,7 +40828,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 function SideBar() {
-  var _React$createElement, _React$createElement2, _React$createElement3, _React$createElement4;
+  var _React$createElement, _React$createElement2, _React$createElement3, _React$createElement4, _React$createElement5;
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: "app-sidebar colored"
@@ -40165,7 +40897,12 @@ function SideBar() {
   }, _defineProperty(_React$createElement4, "className", Object(react_router_dom__WEBPACK_IMPORTED_MODULE_0__["useLocation"])().pathname == "/unit" ? "menu-item active" : "menu-item"), _defineProperty(_React$createElement4, "to", {
     pathname: "/unit",
     state: "Unit"
-  }), _React$createElement4), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", null, "Unit"), " ")))))))));
+  }), _React$createElement4), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", null, "Unit"), " ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_0__["Link"], (_React$createElement5 = {
+    className: "menu-item"
+  }, _defineProperty(_React$createElement5, "className", Object(react_router_dom__WEBPACK_IMPORTED_MODULE_0__["useLocation"])().pathname == "/brand" ? "menu-item active" : "menu-item"), _defineProperty(_React$createElement5, "to", {
+    pathname: "/brand",
+    state: "Brand"
+  }), _React$createElement5), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", null, "Brand"), " ")))))))));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (SideBar);
@@ -42142,8 +42879,8 @@ __webpack_require__(/*! ./index */ "./resources/js/index.js");
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/professor/Documents/Laravel_Projects/Laravel + React_js/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
-module.exports = __webpack_require__(/*! /home/professor/Documents/Laravel_Projects/Laravel + React_js/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
+__webpack_require__(/*! /home/tanvir/Work/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /home/tanvir/Work/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
 
 
 /***/ })

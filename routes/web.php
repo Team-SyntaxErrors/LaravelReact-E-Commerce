@@ -29,6 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/all_menu_get', 'RelativeController@all_menu_get');
     Route::get('/all_category_get/{id}', 'RelativeController@all_category_get');
     Route::resource('/units', 'UnitController');
+    Route::resource('/brands', 'BrandController');
+    Route::get('/brands/status/{id}', 'BrandController@status');
 
     Route::get('/home', 'HomeController@index')->name('home');
 });
