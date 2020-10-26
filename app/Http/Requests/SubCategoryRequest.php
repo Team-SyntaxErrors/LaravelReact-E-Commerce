@@ -28,7 +28,7 @@ class SubCategoryRequest extends FormRequest
             "menu_id"           => "required",
             "category_id"       => "required",
             "sub_category_name" => "required|unique:sub_categories,sub_category_name," . $sub_category . ",sub_category_id",
-            "sub_category_icon" => "required",
+            // "sub_category_icon" => "required",
         ];
     }
 }
