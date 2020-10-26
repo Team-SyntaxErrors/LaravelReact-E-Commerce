@@ -9,7 +9,7 @@ function PageHeader() {
                 <div className="row align-items-end">
                     <div className="col-lg-8">
                         <div className="page-header-title">
-                            <i className="ik ik-home bg-blue" />
+                            {/* <i className="ik ik-home bg-blue" /> */}
                             <div className="d-inline">
                                 <h5>{useLocation().state}</h5>
                             </div>

@@ -51,12 +51,10 @@ class MenuController extends Controller
                 $menu_slug = Str::slug($request->menu_name, '-');
                 $requested_data = Arr::set($requested_data, "menu_slug", $menu_slug);
                 $menu_model->fill($requested_data)->save();
-
             }
+            return $this->successResponse($menu_model, "Menu Saved Successfully", Response::HTTP_CREATED);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
-        } finally {
-            return $this->successResponse($menu_model, "Menu Saved Successfully", Response::HTTP_CREATED);
         }
 
     }
@@ -114,10 +112,9 @@ class MenuController extends Controller
             $menu_slug = Str::slug($request->menu_name, '-');
             $requested_data = Arr::set($requested_data, "menu_slug", $menu_slug);
             $menu_model->fill($requested_data)->save();
+            return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         } catch (\Exception $e) {
             return $this->successResponse($menu_model, "Menu Update Successfully", Response::HTTP_CREATED);
-        } finally {
-            return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -135,10 +132,9 @@ class MenuController extends Controller
                 File::delete($menu->menu_icon);
             }
             $menu->delete();
+            return $this->successResponse(null, "Menu Delete Successfully", Response::HTTP_NO_CONTENT);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
-        } finally {
-            return $this->successResponse(null, "Menu Delete Successfully", Response::HTTP_NO_CONTENT);
         }
     }
 
@@ -152,10 +148,9 @@ class MenuController extends Controller
                 $menu->status = 0;
             }
             $menu->save();
+            return $this->successResponse($menu, "Menu Status Change Successf-ully", $status);
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
-        } finally {
-            return $this->successResponse($menu, "Menu Status Change Successf-ully", $status);
         }
     }
 }
