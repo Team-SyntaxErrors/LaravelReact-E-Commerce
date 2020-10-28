@@ -1,8 +1,6 @@
 import React, { Fragment } from "react";
 
-import { useLocation } from "react-router-dom";
-
-function PageHeader() {
+function PageHeader({ breadCrumbs }) {
     return (
         <Fragment>
             <div className="page-header">
@@ -11,7 +9,7 @@ function PageHeader() {
                         <div className="page-header-title">
                             {/* <i className="ik ik-home bg-blue" /> */}
                             <div className="d-inline">
-                                <h5>{useLocation().state}</h5>
+                                <h5>{breadCrumbs}</h5>
                             </div>
                         </div>
                     </div>
@@ -27,11 +25,9 @@ function PageHeader() {
                                     </a>
                                 </li>
                                 <li
-                                    className={
-                                        useLocation().state && "breadcrumb-item"
-                                    }
+                                    className={breadCrumbs && "breadcrumb-item"}
                                 >
-                                    <a>{useLocation().state}</a>
+                                    <a>{breadCrumbs}</a>
                                 </li>
                             </ol>
                         </nav>
