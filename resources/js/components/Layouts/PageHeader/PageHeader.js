@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 
-function PageHeader({ breadCrumbs }) {
+function PageHeader({ breadCrumbs, Module }) {
     return (
         <Fragment>
             <div className="page-header">
@@ -24,6 +24,11 @@ function PageHeader({ breadCrumbs }) {
                                         <i className="ik ik-home" />
                                     </a>
                                 </li>
+                                {Module && (
+                                    <li className="breadcrumb-item">
+                                        <a>{Module}</a>
+                                    </li>
+                                )}
                                 <li
                                     className={breadCrumbs && "breadcrumb-item"}
                                 >

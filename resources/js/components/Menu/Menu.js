@@ -151,7 +151,7 @@ const Menu = props => {
     };
     return (
         <Fragment>
-            <PageHeader breadCrumbs={props.breadCrumbs} />
+            <PageHeader breadCrumbs={props.breadCrumbs} Module={props.Module} />
             <form onSubmit={submitHandler}>
                 <div
                     className="modal fade"

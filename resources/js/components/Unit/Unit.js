@@ -4,12 +4,13 @@ import "react-toastify/dist/ReactToastify.css";
 import React, { Fragment, useEffect, useState } from "react";
 
 import Axios from "axios";
+import PageHeader from "./../Layouts/PageHeader/PageHeader";
 import Pagination from "react-js-pagination";
 import swal from "sweetalert";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 
-const Unit = () => {
+const Unit = props => {
     const [search, setSearch] = useState("");
     const [select_row, setSelectRow] = useState([8, 10, 20, 30, 40, 50]);
     const [current_row, setCurrentRaw] = useState(8);
@@ -138,6 +139,7 @@ const Unit = () => {
     };
     return (
         <Fragment>
+            <PageHeader breadCrumbs={props.breadCrumbs} Module={props.Module} />
             <form onSubmit={handleSubmit(onAddSubmit)}>
                 <div
                     className="modal fade"
