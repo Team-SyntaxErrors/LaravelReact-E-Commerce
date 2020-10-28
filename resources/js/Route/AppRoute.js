@@ -13,7 +13,11 @@ function AppRoute() {
         <Fragment>
             <Switch>
                 <Route exact path="/" component={DashBoard} />
-                <Route exact path="/menu_list" component={Menu} />
+                <Route
+                    exact
+                    path="/menu_list"
+                    render={() => <Menu breadCrumbs="Menu" />}
+                />
                 <Route exact path="/categories" component={Category} />
                 <Route exact path="/subcategories" component={SubCategory} />
                 <Route exact path="/unit" component={Unit} />
