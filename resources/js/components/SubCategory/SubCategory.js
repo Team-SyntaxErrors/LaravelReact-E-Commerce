@@ -4,11 +4,12 @@ import "react-toastify/dist/ReactToastify.css";
 import React, { Fragment, useEffect, useState } from "react";
 
 import Axios from "axios";
+import PageHeader from "./../Layouts/PageHeader/PageHeader";
 import Pagination from "react-js-pagination";
 import { toast } from "react-toastify";
 import useForms from "../customHooks/useForms";
 
-const SubCategory = () => {
+const SubCategory = props => {
     const [SubCategoryList, setSubCategoryList] = useState([]);
     const [Search, setSearch] = useState("");
     const [Current_row, setCurrent_row] = useState(8);
@@ -234,6 +235,7 @@ const SubCategory = () => {
 
     return (
         <Fragment>
+            <PageHeader breadCrumbs={props.breadCrumbs} Module={props.Module} />
             <form onSubmit={submitHandler}>
                 <div
                     className="modal fade"

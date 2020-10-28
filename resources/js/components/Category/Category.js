@@ -4,12 +4,13 @@ import "react-toastify/dist/ReactToastify.css";
 import React, { Fragment, useEffect, useState } from "react";
 
 import Axios from "axios";
+import PageHeader from "./../Layouts/PageHeader/PageHeader";
 import Pagination from "react-js-pagination";
 import swal from "sweetalert";
 import { toast } from "react-toastify";
 import useForms from "../customHooks/useForms";
 
-const Category = () => {
+const Category = props => {
     const [Menu, setMenu] = useState([]);
     const [category_form, handleChange] = useForms({
         menu_id: "",
@@ -165,6 +166,7 @@ const Category = () => {
 
     return (
         <Fragment>
+            <PageHeader breadCrumbs={props.breadCrumbs} Module={props.Module} />
             <form onSubmit={submitHandler}>
                 <div
                     className="modal fade"

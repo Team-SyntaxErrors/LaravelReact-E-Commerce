@@ -1,8 +1,11 @@
 import React, { Fragment } from "react";
 
-function DashBoard() {
+import PageHeader from "./../Layouts/PageHeader/PageHeader";
+
+function DashBoard(props) {
     return (
         <Fragment>
+            <PageHeader breadCrumbs={props.breadCrumbs} />
             <div>
                 {/* <div className="container-fluid"> */}
                 <div className="row clearfix">

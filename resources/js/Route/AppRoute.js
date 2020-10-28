@@ -12,16 +12,52 @@ function AppRoute() {
     return (
         <Fragment>
             <Switch>
-                <Route exact path="/" component={DashBoard} />
+                <Route
+                    exact
+                    path="/"
+                    render={() => <DashBoard breadCrumbs="Dashboard" />}
+                />
                 <Route
                     exact
                     path="/menu_list"
-                    render={() => <Menu breadCrumbs="Menu" />}
+                    render={() => (
+                        <Menu breadCrumbs="Menu" Module="Web-Settings" />
+                    )}
                 />
-                <Route exact path="/categories" component={Category} />
-                <Route exact path="/subcategories" component={SubCategory} />
-                <Route exact path="/unit" component={Unit} />
-                <Route exact path="/brand" component={Brand} />
+                <Route
+                    exact
+                    path="/categories"
+                    render={() => (
+                        <Category
+                            breadCrumbs="Category"
+                            Module="Web-Settings"
+                        />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/subcategories"
+                    render={() => (
+                        <SubCategory
+                            breadCrumbs="Sub-Category"
+                            Module="Web-Settings"
+                        />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/unit"
+                    render={() => (
+                        <Unit breadCrumbs="Unit" Module="Web-Settings" />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/brand"
+                    render={() => (
+                        <Brand breadCrumbs="Brand" Module="Web-Settings" />
+                    )}
+                />
             </Switch>
         </Fragment>
     );
