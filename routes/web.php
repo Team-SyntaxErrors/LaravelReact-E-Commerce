@@ -27,12 +27,18 @@ Route::middleware('auth')->group(function () {
     Route::resource('/sub_category', 'SubCategoryController');
     Route::get('/sub_category/status/{id}', 'SubCategoryController@status');
     Route::get('/all_menu_get', 'RelativeController@all_menu_get');
-    Route::get('/all_category_get/{id}', 'RelativeController@all_category_get');
+    Route::get('/all_category_get/{id}', 'RelativeController@menu_category_get');
+    Route::get('/categories', 'RelativeController@all_category_get');
+    Route::get('/subcategory_get/{id}', 'RelativeController@category_subcategory_get');
     Route::resource('/units', 'UnitController');
     Route::resource('/brands', 'BrandController');
+    Route::get('/all_brand_get', 'RelativeController@all_brand_get');
+    Route::get('/all_unit_get', 'RelativeController@all_unit_get');
     Route::get('/brands/status/{id}', 'BrandController@status');
-
+    Route::get("/product_slug_check", "ProductSlugCheckApiController");
     Route::get('/home', 'HomeController@index')->name('home');
+    Route::resource('/products', 'ProductController');
+    Route::get('/products/status/{id}', 'ProductController@status');
 });
 Route::get('{ReactRoute}', function () {
     return view('index');

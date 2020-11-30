@@ -139,6 +139,48 @@ function SideBar() {
                                     </div>
                                 </div>
                             </div>
+                            <div className="nav-item has-sub">
+                                <a>
+                                    <i className="ik ik-layers" />
+                                    <span>Product</span>{" "}
+                                </a>
+                                <div className="submenu-content">
+                                    <div>
+                                        <Link
+                                            className="menu-item"
+                                            className={
+                                                useLocation().pathname ==
+                                                "/product"
+                                                    ? "menu-item active"
+                                                    : "menu-item"
+                                            }
+                                            to={{
+                                                pathname: "/product",
+                                                state: "Product"
+                                            }}
+                                        >
+                                            <span>Product</span>{" "}
+                                        </Link>
+                                    </div>
+                                    <div>
+                                        <Link
+                                            className="menu-item"
+                                            className={
+                                                useLocation().pathname ==
+                                                "/product/add"
+                                                    ? "menu-item active"
+                                                    : "menu-item"
+                                            }
+                                            to={{
+                                                pathname: "/product/add",
+                                                state: "Add Product"
+                                            }}
+                                        >
+                                            <span>Add Product</span>{" "}
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
                         </nav>
                     </div>
                 </div>

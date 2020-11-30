@@ -7,7 +7,8 @@ import DashBoard from "../components/DashBoard/DashBoard";
 import Menu from "../components/Menu/Menu";
 import SubCategory from "../components/SubCategory/SubCategory";
 import Unit from "../components/Unit/Unit";
-
+import ListProduct from "../components/Product/ProductList";
+import AddProduct from "../components/Product/AddProduct";
 function AppRoute() {
     return (
         <Fragment>
@@ -56,6 +57,23 @@ function AppRoute() {
                     path="/brand"
                     render={() => (
                         <Brand breadCrumbs="Brand" Module="Web-Settings" />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/product"
+                    render={() => (
+                        <ListProduct breadCrumbs="Product" Module="Products" />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/product/add"
+                    render={() => (
+                        <AddProduct
+                            breadCrumbs="Add Product"
+                            Module="Products"
+                        />
                     )}
                 />
             </Switch>
