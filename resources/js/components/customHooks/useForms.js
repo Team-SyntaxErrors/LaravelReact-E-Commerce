@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const useForms = initialValues => {
     const [values, setValues] = useState(initialValues);
-    const SetValues = e => {
+    const SetInputValues = e => {
         if (e.target.files) {
             let files = e.target.files[0];
             let name = e.target.name;
@@ -18,7 +18,7 @@ const useForms = initialValues => {
     const SetObject = initialValues => {
         setValues(initialValues);
     };
-    return [values, SetValues, SetObject];
+    return [values, SetInputValues, SetObject];
 };
 
 export default useForms;
