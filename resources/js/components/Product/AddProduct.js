@@ -18,20 +18,54 @@ const AddProduct = props => {
     const [Brand, setBrand] = useState([]);
     const [Unit, setUnit] = useState([]);
     const [SlugWarning, setSlugWarning] = useState("");
+    const [error, setError] = useState([]);
+    const [product, setProduct] = useState({
+        product_name: "",
+        product_slug: "",
+        product_sku: "",
+        category_id: 0,
+        subcategory_id: 0,
+        brand_id: 0,
+        purchase_price: 0,
+        sell_price: 0,
+        unit_id: 0,
+        product_alert_qty: 0,
+        tags: [],
+        status: 0,
+        description: ""
+    });
 
-    const [product_name, setProductName] = useState("");
-    const [product_slug, setProductSlug] = useState("");
-    const [product_sku, setProductSku] = useState("");
-    const [category_id, setCategoryId] = useState(0);
-    const [subcategory_id, setSubCategoryId] = useState(0);
-    const [brand_id, setBrandId] = useState(0);
-    const [purchase_price, setPurchasePrice] = useState(0);
-    const [sell_price, setSellPrice] = useState(0);
-    const [unit_id, setUnitId] = useState(0);
-    const [product_alert_qty, setAlertQty] = useState(0);
-    const [tags, setTags] = useState([]);
-    const [status, setStatus] = useState(0);
-    const [description, setDescription] = useState(0);
+    const handleChange = event => {
+        let value = event.target.value;
+        setProduct({ ...product, [event.target.name]: event.target.value });
+    };
+
+    const Slugger = event => {
+        let slug = event.target.value;
+        slug = slugify(slug);
+        Axios.get("/product_slug_check/?slug=" + slug)
+            .then(response => {
+                if (response.status == 201) {
+                    setSlugWarning("");
+                    setProduct({ ...product, ["product_slug"]: slug });
+                } else if (response.status == 200) {
+                    setSlugWarning("This slug is recorded already");
+                } else {
+                    setSlugWarning("This slug is recorded already");
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
+
+    const setTags = newTags => {
+        setProduct({ ...product, ["tags"]: newTags });
+    };
+
+    const setDescription = description => {
+        setProduct({ ...product, ["description"]: description });
+    };
 
     const GetCategory = () => {
         Axios.get("/categories")
@@ -46,9 +80,8 @@ const AddProduct = props => {
         GetCategory();
     }, []);
 
-    const CategoryChange = e => {
-        GetSubCategory(e.target.value);
-        setCategoryId(e.target.value);
+    const CategoryChange = event => {
+        GetSubCategory(event.target.value);
     };
 
     const GetSubCategory = category_id => {
@@ -87,69 +120,29 @@ const AddProduct = props => {
         GetUnit();
     }, []);
 
-    const Slugger = e => {
-        let slug = e.target.value;
-        slug = slugify(slug);
-        Axios.get("/product_slug_check/?slug=" + slug)
-            .then(response => {
-                if (response.status == 201) {
-                    setSlugWarning("");
-                    setProductSlug(slug);
-                } else if (response.status == 200) {
-                    setSlugWarning("This slug is recorded already");
-                } else {
-                    setSlugWarning("This slug is recorded already");
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            });
+    const ClearFrom = () => {
+        setError([]);
+        let FORM = product;
+        Object.keys(FORM).forEach(function(key, value) {
+            FORM[key] = "";
+        });
     };
 
-    const submitHandler = e => {
-        e.preventDefault();
-        const data = {
-            product_name,
-            product_slug,
-            product_sku,
-            category_id,
-            subcategory_id,
-            brand_id,
-            purchase_price,
-            sell_price,
-            unit_id,
-            product_alert_qty,
-            tags,
-            status,
-            description
-        };
-        Axios.post("/products", data)
+    const submitHandler = event => {
+        event.preventDefault();
+        Axios.post("/products", product)
             .then(response => {
-                if (response.data.code == 201) {
-                    ClearForm();
+                if (response.status == 201) {
+                    console.log("SDFASD");
                     toast.success("Product Data Inserted Successfully!");
+                    ClearFrom();
                 }
             })
             .catch(error => {
-                if (error.response.status == 422) {
+                if (error.response) {
                     setError(error.response.data.errors);
                 }
             });
-    };
-    const ClearForm = () => {
-        setProductName("");
-        setProductSlug("");
-        setProductSku("");
-        setCategoryId(0);
-        setSubCategoryId(0);
-        setBrandId(0);
-        setPurchasePrice(0);
-        setSellPrice(0);
-        setUnitId(0);
-        setAlertQty(0);
-        setTags([]);
-        setStatus(0);
-        setDescription("");
     };
     return (
         <Fragment>
@@ -182,12 +175,11 @@ const AddProduct = props => {
                                         <input
                                             type="text"
                                             name="product_name"
+                                            value={product.product_name}
                                             className="form-control"
                                             placeholder="Enter Product Name"
-                                            onChange={e =>
-                                                setProductName(e.target.value)
-                                            }
-                                            onKeyUp={e => Slugger(e)}
+                                            onChange={handleChange}
+                                            onKeyUp={Slugger}
                                         />
                                     </div>
                                 </div>
@@ -203,7 +195,7 @@ const AddProduct = props => {
                                             name="product_slug"
                                             className="form-control"
                                             placeholder="Product Slug"
-                                            value={product_slug}
+                                            value={product.product_slug}
                                             readOnly
                                         />
                                         <span className="text-danger">
@@ -221,11 +213,10 @@ const AddProduct = props => {
                                         <input
                                             type="text"
                                             name="product_sku"
+                                            value={product.product_sku}
                                             className="form-control"
                                             placeholder="Enter Product Sku"
-                                            onChange={e =>
-                                                setProductSku(e.target.value)
-                                            }
+                                            onChange={e => handleChange(e)}
                                         />
                                     </div>
                                 </div>
@@ -242,7 +233,10 @@ const AddProduct = props => {
                                         <select
                                             className="form-control"
                                             name="category_id"
-                                            onChange={e => CategoryChange(e)}
+                                            onChange={e => (
+                                                handleChange(e),
+                                                CategoryChange(e)
+                                            )}
                                         >
                                             <option defaultValue>
                                                 --Select Category--
@@ -268,9 +262,7 @@ const AddProduct = props => {
                                         <select
                                             className="form-control"
                                             name="subcategory_id"
-                                            onChange={e =>
-                                                setSubCategoryId(e.target.value)
-                                            }
+                                            onChange={e => handleChange(e)}
                                         >
                                             <option defaultValue>
                                                 --Select Sub Category--
@@ -296,9 +288,7 @@ const AddProduct = props => {
                                         <select
                                             className="form-control"
                                             name="brand_id"
-                                            onChange={e =>
-                                                setBrandId(e.target.value)
-                                            }
+                                            onChange={e => handleChange(e)}
                                         >
                                             <option defaultValue>
                                                 --Select Brand--
@@ -329,9 +319,7 @@ const AddProduct = props => {
                                             name="purchase_price"
                                             className="form-control"
                                             placeholder="Enter Product Purchase Price"
-                                            onChange={e =>
-                                                setPurchasePrice(e.target.value)
-                                            }
+                                            onChange={e => handleChange(e)}
                                         />
                                     </div>
                                 </div>
@@ -346,9 +334,7 @@ const AddProduct = props => {
                                             type="number"
                                             name="sell_price"
                                             className="form-control"
-                                            onChange={e =>
-                                                setSellPrice(e.target.value)
-                                            }
+                                            onChange={e => handleChange(e)}
                                             placeholder="Enter Product Sell Price"
                                         />
                                     </div>
@@ -362,9 +348,7 @@ const AddProduct = props => {
                                     <div className="col-lg-12">
                                         <select
                                             className="form-control"
-                                            onChange={e =>
-                                                setUnitId(e.target.value)
-                                            }
+                                            onChange={e => handleChange(e)}
                                             name="unit_id"
                                         >
                                             <option defaultValue>
@@ -395,9 +379,7 @@ const AddProduct = props => {
                                             type="number"
                                             name="product_alert_qty"
                                             className="form-control"
-                                            onChange={e =>
-                                                setAlertQty(e.target.value)
-                                            }
+                                            onChange={e => handleChange(e)}
                                             placeholder="Enter Product Alert Quantity"
                                         />
                                     </div>
@@ -417,7 +399,7 @@ const AddProduct = props => {
                                         onChange={handleChange}
                                     /> */}
                                         <ReactTagInput
-                                            tags={tags}
+                                            tags={product.tags}
                                             onChange={newTags =>
                                                 setTags(newTags)
                                             }
@@ -432,17 +414,9 @@ const AddProduct = props => {
                                         Product Status:
                                     </label>
                                     <div className="col-lg-12">
-                                        {/* <input
-                                        type="text"
-                                        name="status"
-                                        className="form-control"
-                                        placeholder="Enter Product Sku"
-                                    /> */}
                                         <select
                                             name="status"
-                                            onChange={e =>
-                                                setStatus(e.target.value)
-                                            }
+                                            onChange={e => handleChange(e)}
                                             className="form-control"
                                         >
                                             <option>--Select Status--</option>

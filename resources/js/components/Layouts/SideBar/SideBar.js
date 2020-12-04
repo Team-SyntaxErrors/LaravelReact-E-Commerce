@@ -150,6 +150,24 @@ function SideBar() {
                                             className="menu-item"
                                             className={
                                                 useLocation().pathname ==
+                                                "/product/add_product"
+                                                    ? "menu-item active"
+                                                    : "menu-item"
+                                            }
+                                            to={{
+                                                pathname:
+                                                    "/product/add_product",
+                                                state: "Add Product"
+                                            }}
+                                        >
+                                            <span>Add Product</span>{" "}
+                                        </Link>
+                                    </div>
+                                    <div>
+                                        <Link
+                                            className="menu-item"
+                                            className={
+                                                useLocation().pathname ==
                                                 "/product"
                                                     ? "menu-item active"
                                                     : "menu-item"
@@ -160,23 +178,6 @@ function SideBar() {
                                             }}
                                         >
                                             <span>Product</span>{" "}
-                                        </Link>
-                                    </div>
-                                    <div>
-                                        <Link
-                                            className="menu-item"
-                                            className={
-                                                useLocation().pathname ==
-                                                "/product/add"
-                                                    ? "menu-item active"
-                                                    : "menu-item"
-                                            }
-                                            to={{
-                                                pathname: "/product/add",
-                                                state: "Add Product"
-                                            }}
-                                        >
-                                            <span>Add Product</span>{" "}
                                         </Link>
                                     </div>
                                 </div>
