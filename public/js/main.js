@@ -45581,7 +45581,6 @@ var AddProduct = function AddProduct(props) {
       setProduct = _useState14[1];
 
   var handleChange = function handleChange(event) {
-    var value = event.target.value;
     setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, event.target.name, event.target.value)));
   };
 
@@ -45621,10 +45620,20 @@ var AddProduct = function AddProduct(props) {
   Object(react__WEBPACK_IMPORTED_MODULE_2__["useEffect"])(function () {
     GetCategory();
   }, []);
+  /**
+   *
+   * @param {object} event
+   */
 
   var CategoryChange = function CategoryChange(event) {
     GetSubCategory(event.target.value);
   };
+  /**
+   * Get category wise sub category.
+   *
+   * @param {int} category_id
+   */
+
 
   var GetSubCategory = function GetSubCategory(category_id) {
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/subcategory_get/" + category_id).then(function (response) {
@@ -45659,18 +45668,27 @@ var AddProduct = function AddProduct(props) {
   }, []);
 
   var ClearFrom = function ClearFrom() {
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "product_name", "")));
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "product_slug", "")));
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "product_sku", "")));
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "category_id", 0)));
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "subcategory_id", 0)));
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "brand_id", 0)));
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "purchase_price", 0)));
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "sell_price", 0)));
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "unit_id", 0)));
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "product_alert_qty", 0)));
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "tags", [])));
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "status", 0)));
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "description", "")));
     setError([]);
-    var FORM = product;
-    Object.keys(FORM).forEach(function (key, value) {
-      FORM[key] = "";
-    });
+    document.getElementById("product-from").reset();
   };
 
   var submitHandler = function submitHandler(event) {
     event.preventDefault();
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/products", product).then(function (response) {
-      if (response.status == 201) {
-        console.log("SDFASD");
+      if (response.data.code === 201) {
         react_toastify__WEBPACK_IMPORTED_MODULE_10__["toast"].success("Product Data Inserted Successfully!");
         ClearFrom();
       }
@@ -45698,7 +45716,8 @@ var AddProduct = function AddProduct(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("i", {
     className: "ik ik-clipboard"
   }), "Product List"), " ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("form", {
-    onSubmit: submitHandler
+    onSubmit: submitHandler,
+    id: "product-from"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "card-body"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
@@ -45935,11 +45954,12 @@ var AddProduct = function AddProduct(props) {
     className: "col-lg-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_4__["CKEditor"], {
     editor: _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_5___default.a,
-    name: "product_description",
+    name: "description",
     onChange: function onChange(event, editor) {
       var data = editor.getData();
       setDescription(data);
-    }
+    },
+    data: product.description
   })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "card-footer"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("button", {

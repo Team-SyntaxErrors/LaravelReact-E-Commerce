@@ -11,15 +11,18 @@ class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * 
+     *
      * @param  Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $product = Product::with("images")->with('tags')
-            ->with('categories')->with('subCategories')
-            ->with('brands')->with('units')
+        $product = Product::with("images")
+            ->with('tags')
+            ->with('categories')
+            ->with('subCategories')
+            ->with('brands')
+            ->with('units')
             ->Search($request->q)
             ->paginate($request->row);
         return $this->successResponse($product, "Product Get Successfully", Response::HTTP_OK);
@@ -44,9 +47,9 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         try {
-            $product = new Product();
+            $product   = new Product();
             $requested = $request->all();
-            
+
             //if there is any tag founded 1 will be stored in product_has_tag field
             if ($request->tags[0]) {
                 $requested['product_has_tag'] = 1;
@@ -55,7 +58,7 @@ class ProductController extends Controller
             }
 
             $product->fill($requested)->save();
-            
+
             //Product Tags inserting in product_tags table
             if ($request->tags[0]) {
                 $data = [];
