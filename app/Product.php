@@ -7,8 +7,23 @@ use Illuminate\Support\Facades\Auth;
 
 class Product extends Model
 {
+    /**
+     * Undocumented variable
+     *
+     * @var string
+     */
     protected $table = 'products';
+    /**
+     * Undocumented variable
+     *
+     * @var string
+     */
     protected $primaryKey = 'product_id';
+    /**
+     * Undocumented variable
+     *
+     * @var array
+     */
     protected $fillable = [
         "product_name",
         "product_slug",
@@ -25,9 +40,9 @@ class Product extends Model
         "status",
     ];
 
-    /** 
+    /**
      * Relation between products table and product_images table
-    */
+     */
     public function images()
     {
         return $this->hasMany(ProductImage::class, 'product_id');
@@ -72,12 +87,12 @@ class Product extends Model
     {
         return $this->belongsTo(Unit::class, 'unit_id');
     }
-    
-    /** 
+
+    /**
      * Store created_by when new product inserted
-     * 
+     *
      * Updated updated_by when product updated
-    */
+     */
     public static function boot()
     {
         parent::boot();

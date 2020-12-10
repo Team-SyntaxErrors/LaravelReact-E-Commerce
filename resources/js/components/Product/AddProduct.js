@@ -36,7 +36,6 @@ const AddProduct = props => {
     });
 
     const handleChange = event => {
-        let value = event.target.value;
         setProduct({ ...product, [event.target.name]: event.target.value });
     };
 
@@ -80,10 +79,19 @@ const AddProduct = props => {
         GetCategory();
     }, []);
 
+    /**
+     *
+     * @param {object} event
+     */
     const CategoryChange = event => {
         GetSubCategory(event.target.value);
     };
 
+    /**
+     * Get category wise sub category.
+     *
+     * @param {int} category_id
+     */
     const GetSubCategory = category_id => {
         Axios.get("/subcategory_get/" + category_id)
             .then(response => {
@@ -121,19 +129,28 @@ const AddProduct = props => {
     }, []);
 
     const ClearFrom = () => {
+        setProduct({ ...product, ["product_name"]: "" });
+        setProduct({ ...product, ["product_slug"]: "" });
+        setProduct({ ...product, ["product_sku"]: "" });
+        setProduct({ ...product, ["category_id"]: 0 });
+        setProduct({ ...product, ["subcategory_id"]: 0 });
+        setProduct({ ...product, ["brand_id"]: 0 });
+        setProduct({ ...product, ["purchase_price"]: 0 });
+        setProduct({ ...product, ["sell_price"]: 0 });
+        setProduct({ ...product, ["unit_id"]: 0 });
+        setProduct({ ...product, ["product_alert_qty"]: 0 });
+        setProduct({ ...product, ["tags"]: [] });
+        setProduct({ ...product, ["status"]: 0 });
+        setProduct({ ...product, ["description"]: "" });
         setError([]);
-        let FORM = product;
-        Object.keys(FORM).forEach(function(key, value) {
-            FORM[key] = "";
-        });
+        document.getElementById("product-from").reset();
     };
 
     const submitHandler = event => {
         event.preventDefault();
         Axios.post("/products", product)
             .then(response => {
-                if (response.status == 201) {
-                    console.log("SDFASD");
+                if (response.data.code === 201) {
                     toast.success("Product Data Inserted Successfully!");
                     ClearFrom();
                 }
@@ -163,7 +180,7 @@ const AddProduct = props => {
                         </button>{" "}
                     </Link>
                 </div>
-                <form onSubmit={submitHandler}>
+                <form onSubmit={submitHandler} id="product-from">
                     <div className="card-body">
                         <div className="row">
                             <div className="col-md-4">
@@ -391,13 +408,6 @@ const AddProduct = props => {
                                         Product Tag:
                                     </label>
                                     <div className="col-lg-12">
-                                        {/* <input
-                                        type="text"
-                                        name="tags"
-                                        className="form-control"
-                                        placeholder="Enter Product Slug"
-                                        onChange={handleChange}
-                                    /> */}
                                         <ReactTagInput
                                             tags={product.tags}
                                             onChange={newTags =>
@@ -437,11 +447,12 @@ const AddProduct = props => {
                                     <div className="col-lg-12">
                                         <CKEditor
                                             editor={ClassicEditor}
-                                            name="product_description"
+                                            name="description"
                                             onChange={(event, editor) => {
                                                 const data = editor.getData();
                                                 setDescription(data);
                                             }}
+                                            data={product.description}
                                         />
                                     </div>
                                 </div>
