@@ -14,7 +14,7 @@ class BrandController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request For search & paginate data.
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -26,7 +26,7 @@ class BrandController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -36,7 +36,7 @@ class BrandController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(BrandRequest $request)
@@ -59,8 +59,8 @@ class BrandController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  integer $id
+     * @return void
      */
     public function show($id)
     {
@@ -70,8 +70,8 @@ class BrandController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  integer $id
+     * @return void
      */
     public function edit($id)
     {
@@ -81,8 +81,8 @@ class BrandController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  integer                  $id
      * @return \Illuminate\Http\Response
      */
     public function update(BrandRequest $request, $id)
@@ -106,7 +106,7 @@ class BrandController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -127,10 +127,10 @@ class BrandController extends Controller
     {
         try {
             $brand = Brand::findOrFail($id);
-            if ($brand->status == 1):
+            if ($brand->status == 1) :
                 $brand->update(['status' => 0]);
                 $status = Response::HTTP_CREATED;
-            else:
+            else :
                 $brand->update(['status' => 1]);
                 $status = Response::HTTP_OK;
             endif;

@@ -12,7 +12,7 @@ $factory->define(Menu::class, function (Faker $faker) {
     return [
         'menu_name'=>$menu_name,
         'menu_slug'=>Str::slug($menu_name),
-        'menu_icon'=>'backend_assets/images/'.$image[rand(0,2)],
+        'menu_icon'=>'backend_assets/images/'.$image[rand(0, 2)],
         'status'=>1
     ];
 });

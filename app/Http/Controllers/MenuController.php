@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 
 class MenuController extends Controller
 {
+    
     /**
      * Display a listing of the resource.
      *
@@ -37,7 +38,7 @@ class MenuController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\MenuRequest  $request
+     * @param  \App\Http\Requests\MenuRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(MenuRequest $request)
@@ -56,13 +57,12 @@ class MenuController extends Controller
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -73,7 +73,7 @@ class MenuController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -84,8 +84,8 @@ class MenuController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\MenuRequest  $request
-     * @param  int  $id
+     * @param  \App\Http\Requests\MenuRequest $request
+     * @param  integer                        $id
      * @return \Illuminate\Http\Response
      */
     public function update(MenuRequest $request, $id)
@@ -107,7 +107,6 @@ class MenuController extends Controller
                     "status" => $status,
                     "data"   => new MenuResource($menu_model),
                 ];
-
             }
             $menu_slug = Str::slug($request->menu_name, '-');
             $requested_data = Arr::set($requested_data, "menu_slug", $menu_slug);
@@ -121,7 +120,7 @@ class MenuController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
