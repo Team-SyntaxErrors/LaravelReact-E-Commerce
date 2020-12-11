@@ -36,7 +36,7 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\CategoryRequest  $request
+     * @param  \App\Http\Requests\CategoryRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(CategoryRequest $request)
@@ -60,7 +60,7 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Category  $category
+     * @param  \App\Category $category
      * @return \Illuminate\Http\Response
      */
     public function show(Category $category)
@@ -71,7 +71,7 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Category  $category
+     * @param  \App\Category $category
      * @return \Illuminate\Http\Response
      */
     public function edit(Category $category)
@@ -82,8 +82,8 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\CategoryRequest  $request
-     * @param  \App\Category  $category
+     * @param  \App\Http\Requests\CategoryRequest $request
+     * @param  \App\Category                      $category
      * @return \Illuminate\Http\Response
      */
     public function update(CategoryRequest $request, $id)
@@ -110,7 +110,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Category  $category
+     * @param  \App\Category $category
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -131,10 +131,10 @@ class CategoryController extends Controller
     {
         try {
             $category = Category::findOrFail($id);
-            if ($category->status == 1):
+            if ($category->status == 1) :
                 $category->update(['status' => 0]);
                 $status = Response::HTTP_CREATED;
-            else:
+            else :
                 $category->update(['status' => 1]);
                 $status = Response::HTTP_OK;
             endif;

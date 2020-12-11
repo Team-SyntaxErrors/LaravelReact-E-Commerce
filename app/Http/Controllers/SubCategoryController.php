@@ -36,7 +36,7 @@ class SubCategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(SubCategoryRequest $request)
@@ -61,7 +61,7 @@ class SubCategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -72,7 +72,7 @@ class SubCategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -83,8 +83,8 @@ class SubCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  integer                  $id
      * @return \Illuminate\Http\Response
      */
     public function update(SubCategoryRequest $request, $id)
@@ -111,7 +111,7 @@ class SubCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -126,17 +126,16 @@ class SubCategoryController extends Controller
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-
     }
 
     public function status($id)
     {
         try {
             $subcategory = SubCategory::findOrFail($id);
-            if ($subcategory->status == 1):
+            if ($subcategory->status == 1) :
                 $subcategory->update(['status' => 0]);
                 $status = Response::HTTP_CREATED;
-            else:
+            else :
                 $subcategory->update(['status' => 1]);
                 $status = Response::HTTP_OK;
             endif;

@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Auth;
+
 class Unit extends Model
 {
     protected $table = "units";
@@ -15,9 +16,10 @@ class Unit extends Model
         return $query->where('status', 1);
     }
 
-    public function scopeSearch($query, $search){
+    public function scopeSearch($query, $search)
+    {
         return $query->where('unit_name', 'LIKE', '%' . $search . '%')
-                    ->orwhere('short_name', 'like' ,'%'.$search. '%');
+                    ->orwhere('short_name', 'like', '%'.$search. '%');
     }
 
 

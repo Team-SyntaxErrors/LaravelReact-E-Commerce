@@ -14,12 +14,10 @@ trait ImageUpload
         $extension = explode("/", $sub_str);
         $allowed = Helper::ImageExtension($extension[1]);
         if ($allowed == "Allowed") {
-
             $upload_path = "backend_assets/images/" . $folder_name . "/" . time() . "." . $extension[1];
             $image_upload = Image::make($request->$field_name)->resize($height, $width);
             $image_upload->save($upload_path);
             return $upload_path;
-
         } else {
             $status = 400;
             $response = [

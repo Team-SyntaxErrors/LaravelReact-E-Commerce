@@ -33,7 +33,7 @@ class UnitController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(UnitFormRequest $request)
@@ -50,17 +50,17 @@ class UnitController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Unit  $unit
+     * @param  \App\Unit $unit
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         try {
             $unit_model = Unit::findOrFail($id);
-            if ($unit_model->status == 1):
+            if ($unit_model->status == 1) :
                 $unit_model->update(['status' => 0]);
                 $status = Response::HTTP_CREATED;
-            else:
+            else :
                 $unit_model->update(['status' => 1]);
                 $status = Response::HTTP_OK;
             endif;
@@ -73,7 +73,7 @@ class UnitController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Unit  $unit
+     * @param  \App\Unit $unit
      * @return \Illuminate\Http\Response
      */
     public function edit(Unit $unit)
@@ -84,8 +84,8 @@ class UnitController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Unit  $unit
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Unit                $unit
      * @return \Illuminate\Http\Response
      */
     public function update(UnitFormRequest $request, $id)
@@ -102,7 +102,7 @@ class UnitController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Unit  $unit
+     * @param  \App\Unit $unit
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
