@@ -26,19 +26,29 @@ Route::middleware('auth')->group(function () {
     Route::get('/category/status/{id}', 'CategoryController@status');
     Route::resource('/sub_category', 'SubCategoryController');
     Route::get('/sub_category/status/{id}', 'SubCategoryController@status');
-    Route::get('/all_menu_get', 'RelativeController@all_menu_get');
-    Route::get('/all_category_get/{id}', 'RelativeController@menu_category_get');
-    Route::get('/categories', 'RelativeController@all_category_get');
-    Route::get('/subcategory_get/{id}', 'RelativeController@category_subcategory_get');
+
     Route::resource('/units', 'UnitController');
     Route::resource('/brands', 'BrandController');
-    Route::get('/all_brand_get', 'RelativeController@all_brand_get');
-    Route::get('/all_unit_get', 'RelativeController@all_unit_get');
+
     Route::get('/brands/status/{id}', 'BrandController@status');
     Route::get("/product_slug_check", "ProductSlugCheckApiController");
     Route::get('/home', 'HomeController@index')->name('home');
     Route::resource('/products', 'ProductController');
     Route::get('/products/status/{id}', 'ProductController@status');
+
+    //All menu
+    Route::get('/all_menu_get', 'MenuApiController');
+    //Menu wise category
+    Route::get('/all_category_get/{id}', 'MenuWiseCategoryApiController');
+    //All category
+    Route::get('/categories', 'CategoryApiController');
+    //category wise sub-category
+    Route::get('/subcategory_get/{id}', 'CategoryWiseSubCategoryApiController');
+    //get brand
+    Route::get('/all_brand_get', 'BrandApiController');
+    //get unit
+    Route::get('/all_unit_get', 'UnitApiController');
+
 });
 Route::get('{ReactRoute}', function () {
     return view('index');
