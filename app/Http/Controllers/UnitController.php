@@ -12,6 +12,7 @@ class UnitController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Illuminate\Http\Request $request Getting search & paginated data.
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -23,7 +24,7 @@ class UnitController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -33,7 +34,7 @@ class UnitController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  App\Request\UnitFormRequest $request Getting validated form data.
      * @return \Illuminate\Http\Response
      */
     public function store(UnitFormRequest $request)
@@ -50,10 +51,10 @@ class UnitController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Unit $unit
+     * @param  integer $id Instantiating object of model through this id.
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         try {
             $unit_model = Unit::findOrFail($id);
@@ -73,8 +74,8 @@ class UnitController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Unit $unit
-     * @return \Illuminate\Http\Response
+     * @param  \App\Unit $unit Instantiating object of model through id.
+     * @return void
      */
     public function edit(Unit $unit)
     {
@@ -84,11 +85,11 @@ class UnitController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Unit                $unit
+     * @param  App\Request\UnitFormRequest $request Getting validated form data.
+     * @param  integer                     $id      Instantiating object of model through this id.
      * @return \Illuminate\Http\Response
      */
-    public function update(UnitFormRequest $request, $id)
+    public function update(UnitFormRequest $request, int $id)
     {
         try {
             $unit_model = Unit::findOrFail($id);
@@ -102,10 +103,10 @@ class UnitController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Unit $unit
+     * @param  integer $id Instantiating object of model through this id.
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         try {
             Unit::findOrFail($id)->delete();

@@ -36,7 +36,7 @@ class BrandController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  App\Http\Requests\BrandRequest $request For getting Validated form data.
      * @return \Illuminate\Http\Response
      */
     public function store(BrandRequest $request)
@@ -59,10 +59,10 @@ class BrandController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  integer $id
+     * @param  integer $id Getting id.
      * @return void
      */
-    public function show($id)
+    public function show(int $id)
     {
         //
     }
@@ -70,10 +70,10 @@ class BrandController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  integer $id
+     * @param  integer $id Getting id for edit query.
      * @return void
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         //
     }
@@ -81,11 +81,11 @@ class BrandController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  integer                  $id
+     * @param  App\Http\Requests\BrandRequest $request Getting validated form data.
+     * @param  integer                        $id      Getting id for retrieving data from database.
      * @return \Illuminate\Http\Response
      */
-    public function update(BrandRequest $request, $id)
+    public function update(BrandRequest $request, int $id)
     {
         try {
             $brand = Brand::findOrFail($id);
@@ -106,10 +106,10 @@ class BrandController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  integer $id
+     * @param  integer $id Getting id for retrieving data.
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         try {
             $brand = Brand::findOrFail($id);
@@ -123,7 +123,11 @@ class BrandController extends Controller
         }
     }
 
-    public function status($id)
+    /**
+     * @param integer $id For finding data from database.
+     * @return \Illuminate\Http\Response
+     */
+    public function status(int $id)
     {
         try {
             $brand = Brand::findOrFail($id);
