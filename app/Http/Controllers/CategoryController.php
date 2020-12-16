@@ -15,6 +15,7 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Illuminate\Http\Request $request For getting search & pagination data.
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -26,7 +27,7 @@ class CategoryController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -36,7 +37,7 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\CategoryRequest $request
+     * @param  \App\Http\Requests\CategoryRequest $request For getting validated data form data.
      * @return \Illuminate\Http\Response
      */
     public function store(CategoryRequest $request)
@@ -60,8 +61,8 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Category $category
-     * @return \Illuminate\Http\Response
+     * @param  \App\Category $category For instantiating object using id.
+     * @return void
      */
     public function show(Category $category)
     {
@@ -71,8 +72,8 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Category $category
-     * @return \Illuminate\Http\Response
+     * @param  \App\Category $category For instantiating object using id.
+     * @return void
      */
     public function edit(Category $category)
     {
@@ -82,11 +83,11 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\CategoryRequest $request
-     * @param  \App\Category                      $category
+     * @param  App\Http\Requests\CategoryRequest $request For getting validated Form data.
+     * @param  integer                           $id      For getting id to instantiating object.
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryRequest $request, $id)
+    public function update(CategoryRequest $request, int $id)
     {
         try {
             $category_model = Category::findOrFail($id);
@@ -110,10 +111,10 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Category $category
+     * @param  integer $id Getting id of delete data.
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         try {
             $category = Category::findOrFail($id);
@@ -127,7 +128,13 @@ class CategoryController extends Controller
         }
     }
 
-    public function status($id)
+    /**
+     * Status Changing Function.
+     *
+     * @param integer $id Getting id to change status.
+     * @return \Illuminate\Http\Response
+     */
+    public function status(int $id)
     {
         try {
             $category = Category::findOrFail($id);

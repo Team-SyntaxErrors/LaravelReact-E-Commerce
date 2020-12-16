@@ -12,7 +12,7 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  Illuminate\Http\Request $request
+     * @param  Illuminate\Http\Request $request Getting search & pagination data.
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -31,7 +31,7 @@ class ProductController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -41,7 +41,7 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request $request Getting validated form data.
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -80,10 +80,10 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  integer $id
-     * @return \Illuminate\Http\Response
+     * @param  integer $id Instantiating object of model through this id.
+     * @return void
      */
-    public function show($id)
+    public function show(int $id)
     {
         //
     }
@@ -91,10 +91,10 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  integer $id
-     * @return \Illuminate\Http\Response
+     * @param  integer $id Instantiating object of model through this id.
+     * @return void
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         //
     }
@@ -102,11 +102,11 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  integer                  $id
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request Getting validated form data.
+     * @param  integer                  $id      Instantiating object of model through this id.
+     * @return void
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         // try {
         //     $product = Product::find($id);
@@ -137,10 +137,10 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  integer $id
+     * @param  integer $id Instantiating object of model through this id.
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         try {
             $product = Product::findOrFail($id);
@@ -150,7 +150,14 @@ class ProductController extends Controller
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
-    public function status($id)
+
+    /**
+     * Changing status of specified resource.
+     *
+     * @param integer $id Instantiating object of model through this id.
+     * @return \Illuminate\Http\Response
+     */
+    public function status(int $id)
     {
         try {
             $product = Product::findOrFail($id);

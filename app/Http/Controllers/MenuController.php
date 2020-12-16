@@ -13,10 +13,11 @@ use Illuminate\Support\Str;
 
 class MenuController extends Controller
 {
-    
+
     /**
      * Display a listing of the resource.
      *
+     * @param Illuminate\Http\Request $request Getting search & pagination data.
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -28,7 +29,7 @@ class MenuController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -38,7 +39,7 @@ class MenuController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\MenuRequest $request
+     * @param  \App\Http\Requests\MenuRequest $request Getting Validated Form data.
      * @return \Illuminate\Http\Response
      */
     public function store(MenuRequest $request)
@@ -62,10 +63,10 @@ class MenuController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  integer $id
-     * @return \Illuminate\Http\Response
+     * @param  integer $id Instantiating object of model through this id.
+     * @return void
      */
-    public function show($id)
+    public function show(int $id)
     {
         //
     }
@@ -73,10 +74,10 @@ class MenuController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  integer $id
-     * @return \Illuminate\Http\Response
+     * @param  integer $id Instantiating object of model through this id.
+     * @return void
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         //
     }
@@ -84,11 +85,11 @@ class MenuController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\MenuRequest $request
-     * @param  integer                        $id
+     * @param  \App\Http\Requests\MenuRequest $request Getting Validated Form data.
+     * @param  integer                        $id      Instantiating object of model through this id.
      * @return \Illuminate\Http\Response
      */
-    public function update(MenuRequest $request, $id)
+    public function update(MenuRequest $request, int $id)
     {
         try {
             $menu_model = Menu::findOrFail($id);
@@ -120,10 +121,10 @@ class MenuController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  integer $id
+     * @param  integer $id Instantiating object of model through this id.
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         try {
             $menu = Menu::findOrFail($id);
@@ -137,7 +138,13 @@ class MenuController extends Controller
         }
     }
 
-    public function status($id)
+    /**
+     * Status Changing of this specified resource.
+     *
+     * @param integer $id Instantiating object of model through this id.
+     * @return \Illuminate\Http\Response
+     */
+    public function status(int $id)
     {
         try {
             $menu = Menu::findOrFail($id);
