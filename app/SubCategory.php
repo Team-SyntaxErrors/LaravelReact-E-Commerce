@@ -28,11 +28,11 @@ class SubCategory extends Model
     protected $fillable = ['category_id', 'menu_id', 'sub_category_name', 'sub_category_slug', 'sub_category_icon', 'status'];
 
     /**
-     * Undocumented function
+     * Search function
      *
-     * @param $query
-     * @param $q
-     * @return void
+     * @param mixed $query Initial Query to add condition.
+     * @param mixed $q     Token for search in table.
+     * @return array
      */
     public function scopeSearch($query, $q)
     {
@@ -42,7 +42,7 @@ class SubCategory extends Model
     /**
      * The relation between subCategory and menu table
      *
-     * @return void
+     * @return object
      */
     public function menus()
     {
@@ -52,7 +52,7 @@ class SubCategory extends Model
     /**
      * The relation between subCategory and category table
      *
-     * @return void
+     * @return object
      */
     public function categories()
     {

@@ -25,14 +25,21 @@ class Brand extends Model
      *
      * @var array
      */
-    protected $fillable = ['brand_name', 'contact_person', 'phone_number', 'brand_address', 'brand_logo', 'brand_description', 'status'];
+    protected $fillable = [
+        'brand_name',
+        'contact_person',
+        'phone_number',
+        'brand_address',
+        'brand_logo',
+        'brand_description',
+        'status'];
 
     /**
-     * Undocumented function
+     * Search function
      *
-     * @param $query
-     * @param $q
-     * @return void
+     * @param mixed $query Initial Query to add condition.
+     * @param mixed $q     Token for search in table.
+     * @return array
      */
     public function scopeSearch($query, $q)
     {

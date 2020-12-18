@@ -28,11 +28,11 @@ class Category extends Model
     protected $fillable = ['menu_id', 'category_name', 'category_slug', 'category_icon', 'status'];
 
     /**
-     * Undocumented function
+     * Search function
      *
-     * @param $query
-     * @param $q
-     * @return void
+     * @param mixed $query Initial Query to add condition.
+     * @param mixed $q     Token for search in table.
+     * @return array
      */
     public function scopeSearch($query, $q)
     {
@@ -42,7 +42,7 @@ class Category extends Model
     /**
      * The relation between category and menu table
      *
-     * @return void
+     * @return object
      */
     public function menus()
     {
@@ -52,7 +52,7 @@ class Category extends Model
     /**
      * The relation between category and subCategory table
      *
-     * @return void
+     * @return array
      */
     public function subcategories()
     {

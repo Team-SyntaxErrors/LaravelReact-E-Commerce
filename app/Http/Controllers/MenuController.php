@@ -48,7 +48,7 @@ class MenuController extends Controller
             $menu_model = new Menu();
             $requested_data = $request->all();
             if ($request->menu_icon) {
-                $upload_path = $this->VerifyStore($request, 'menu_icon', 'menu_icon');
+                $upload_path = $this->verifyStore($request, 'menu_icon', 'menu_icon');
                 $requested_data = Arr::set($requested_data, "menu_icon", $upload_path);
                 $menu_slug = Str::slug($request->menu_name, '-');
                 $requested_data = Arr::set($requested_data, "menu_slug", $menu_slug);
@@ -98,7 +98,7 @@ class MenuController extends Controller
                 if (File::exists($menu_model->menu_icon)) {
                     File::delete($menu_model->menu_icon);
                 }
-                $upload_path = $this->VerifyStore($request, 'menu_icon', 'menu_icon');
+                $upload_path = $this->verifyStore($request, 'menu_icon', 'menu_icon');
                 $requested_data = Arr::set($requested_data, "menu_icon", $upload_path);
                 $menu_slug = Str::slug($request->menu_name, '-');
                 $requested_data = Arr::set($requested_data, "menu_slug", $menu_slug);
@@ -112,9 +112,9 @@ class MenuController extends Controller
             $menu_slug = Str::slug($request->menu_name, '-');
             $requested_data = Arr::set($requested_data, "menu_slug", $menu_slug);
             $menu_model->fill($requested_data)->save();
-            return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
-        } catch (\Exception $e) {
             return $this->successResponse($menu_model, "Menu Update Successfully", Response::HTTP_CREATED);
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 

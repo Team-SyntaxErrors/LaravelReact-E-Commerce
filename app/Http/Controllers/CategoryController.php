@@ -46,7 +46,7 @@ class CategoryController extends Controller
             $category_model = new Category();
             $requested_data = $request->all();
             if ($request->category_icon) {
-                $upload_path = $this->VerifyStore($request, 'category_icon', 'category_icon');
+                $upload_path = $this->verifyStore($request, 'category_icon', 'category_icon');
                 $requested_data = Arr::set($requested_data, "category_icon", $upload_path);
                 $category_slug = Str::slug($request->category_name, '-');
                 $requested_data = Arr::set($requested_data, "category_slug", $category_slug);
@@ -96,7 +96,7 @@ class CategoryController extends Controller
                 if (File::exists($category_model->category_icon)) {
                     File::delete($category_model->category_icon);
                 }
-                $upload_path = $this->VerifyStore($request, 'category_icon', 'category_icon');
+                $upload_path = $this->verifyStore($request, 'category_icon', 'category_icon');
                 $requested_data = Arr::set($requested_data, "category_icon", $upload_path);
             }
             $category_slug = Str::slug($request->category_name, '-');

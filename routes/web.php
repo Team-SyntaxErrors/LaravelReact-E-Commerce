@@ -48,7 +48,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/all_brand_get', 'BrandApiController');
     //get unit
     Route::get('/all_unit_get', 'UnitApiController');
-
 });
 Route::get('{ReactRoute}', function () {
     return view('index');
