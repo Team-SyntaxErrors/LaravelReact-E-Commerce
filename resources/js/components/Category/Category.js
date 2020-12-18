@@ -39,7 +39,7 @@ const Category = props => {
     const GetMenu = () => {
         Axios.get("/all_menu_get")
             .then(response => {
-                setMenu(response.data);
+                setMenu(response.data.data);
             })
             .catch(error => {
                 console.log(error);

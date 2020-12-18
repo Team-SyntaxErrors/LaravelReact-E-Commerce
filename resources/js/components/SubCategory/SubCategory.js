@@ -72,7 +72,7 @@ const SubCategory = props => {
     const GetMenu = () => {
         Axios.get("/all_menu_get")
             .then(response => {
-                setMenu(response.data);
+                setMenu(response.data.data);
             })
             .catch(error => {
                 console.log(error);
@@ -88,7 +88,7 @@ const SubCategory = props => {
     const GetCategory = menu_id => {
         Axios.get("/all_category_get/" + menu_id)
             .then(response => {
-                setCategory(response.data);
+                setCategory(response.data.data);
             })
             .catch(error => {
                 console.log(error);
