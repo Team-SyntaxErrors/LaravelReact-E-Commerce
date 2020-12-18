@@ -30356,7 +30356,9 @@ var isObject = (value) => !isNullOrUndefined(value) &&
     isObjectType(value) &&
     !(value instanceof Date);
 
-var isKey = (value) => /^\w*$/.test(value);
+var isKey = (value) => !Array.isArray(value) &&
+    (/^\w*$/.test(value) ||
+        !/\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/.test(value));
 
 var compact = (value) => value.filter(Boolean);
 
@@ -30398,7 +30400,7 @@ var transformToNestObject = (data, value = {}) => {
 
 var isUndefined = (val) => val === undefined;
 
-var get = (obj = {}, path, defaultValue) => {
+var get = (obj, path, defaultValue) => {
     const result = compact(path.split(/[,[\].]+?/)).reduce((result, key) => (isNullOrUndefined(result) ? result : result[key]), obj);
     return isUndefined(result) || result === obj
         ? isUndefined(obj[path])
@@ -30485,7 +30487,7 @@ var getCheckboxValue = (options) => {
 function getFieldValue(fieldsRef, name, shallowFieldsStateRef, excludeDisabled) {
     const field = fieldsRef.current[name];
     if (field) {
-        const { ref: { value, disabled }, ref, valueAsNumber, valueAsDate, setValueAs, } = field;
+        const { ref: { value, disabled }, ref, } = field;
         if (disabled && excludeDisabled) {
             return;
         }
@@ -30501,13 +30503,7 @@ function getFieldValue(fieldsRef, name, shallowFieldsStateRef, excludeDisabled) 
         if (isCheckBoxInput(ref)) {
             return getCheckboxValue(field.options).value;
         }
-        return valueAsNumber
-            ? +value
-            : valueAsDate
-                ? ref.valueAsDate
-                : setValueAs
-                    ? setValueAs(value)
-                    : value;
+        return value;
     }
     if (shallowFieldsStateRef) {
         return get(shallowFieldsStateRef.current, name);
@@ -30571,20 +30567,22 @@ function unset(object, path) {
 
 const isSameRef = (fieldValue, ref) => fieldValue && fieldValue.ref === ref;
 function findRemovedFieldAndRemoveListener(fieldsRef, handleChange, field, shallowFieldsStateRef, shouldUnregister, forceDelete) {
-    const { ref, ref: { name }, } = field;
+    const { ref, ref: { name, type }, } = field;
     const fieldRef = fieldsRef.current[name];
     if (!shouldUnregister) {
         const value = getFieldValue(fieldsRef, name, shallowFieldsStateRef);
         !isUndefined(value) && set(shallowFieldsStateRef.current, name, value);
     }
-    if (!ref.type || !fieldRef) {
+    if (!type) {
         delete fieldsRef.current[name];
         return;
     }
-    if (isRadioInput(ref) || isCheckBoxInput(ref)) {
+    if ((isRadioInput(ref) || isCheckBoxInput(ref)) && fieldRef) {
         if (Array.isArray(fieldRef.options) && fieldRef.options.length) {
-            compact(fieldRef.options).forEach((option = {}, index) => {
-                if ((isDetached(option.ref) && isSameRef(option, option.ref)) ||
+            compact(fieldRef.options).forEach((option, index) => {
+                if ((option.ref &&
+                    isDetached(option.ref) &&
+                    isSameRef(option, option.ref)) ||
                     forceDelete) {
                     removeAllEventListeners(option.ref, handleChange);
                     unset(fieldRef.options, `[${index}]`);
@@ -30603,6 +30601,30 @@ function findRemovedFieldAndRemoveListener(fieldsRef, handleChange, field, shall
         delete fieldsRef.current[name];
     }
 }
+
+function setFieldArrayDirtyFields(values, defaultValues, dirtyFields, parentNode, parentName) {
+    let index = -1;
+    while (++index < values.length) {
+        for (const key in values[index]) {
+            if (Array.isArray(values[index][key])) {
+                !dirtyFields[index] && (dirtyFields[index] = {});
+                dirtyFields[index][key] = [];
+                setFieldArrayDirtyFields(values[index][key], get(defaultValues[index] || {}, key, []), dirtyFields[index][key], dirtyFields[index], key);
+            }
+            else {
+                get(defaultValues[index] || {}, key) === values[index][key]
+                    ? set(dirtyFields[index] || {}, key)
+                    : (dirtyFields[index] = Object.assign(Object.assign({}, dirtyFields[index]), { [key]: true }));
+            }
+        }
+        !dirtyFields.length &&
+            parentNode &&
+            delete parentNode[parentName];
+    }
+    return dirtyFields.length ? dirtyFields : undefined;
+}
+
+var isString = (value) => typeof value === 'string';
 
 var isPrimitive = (value) => isNullOrUndefined(value) || !isObjectType(value);
 
@@ -30624,31 +30646,6 @@ function deepMerge(target, source) {
     }
     return target;
 }
-
-function setDirtyFields(values, defaultValues, dirtyFields, parentNode, parentName) {
-    let index = -1;
-    while (++index < values.length) {
-        for (const key in values[index]) {
-            if (Array.isArray(values[index][key])) {
-                !dirtyFields[index] && (dirtyFields[index] = {});
-                dirtyFields[index][key] = [];
-                setDirtyFields(values[index][key], get(defaultValues[index] || {}, key, []), dirtyFields[index][key], dirtyFields[index], key);
-            }
-            else {
-                get(defaultValues[index] || {}, key) === values[index][key]
-                    ? set(dirtyFields[index] || {}, key)
-                    : (dirtyFields[index] = Object.assign(Object.assign({}, dirtyFields[index]), { [key]: true }));
-            }
-        }
-        parentNode &&
-            !dirtyFields.length &&
-            delete parentNode[parentName];
-    }
-    return dirtyFields;
-}
-var setFieldArrayDirtyFields = (values, defaultValues, dirtyFields) => deepMerge(setDirtyFields(values, defaultValues, dirtyFields), setDirtyFields(defaultValues, values, dirtyFields));
-
-var isString = (value) => typeof value === 'string';
 
 var getFieldsValues = (fieldsRef, shallowFieldsState, shouldUnregister, excludeDisabled, search) => {
     const output = {};
@@ -30672,35 +30669,33 @@ function deepEqual(object1, object2, isErrorObject) {
         object2 instanceof Date) {
         return object1 === object2;
     }
-    if (!Object(react__WEBPACK_IMPORTED_MODULE_0__["isValidElement"])(object1)) {
-        const keys1 = Object.keys(object1);
-        const keys2 = Object.keys(object2);
-        if (keys1.length !== keys2.length) {
-            return false;
-        }
-        for (const key of keys1) {
+    const keys1 = Object.keys(object1);
+    const keys2 = Object.keys(object2);
+    if (keys1.length !== keys2.length) {
+        return false;
+    }
+    for (const key of keys1) {
+        if (!(isErrorObject && ['ref', 'context'].includes(key))) {
             const val1 = object1[key];
-            if (!(isErrorObject && key === 'ref')) {
-                const val2 = object2[key];
-                if ((isObject(val1) || Array.isArray(val1)) &&
-                    (isObject(val2) || Array.isArray(val2))
-                    ? !deepEqual(val1, val2, isErrorObject)
-                    : val1 !== val2) {
-                    return false;
-                }
+            const val2 = object2[key];
+            if ((isObject(val1) || Array.isArray(val1)) &&
+                (isObject(val2) || Array.isArray(val2))
+                ? !deepEqual(val1, val2, isErrorObject)
+                : val1 !== val2) {
+                return false;
             }
         }
     }
     return true;
 }
 
-var isErrorStateChanged = ({ errors, name, error, validFields, fieldsWithValidation, }) => {
+function isErrorStateChanged({ errors, name, error, validFields, fieldsWithValidation, }) {
     const isValid = isUndefined(error);
     const previousError = get(errors, name);
     return ((isValid && !!previousError) ||
         (!isValid && !deepEqual(previousError, error, true)) ||
         (isValid && get(fieldsWithValidation, name) && !get(validFields, name)));
-};
+}
 
 var isRegex = (value) => value instanceof RegExp;
 
@@ -30713,7 +30708,7 @@ var getValueAndMessage = (validationData) => isObject(validationData) && !isRege
 
 var isFunction = (value) => typeof value === 'function';
 
-var isMessage = (value) => isString(value) || Object(react__WEBPACK_IMPORTED_MODULE_0__["isValidElement"])(value);
+var isMessage = (value) => isString(value) || (isObject(value) && Object(react__WEBPACK_IMPORTED_MODULE_0__["isValidElement"])(value));
 
 function getValidateError(result, ref, type = 'validate') {
     if (isMessage(result) || (isBoolean(result) && !result)) {
@@ -30725,10 +30720,15 @@ function getValidateError(result, ref, type = 'validate') {
     }
 }
 
-var appendErrors = (name, validateAllFieldCriteria, errors, type, message) => validateAllFieldCriteria
-    ? Object.assign(Object.assign({}, errors[name]), { types: Object.assign(Object.assign({}, (errors[name] && errors[name].types ? errors[name].types : {})), { [type]: message || true }) }) : {};
+var appendErrors = (name, validateAllFieldCriteria, errors, type, message) => {
+    if (validateAllFieldCriteria) {
+        const error = errors[name];
+        return Object.assign(Object.assign({}, error), { types: Object.assign(Object.assign({}, (error && error.types ? error.types : {})), { [type]: message || true }) });
+    }
+    return {};
+};
 
-var validateField = async (fieldsRef, validateAllFieldCriteria, { ref, ref: { value }, options, required, maxLength, minLength, min, max, pattern, validate, }, shallowFieldsStateRef) => {
+var validateField = async (fieldsRef, validateAllFieldCriteria, { ref, ref: { type, value }, options, required, maxLength, minLength, min, max, pattern, validate, }, shallowFieldsStateRef) => {
     const name = ref.name;
     const error = {};
     const isRadio = isRadioInput(ref);
@@ -30760,12 +30760,12 @@ var validateField = async (fieldsRef, validateAllFieldCriteria, { ref, ref: { va
             }
         }
     }
-    if ((!isNullOrUndefined(min) || !isNullOrUndefined(max)) && value !== '') {
+    if (!isNullOrUndefined(min) || !isNullOrUndefined(max)) {
         let exceedMax;
         let exceedMin;
         const maxOutput = getValueAndMessage(max);
         const minOutput = getValueAndMessage(min);
-        if (!isNaN(value)) {
+        if (type === 'number' || (!type && !isNaN(value))) {
             const valueNumber = ref.valueAsNumber || parseFloat(value);
             if (!isNullOrUndefined(maxOutput.value)) {
                 exceedMax = valueNumber > maxOutput.value;
@@ -30853,23 +30853,23 @@ var validateField = async (fieldsRef, validateAllFieldCriteria, { ref, ref: { va
     return error;
 };
 
-const getPath = (rootPath, values, paths = []) => {
-    for (const property in values) {
-        const rootName = (rootPath +
-            (isObject(values)
-                ? `.${property}`
-                : `[${property}]`));
-        isPrimitive(values[property])
-            ? paths.push(rootName)
-            : getPath(rootName, values[property], paths);
-    }
-    return paths;
+const getPath = (path, values) => {
+    const getInnerPath = (key, value, isObject) => {
+        const pathWithIndex = isObject ? `${path}.${key}` : `${path}[${key}]`;
+        return isPrimitive(value) ? pathWithIndex : getPath(pathWithIndex, value);
+    };
+    return Object.entries(values)
+        .map(([key, value]) => getInnerPath(key, value, isObject(values)))
+        .flat(Infinity);
 };
 
 var assignWatchFields = (fieldValues, fieldName, watchFields, inputValue, isSingleField) => {
-    let value = undefined;
+    let value;
     watchFields.add(fieldName);
-    if (!isEmptyObject(fieldValues)) {
+    if (isEmptyObject(fieldValues)) {
+        value = undefined;
+    }
+    else {
         value = get(fieldValues, fieldName);
         if (isObject(value) || Array.isArray(value)) {
             getPath(fieldName, value).forEach((name) => watchFields.add(name));
@@ -30927,9 +30927,7 @@ function onDomRemove(fieldsRef, removeFieldEventListenerAndRef) {
     return observer;
 }
 
-var isWeb = typeof window !== UNDEFINED && typeof document !== UNDEFINED;
-
-function cloneObject(data) {
+function cloneObject(data, isWeb) {
     let copy;
     if (isPrimitive(data) || (isWeb && data instanceof File)) {
         return data;
@@ -30948,13 +30946,13 @@ function cloneObject(data) {
     if (data instanceof Map) {
         copy = new Map();
         for (const key of data.keys()) {
-            copy.set(key, cloneObject(data.get(key)));
+            copy.set(key, cloneObject(data.get(key), isWeb));
         }
         return copy;
     }
     copy = Array.isArray(data) ? [] : {};
     for (const key in data) {
-        copy[key] = cloneObject(data[key]);
+        copy[key] = cloneObject(data[key], isWeb);
     }
     return copy;
 }
@@ -30970,6 +30968,9 @@ var modeChecker = (mode) => ({
 var isRadioOrCheckboxFunction = (ref) => isRadioInput(ref) || isCheckBoxInput(ref);
 
 const isWindowUndefined = typeof window === UNDEFINED;
+const isWeb = typeof document !== UNDEFINED &&
+    !isWindowUndefined &&
+    !isUndefined(window.HTMLElement);
 const isProxyEnabled = isWeb ? 'Proxy' in window : typeof Proxy !== UNDEFINED;
 function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_MODE.onChange, resolver, context, defaultValues = {}, shouldFocusError = true, shouldUnregister = true, criteriaMode, } = {}) {
     const fieldsRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])({});
@@ -31020,14 +31021,10 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
     shallowFieldsStateRef.current = shouldUnregister
         ? {}
         : isEmptyObject(shallowFieldsStateRef.current)
-            ? cloneObject(defaultValues)
+            ? cloneObject(defaultValues, isWeb)
             : shallowFieldsStateRef.current;
-    const updateFormState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((state = {}) => {
-        if (!isUnMount.current) {
-            formStateRef.current = Object.assign(Object.assign({}, formStateRef.current), state);
-            setFormState(formStateRef.current);
-        }
-    }, []);
+    const updateFormState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((state = {}) => !isUnMount.current &&
+        setFormState(Object.assign(Object.assign({}, formStateRef.current), state)), []);
     const shouldRenderBaseOnError = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, error, shouldRender = false, state = {}, isValid) => {
         let shouldReRender = shouldRender ||
             isErrorStateChanged({
@@ -31055,7 +31052,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         }
         if ((shouldReRender && !isNullOrUndefined(shouldRender)) ||
             !isEmptyObject(state)) {
-            updateFormState(Object.assign(Object.assign({}, state), (resolverRef.current ? { isValid: !!isValid } : {})));
+            updateFormState(Object.assign(Object.assign(Object.assign({}, state), { errors: formStateRef.current.errors }), (resolverRef.current ? { isValid: !!isValid } : {})));
         }
     }, []);
     const setFieldValue = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, rawValue) => {
@@ -31063,8 +31060,8 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         const value = isWeb && isHTMLElement(ref) && isNullOrUndefined(rawValue)
             ? ''
             : rawValue;
-        if (isRadioInput(ref)) {
-            (options || []).forEach(({ ref: radioRef }) => (radioRef.checked = radioRef.value === value));
+        if (isRadioInput(ref) && options) {
+            options.forEach(({ ref: radioRef }) => (radioRef.checked = radioRef.value === value));
         }
         else if (isFileInput(ref) && !isString(value)) {
             ref.files = value;
@@ -31084,7 +31081,8 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         }
     }, []);
     const isFormDirty = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, data) => {
-        if (readFormStateRef.current.isDirty) {
+        if (readFormStateRef.current.isDirty ||
+            readFormStateRef.current.dirtyFields) {
             const formValues = getValues();
             name && data && set(formValues, name, data);
             return !deepEqual(formValues, isEmptyObject(defaultValuesRef.current)
@@ -31110,21 +31108,21 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 previousIsDirty !== state.isDirty) ||
                 (readFormStateRef.current.dirtyFields &&
                     isDirtyFieldExist !== get(formStateRef.current.dirtyFields, name));
-            isChanged && shouldRender && updateFormState(state);
+            if (isChanged && shouldRender) {
+                formStateRef.current = Object.assign(Object.assign({}, formStateRef.current), state);
+                updateFormState(Object.assign({}, state));
+            }
             return isChanged ? state : {};
         }
         return {};
     }, []);
     const executeValidation = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(async (name, skipReRender) => {
-        if (true) {
-            if (!fieldsRef.current[name]) {
-                console.warn('📋 Field is missing with `name` attribute: ', name);
-                return false;
-            }
+        if (fieldsRef.current[name]) {
+            const error = (await validateField(fieldsRef, isValidateAllFieldCriteria, fieldsRef.current[name], shallowFieldsStateRef))[name];
+            shouldRenderBaseOnError(name, error, skipReRender);
+            return isUndefined(error);
         }
-        const error = (await validateField(fieldsRef, isValidateAllFieldCriteria, fieldsRef.current[name], shallowFieldsStateRef))[name];
-        shouldRenderBaseOnError(name, error, skipReRender);
-        return isUndefined(error);
+        return false;
     }, [shouldRenderBaseOnError, isValidateAllFieldCriteria]);
     const executeSchemaOrResolverValidation = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(async (names) => {
         const { errors } = await resolverRef.current(getValues(), contextRef.current, isValidateAllFieldCriteria);
@@ -31141,6 +31139,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 .every(Boolean);
             updateFormState({
                 isValid: isEmptyObject(errors),
+                errors: formStateRef.current.errors,
             });
             return isInputsValid;
         }
@@ -31161,7 +31160,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             updateFormState();
             return result.every(Boolean);
         }
-        return await executeValidation(fields);
+        return await executeValidation(fields, readFormStateRef.current.isValid);
     }, [executeSchemaOrResolverValidation, executeValidation]);
     const setInternalValues = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, value, { shouldDirty, shouldValidate }) => {
         const data = {};
@@ -31174,12 +31173,10 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             }
         }
     }, [trigger, setFieldValue, updateAndGetDirtyState]);
-    const setInternalValue = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, value, config) => {
-        !isPrimitive(value) && set(shallowFieldsStateRef.current, name, value);
+    const setInternalValue = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, value, config = {}) => {
         if (fieldsRef.current[name]) {
             setFieldValue(name, value);
             config.shouldDirty && updateAndGetDirtyState(name);
-            config.shouldValidate && trigger(name);
         }
         else if (!isPrimitive(value)) {
             setInternalValues(name, value, config);
@@ -31194,6 +31191,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                     set(formStateRef.current.dirtyFields, name, setFieldArrayDirtyFields(value, get(defaultValuesRef.current, name, []), get(formStateRef.current.dirtyFields, name, [])));
                     updateFormState({
                         isDirty: !deepEqual(Object.assign(Object.assign({}, getValues()), { [name]: value }), defaultValuesRef.current),
+                        dirtyFields: formStateRef.current.dirtyFields,
                     });
                 }
             }
@@ -31218,9 +31216,10 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         return found;
     };
     function setValue(name, value, config) {
-        setInternalValue(name, value, config || {});
+        setInternalValue(name, value, config);
         isFieldWatched(name) && updateFormState();
         renderWatchedInputs(name);
+        (config || {}).shouldValidate && trigger(name);
     }
     handleChangeRef.current = handleChangeRef.current
         ? handleChangeRef.current
@@ -31235,16 +31234,12 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                     isReValidateOnChange,
                     isReValidateOnBlur, isTouched: !!get(formStateRef.current.touched, name), isSubmitted: formStateRef.current.isSubmitted }, modeRef.current));
                 let state = updateAndGetDirtyState(name, false);
-                let shouldRender = !isEmptyObject(state) ||
-                    isFieldWatched(name);
+                let shouldRender = !isEmptyObject(state) || isFieldWatched(name);
                 if (isBlurEvent &&
                     !get(formStateRef.current.touched, name) &&
                     readFormStateRef.current.touched) {
                     set(formStateRef.current.touched, name, true);
                     state = Object.assign(Object.assign({}, state), { touched: formStateRef.current.touched });
-                }
-                if (!shouldUnregister && isCheckBoxInput(target)) {
-                    set(shallowFieldsStateRef.current, name, getFieldValue(fieldsRef, name));
                 }
                 if (shouldSkipValidation) {
                     renderWatchedInputs(name);
@@ -31256,10 +31251,10 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                     const { errors } = await resolverRef.current(getValues(), contextRef.current, isValidateAllFieldCriteria);
                     const previousFormIsValid = formStateRef.current.isValid;
                     error = get(errors, name);
-                    if (isCheckBoxInput(target) &&
-                        !error &&
-                        resolverRef.current) {
-                        const parentNodeName = getFieldArrayParentName(name);
+                    if (!error && resolverRef.current) {
+                        const parentNodeName = name.substring(0, name.lastIndexOf('.') > name.lastIndexOf('[')
+                            ? name.lastIndexOf('.')
+                            : name.lastIndexOf('['));
                         const currentError = get(errors, parentNodeName, {});
                         currentError.type &&
                             currentError.message &&
@@ -31271,7 +31266,9 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                         }
                     }
                     isValid = isEmptyObject(errors);
-                    previousFormIsValid !== isValid && (shouldRender = true);
+                    if (previousFormIsValid !== isValid) {
+                        shouldRender = true;
+                    }
                 }
                 else {
                     error = (await validateField(fieldsRef, isValidateAllFieldCriteria, field, shallowFieldsStateRef))[name];
@@ -31282,7 +31279,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         };
     function setFieldArrayDefaultValues(data) {
         if (!shouldUnregister) {
-            let copy = cloneObject(data);
+            let copy = cloneObject(data, isWeb);
             for (const value of fieldArrayNamesRef.current) {
                 if (isKey(value) && !copy[value]) {
                     copy = Object.assign(Object.assign({}, copy), { [value]: [] });
@@ -31303,10 +31300,10 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             }
             return data;
         }
-        return setFieldArrayDefaultValues(getFieldsValues(fieldsRef, cloneObject(shallowFieldsStateRef.current), shouldUnregister));
+        return setFieldArrayDefaultValues(getFieldsValues(fieldsRef, cloneObject(shallowFieldsStateRef.current, isWeb), shouldUnregister));
     }
     const validateResolver = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(async (values = {}) => {
-        const { errors } = await resolverRef.current(Object.assign(Object.assign({}, getValues()), values), contextRef.current, isValidateAllFieldCriteria);
+        const { errors } = await resolverRef.current(Object.assign(Object.assign(Object.assign({}, defaultValuesRef.current), getValues()), values), contextRef.current, isValidateAllFieldCriteria);
         const isValid = isEmptyObject(errors);
         formStateRef.current.isValid !== isValid &&
             updateFormState({
@@ -31318,7 +31315,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         if (isWatchAllRef.current) {
             updateFormState();
         }
-        else {
+        else if (watchFieldsRef) {
             for (const watchField of watchFieldsRef.current) {
                 if (watchField.startsWith(name)) {
                     updateFormState();
@@ -31338,7 +31335,9 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 unset(formStateRef.current.errors, field.ref.name);
                 set(formStateRef.current.dirtyFields, field.ref.name, true);
                 updateFormState({
+                    errors: formStateRef.current.errors,
                     isDirty: isFormDirty(),
+                    dirtyFields: formStateRef.current.dirtyFields,
                 });
                 readFormStateRef.current.isValid &&
                     resolverRef.current &&
@@ -31361,6 +31360,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         set(formStateRef.current.errors, name, Object.assign(Object.assign({}, error), { ref }));
         updateFormState({
             isValid: false,
+            errors: formStateRef.current.errors,
         });
         error.shouldFocus && ref && ref.focus && ref.focus();
     }
@@ -31368,24 +31368,24 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         const watchFields = watchId
             ? useWatchFieldsRef.current[watchId]
             : watchFieldsRef.current;
-        let fieldValues = getFieldsValues(fieldsRef, cloneObject(shallowFieldsStateRef.current), shouldUnregister, false, fieldNames);
+        const combinedDefaultValues = isUndefined(defaultValue)
+            ? defaultValuesRef.current
+            : defaultValue;
+        let fieldValues = getFieldsValues(fieldsRef, cloneObject(shallowFieldsStateRef.current, isWeb), shouldUnregister, false, fieldNames);
         if (isString(fieldNames)) {
             if (fieldArrayNamesRef.current.has(fieldNames)) {
                 const fieldArrayValue = get(fieldArrayValuesRef.current, fieldNames, []);
                 fieldValues =
-                    !fieldArrayValue.length ||
-                        fieldArrayValue.length !==
-                            compact(get(fieldValues, fieldNames, [])).length
+                    fieldArrayValue.length !==
+                        compact(get(fieldValues, fieldNames, [])).length ||
+                        !fieldArrayValue.length
                         ? fieldArrayValuesRef.current
                         : fieldValues;
             }
-            return assignWatchFields(fieldValues, fieldNames, watchFields, isUndefined(get(defaultValuesRef.current, fieldNames))
-                ? defaultValue
-                : get(defaultValuesRef.current, fieldNames), true);
+            return assignWatchFields(fieldValues, fieldNames, watchFields, isUndefined(defaultValue)
+                ? get(combinedDefaultValues, fieldNames)
+                : defaultValue, true);
         }
-        const combinedDefaultValues = isUndefined(defaultValue)
-            ? defaultValuesRef.current
-            : defaultValue;
         if (Array.isArray(fieldNames)) {
             return fieldNames.reduce((previous, name) => (Object.assign(Object.assign({}, previous), { [name]: assignWatchFields(fieldValues, name, watchFields, combinedDefaultValues) })), {});
         }
@@ -31401,7 +31401,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             removeFieldEventListenerAndRef(fieldsRef.current[fieldName], true);
         }
     }
-    function registerFieldRef(ref, options = {}) {
+    function registerFieldRef(ref, validateOptions = {}) {
         if (true) {
             if (!ref.name) {
                 return console.warn('📋 Field is missing `name` attribute', ref, `https://react-hook-form.com/api#useForm`);
@@ -31414,7 +31414,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             }
         }
         const { name, type, value } = ref;
-        const fieldRefAndValidationOptions = Object.assign({ ref }, options);
+        const fieldRefAndValidationOptions = Object.assign({ ref }, validateOptions);
         const fields = fieldsRef.current;
         const isRadioOrCheckbox = isRadioOrCheckboxFunction(ref);
         const isFieldArray = isNameInFieldArray(fieldArrayNamesRef.current, name);
@@ -31429,7 +31429,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                         return value === option.ref.value && compareRef(option.ref);
                     })
                 : compareRef(field.ref))) {
-            fields[name] = Object.assign(Object.assign({}, field), options);
+            fields[name] = Object.assign(Object.assign({}, field), validateOptions);
             return;
         }
         if (type) {
@@ -31439,7 +31439,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                         {
                             ref,
                         },
-                    ], ref: { type, name } }, options) : Object.assign({}, fieldRefAndValidationOptions);
+                    ], ref: { type, name } }, validateOptions) : Object.assign({}, fieldRefAndValidationOptions);
         }
         else {
             field = fieldRefAndValidationOptions;
@@ -31455,7 +31455,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 setFieldValue(name, defaultValue);
             }
         }
-        if (!isEmptyObject(options)) {
+        if (!isEmptyObject(validateOptions)) {
             set(fieldsWithValidationRef.current, name, true);
             if (!isOnSubmit && readFormStateRef.current.isValid) {
                 validateField(fieldsRef, isValidateAllFieldCriteria, field, shallowFieldsStateRef).then((error) => {
@@ -31463,7 +31463,9 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                     isEmptyObject(error)
                         ? set(validFieldsRef.current, name, true)
                         : unset(validFieldsRef.current, name);
-                    previousFormIsValid !== isEmptyObject(error) && updateFormState();
+                    if (previousFormIsValid !== isEmptyObject(error)) {
+                        updateFormState();
+                    }
                 });
             }
         }
@@ -31482,17 +31484,17 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 : field, isRadioOrCheckbox || isSelectInput(ref), handleChangeRef.current);
         }
     }
-    function register(refOrRegisterOptions, options) {
+    function register(refOrValidationOptions, rules) {
         if (!isWindowUndefined) {
-            if (isString(refOrRegisterOptions)) {
-                registerFieldRef({ name: refOrRegisterOptions }, options);
+            if (isString(refOrValidationOptions)) {
+                registerFieldRef({ name: refOrValidationOptions }, rules);
             }
-            else if (isObject(refOrRegisterOptions) &&
-                'name' in refOrRegisterOptions) {
-                registerFieldRef(refOrRegisterOptions, options);
+            else if (isObject(refOrValidationOptions) &&
+                'name' in refOrValidationOptions) {
+                registerFieldRef(refOrValidationOptions, rules);
             }
             else {
-                return (ref) => ref && registerFieldRef(ref, refOrRegisterOptions);
+                return (ref) => ref && registerFieldRef(ref, refOrValidationOptions);
             }
         }
     }
@@ -31502,7 +31504,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             e.persist();
         }
         let fieldErrors = {};
-        let fieldValues = setFieldArrayDefaultValues(getFieldsValues(fieldsRef, cloneObject(shallowFieldsStateRef.current), shouldUnregister, true));
+        let fieldValues = setFieldArrayDefaultValues(getFieldsValues(fieldsRef, cloneObject(shallowFieldsStateRef.current, isWeb), shouldUnregister, true));
         readFormStateRef.current.isSubmitting &&
             updateFormState({
                 isSubmitting: true,
@@ -31516,7 +31518,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             else {
                 for (const field of Object.values(fieldsRef.current)) {
                     if (field) {
-                        const { name } = field.ref;
+                        const { ref: { name }, } = field;
                         const fieldError = await validateField(fieldsRef, isValidateAllFieldCriteria, field, shallowFieldsStateRef);
                         if (fieldError[name]) {
                             set(fieldErrors, name, fieldError[name]);
@@ -31550,6 +31552,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 isSubmitted: true,
                 isSubmitting: false,
                 isSubmitSuccessful: isEmptyObject(formStateRef.current.errors),
+                errors: formStateRef.current.errors,
                 submitCount: formStateRef.current.submitCount + 1,
             });
         }
@@ -31594,12 +31597,12 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             }
         }
         fieldsRef.current = {};
-        defaultValuesRef.current = cloneObject(values || defaultValuesRef.current);
+        defaultValuesRef.current = cloneObject(values || defaultValuesRef.current, isWeb);
         values && renderWatchedInputs('');
         Object.values(resetFieldArrayFunctionRef.current).forEach((resetFieldArray) => isFunction(resetFieldArray) && resetFieldArray());
         shallowFieldsStateRef.current = shouldUnregister
             ? {}
-            : cloneObject(values) || {};
+            : cloneObject(values, isWeb) || {};
         resetRefs(omitResetState);
     };
     Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
@@ -31610,11 +31613,8 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 : onDomRemove(fieldsRef, removeFieldEventListenerAndRef);
     }, [removeFieldEventListenerAndRef, defaultValuesRef.current]);
     Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => () => {
-        observerRef.current && observerRef.current.disconnect();
-        if (true) {
-            return;
-        }
         isUnMount.current = true;
+        observerRef.current && observerRef.current.disconnect();
         Object.values(fieldsRef.current).forEach((field) => removeFieldEventListenerAndRef(field, true));
     }, []);
     if (!resolver && readFormStateRef.current.isValid) {
@@ -31712,24 +31712,30 @@ const FormProvider = (_a) => {
 
 var generateId = () => {
     const d = typeof performance === UNDEFINED ? Date.now() : performance.now() * 1000;
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         const r = (Math.random() * 16 + d) % 16 | 0;
         return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
     });
 };
 
-function removeAtIndexes(data, indexes) {
-    let i = 0;
-    const temp = [...data];
-    for (const index of indexes) {
-        temp.splice(index - i, 1);
-        i++;
+const removeAt = (data, index) => [
+    ...data.slice(0, index),
+    ...data.slice(index + 1),
+];
+function removeAtIndexes(data, index) {
+    let k = -1;
+    while (++k < data.length) {
+        if (index.indexOf(k) >= 0) {
+            delete data[k];
+        }
     }
-    return compact(temp).length ? temp : [];
+    return compact(data);
 }
 var removeArrayAt = (data, index) => isUndefined(index)
     ? []
-    : removeAtIndexes(data, (Array.isArray(index) ? index : [index]).sort());
+    : Array.isArray(index)
+        ? removeAtIndexes(data, index)
+        : removeAt(data, index);
 
 var moveArrayAt = (data, from, to) => {
     if (Array.isArray(data)) {
@@ -31762,28 +31768,25 @@ function insert(data, index, value) {
 
 var fillEmptyArray = (value) => Array.isArray(value) ? Array(value.length).fill(undefined) : undefined;
 
-var fillBooleanArray = (value) => (Array.isArray(value) ? value : [value]).map((data) => {
-    if (isObject(data)) {
+function mapValueToBoolean(value) {
+    if (isObject(value)) {
         const object = {};
-        for (const key in data) {
+        for (const key in value) {
             object[key] = true;
         }
-        return object;
+        return [object];
     }
-    return true;
-});
+    return [true];
+}
+var fillBooleanArray = (value) => (Array.isArray(value) ? value : [value])
+    .map(mapValueToBoolean)
+    .flat();
 
 const mapIds = (values = [], keyName) => {
     if (true) {
         for (const value of values) {
-            if (typeof value === 'object') {
-                if (keyName in value) {
-                    console.warn(`📋 useFieldArray fieldValues contain the keyName \`${keyName}\` which is reserved for use by useFieldArray. https://react-hook-form.com/api#useFieldArray`);
-                    break;
-                }
-            }
-            else {
-                console.warn(`📋 useFieldArray input's name should be in object shape instead of flat array. https://react-hook-form.com/api#useFieldArray`);
+            if (!!value && keyName in value) {
+                console.warn(`📋 useFieldArray fieldValues contain the keyName \`${keyName}\` which is reserved for use by useFieldArray. https://react-hook-form.com/api#useFieldArray`);
                 break;
             }
         }
@@ -31809,17 +31812,12 @@ const useFieldArray = ({ control, name, keyName = 'id', }) => {
     ]);
     const [fields, setFields] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(mapIds(memoizedDefaultValues.current, keyName));
     set(fieldArrayValuesRef.current, name, fields);
-    const omitKey = (fields) => fields.map((_a = {}) => {
-        var _b = keyName, omitted = _a[_b], rest = __rest(_a, [typeof _b === "symbol" ? _b : _b + ""]);
-        return rest;
-    });
-    fieldArrayNamesRef.current.add(name);
     const getFieldArrayValue = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(() => get(fieldArrayValuesRef.current, name, []), []);
     const getCurrentFieldsValues = () => get(getValues(), name, getFieldArrayValue()).map((item, index) => (Object.assign(Object.assign({}, getFieldArrayValue()[index]), item)));
     fieldArrayNamesRef.current.add(name);
     if (fieldArrayParentName &&
         !get(fieldArrayDefaultValuesRef.current, fieldArrayParentName)) {
-        set(fieldArrayDefaultValuesRef.current, fieldArrayParentName, cloneObject(get(defaultValuesRef.current, fieldArrayParentName)));
+        set(fieldArrayDefaultValuesRef.current, fieldArrayParentName, get(defaultValuesRef.current, fieldArrayParentName));
     }
     const setFieldAndValidState = (fieldsValues) => {
         setFields(fieldsValues);
@@ -31838,8 +31836,22 @@ const useFieldArray = ({ control, name, keyName = 'id', }) => {
     };
     const cleanup = (ref) => !compact(get(ref, name, [])).length && unset(ref, name);
     const updateDirtyFieldsWithDefaultValues = (updatedFieldArrayValues) => {
+        const defaultFieldArrayValues = get(defaultValuesRef.current, name, []);
+        const updateDirtyFieldsBaseOnDefaultValues = (base, target) => {
+            for (const key in base) {
+                for (const innerKey in base[key]) {
+                    if (innerKey !== keyName &&
+                        (!target[key] ||
+                            !base[key] ||
+                            base[key][innerKey] !== target[key][innerKey])) {
+                        set(formStateRef.current.dirtyFields, `${name}[${key}]`, Object.assign(Object.assign({}, get(formStateRef.current.dirtyFields, `${name}[${key}]`, {})), { [innerKey]: true }));
+                    }
+                }
+            }
+        };
         if (updatedFieldArrayValues) {
-            set(formStateRef.current.dirtyFields, name, setFieldArrayDirtyFields(omitKey(updatedFieldArrayValues), get(defaultValuesRef.current, name, []), get(formStateRef.current.dirtyFields, name, [])));
+            updateDirtyFieldsBaseOnDefaultValues(defaultFieldArrayValues, updatedFieldArrayValues);
+            updateDirtyFieldsBaseOnDefaultValues(updatedFieldArrayValues, defaultFieldArrayValues);
         }
     };
     const batchStateUpdate = (method, args, updatedFieldValues, updatedFormValues = [], shouldSet = true, shouldUpdateValid = false) => {
@@ -31879,12 +31891,18 @@ const useFieldArray = ({ control, name, keyName = 'id', }) => {
             cleanup(fieldsWithValidationRef.current);
         }
         updateFormState({
-            isDirty: isFormDirty(name, omitKey(updatedFormValues)),
+            errors: formStateRef.current.errors,
+            dirtyFields: formStateRef.current.dirtyFields,
+            isDirty: isFormDirty(name, updatedFormValues.map((_a = {}) => {
+                var _b = keyName, omitted = _a[_b], rest = __rest(_a, [typeof _b === "symbol" ? _b : _b + ""]);
+                return rest;
+            })),
+            touched: formStateRef.current.touched,
         });
     };
     const append = (value, shouldFocus = true) => {
         const updateFormValues = [
-            ...getCurrentFieldsValues(),
+            ...getFieldArrayValue(),
             ...mapIds(Array.isArray(value) ? value : [value], keyName),
         ];
         setFieldAndValidState(updateFormValues);
@@ -31999,9 +32017,6 @@ const useFieldArray = ({ control, name, keyName = 'id', }) => {
             };
         }
         return () => {
-            if (true) {
-                return;
-            }
             resetFields();
             delete resetFunctions[name];
             unset(fieldArrayValuesRef, name);
@@ -32072,14 +32087,15 @@ var getInputValue = (event) => isPrimitive(event) ||
         ? event.target.checked
         : event.target.value;
 
-function useField({ name, rules, defaultValue, control, onFocus, }) {
+const Controller = (_a) => {
+    var { name, rules, as, render, defaultValue, control, onFocus } = _a, rest = __rest(_a, ["name", "rules", "as", "render", "defaultValue", "control", "onFocus"]);
     const methods = useFormContext();
     if (true) {
         if (!control && !methods) {
             throw new Error('📋 Controller is missing `control` prop. https://react-hook-form.com/api#Controller');
         }
     }
-    const { defaultValuesRef, setValue, register, unregister, trigger, mode, reValidateMode: { isReValidateOnBlur, isReValidateOnChange }, formStateRef: { current: { isSubmitted, touched, errors, dirtyFields }, }, updateFormState, readFormStateRef, fieldsRef, fieldArrayNamesRef, shallowFieldsStateRef, } = control || methods.control;
+    const { defaultValuesRef, setValue, register, unregister, trigger, mode, reValidateMode: { isReValidateOnBlur, isReValidateOnChange }, formStateRef: { current: { isSubmitted, touched }, }, updateFormState, readFormStateRef, fieldsRef, fieldArrayNamesRef, shallowFieldsStateRef, } = control || methods.control;
     const isNotFieldArray = !isNameInFieldArray(fieldArrayNamesRef.current, name);
     const getInitialValue = () => !isUndefined(get(shallowFieldsStateRef.current, name)) && isNotFieldArray
         ? get(shallowFieldsStateRef.current, name)
@@ -32096,8 +32112,8 @@ function useField({ name, rules, defaultValue, control, onFocus, }) {
             if (isFunction(ref.current.focus)) {
                 ref.current.focus();
             }
-            if (true) {
-                if (!isFunction(ref.current.focus)) {
+            else {
+                if (true) {
                     console.warn(`📋 'ref' from Controller render prop must be attached to a React component or a DOM Element whose ref provides a 'focus()' method`);
                 }
             }
@@ -32120,10 +32136,8 @@ function useField({ name, rules, defaultValue, control, onFocus, }) {
         return data;
     }, []);
     const registerField = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((shouldUpdateValue) => {
-        if (true) {
-            if (!name) {
-                return console.warn('📋 Field is missing `name` prop. https://react-hook-form.com/api#Controller');
-            }
+        if ( true && !name) {
+            return console.warn('📋 Field is missing `name` prop. https://react-hook-form.com/api#Controller');
         }
         if (fieldsRef.current[name]) {
             fieldsRef.current[name] = Object.assign({ ref: fieldsRef.current[name].ref }, rules);
@@ -32141,17 +32155,20 @@ function useField({ name, rules, defaultValue, control, onFocus, }) {
                     return valueRef.current;
                 },
             }), rules);
-            shouldUpdateValue = isUndefined(get(defaultValuesRef.current, name));
+            shouldUpdateValue = !get(defaultValuesRef.current, name);
         }
         shouldUpdateValue &&
             isNotFieldArray &&
             setInputStateValue(getInitialValue());
     }, [rules, name, register]);
-    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => () => unregister(name), [name]);
+    Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => () => unregister(name), [unregister, name]);
     Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
         if (true) {
             if (isUndefined(value)) {
                 console.warn(`📋 ${name} is missing in the 'defaultValue' prop of either its Controller (https://react-hook-form.com/api#Controller) or useForm (https://react-hook-form.com/api#useForm)`);
+            }
+            if ((!as && !render) || (as && render)) {
+                console.warn(`📋 ${name} Controller should use either the 'as' or 'render' prop, not both. https://react-hook-form.com/api#Controller`);
             }
             if (!isNotFieldArray && isUndefined(defaultValue)) {
                 console.warn('📋 Controller is missing `defaultValue` prop when using `useFieldArray`. https://react-hook-form.com/api#Controller');
@@ -32170,37 +32187,32 @@ function useField({ name, rules, defaultValue, control, onFocus, }) {
             });
         }
         shouldValidate(true) && trigger(name);
-    }, [name, updateFormState, shouldValidate, trigger, readFormStateRef]);
+    }, [
+        name,
+        touched,
+        updateFormState,
+        shouldValidate,
+        trigger,
+        readFormStateRef,
+    ]);
     const onChange = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((...event) => setValue(name, commonTask(event), {
         shouldValidate: shouldValidate(),
         shouldDirty: true,
     }), [setValue, name, shouldValidate]);
-    return {
-        field: {
-            onChange,
-            onBlur,
-            name,
-            value,
-            ref,
-        },
-        state: {
-            inValid: !get(errors, name),
-            isDirty: !!get(dirtyFields, name),
-            isTouched: !!get(touched, name),
-        },
+    const commonProps = {
+        onChange,
+        onBlur,
+        name,
+        value,
+        ref,
     };
-}
-
-const Controller = (props) => {
-    const { rules, as, render, defaultValue, control, onFocus } = props, rest = __rest(props, ["rules", "as", "render", "defaultValue", "control", "onFocus"]);
-    const { field } = useField(props);
-    const componentProps = Object.assign(Object.assign({}, rest), field);
+    const props = Object.assign(Object.assign({}, rest), commonProps);
     return as
         ? Object(react__WEBPACK_IMPORTED_MODULE_0__["isValidElement"])(as)
-            ? Object(react__WEBPACK_IMPORTED_MODULE_0__["cloneElement"])(as, componentProps)
-            : Object(react__WEBPACK_IMPORTED_MODULE_0__["createElement"])(as, componentProps)
+            ? Object(react__WEBPACK_IMPORTED_MODULE_0__["cloneElement"])(as, props)
+            : Object(react__WEBPACK_IMPORTED_MODULE_0__["createElement"])(as, props)
         : render
-            ? render(field)
+            ? render(commonProps)
             : null;
 };
 
@@ -34746,8 +34758,7 @@ function cssTransition(_ref) {
 
       if (node) {
         node.classList.remove(enterClassName);
-        node.style.removeProperty('animationFillMode');
-        node.style.removeProperty('animationDuration');
+        node.style.cssText = '';
       }
     };
 
@@ -35068,13 +35079,11 @@ function useToastContainer(props) {
 
     if (Object(react__WEBPACK_IMPORTED_MODULE_0__["isValidElement"])(content) && !isStr(content.type)) {
       toastContent = Object(react__WEBPACK_IMPORTED_MODULE_0__["cloneElement"])(content, {
-        closeToast: closeToast,
-        toastProps: toastProps
+        closeToast: closeToast
       });
     } else if (isFn(content)) {
       toastContent = content({
-        closeToast: closeToast,
-        toastProps: toastProps
+        closeToast: closeToast
       });
     } // not handling limit + delay by design. Waiting for user feedback first
 
@@ -35248,7 +35257,6 @@ function useToast(props) {
   }
 
   function onDragMove(e) {
-    e.preventDefault();
     var toast = toastRef.current;
 
     if (drag.canDrag) {
@@ -47487,8 +47495,8 @@ __webpack_require__(/*! ./index */ "./resources/js/index.js");
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/professor/Documents/Laravel/Laravel + React_js/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
-module.exports = __webpack_require__(/*! /home/professor/Documents/Laravel/Laravel + React_js/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
+__webpack_require__(/*! /home/tanvir/Work/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /home/tanvir/Work/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
 
 
 /***/ })

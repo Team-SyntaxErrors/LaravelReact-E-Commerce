@@ -45,7 +45,7 @@ class Product extends Model
     /**
      * The relation between product and product image table
      *
-     * @return void
+     * @return object
      */
     public function images()
     {
@@ -55,7 +55,7 @@ class Product extends Model
     /**
      * The relation between product and tag table
      *
-     * @return void
+     * @return object
      */
     public function tags()
     {
@@ -65,7 +65,7 @@ class Product extends Model
     /**
      * The relation between product and category table
      *
-     * @return void
+     * @return object
      */
     public function categories()
     {
@@ -75,7 +75,7 @@ class Product extends Model
     /**
      * The relation between product and subCategory table
      *
-     * @return void
+     * @return object
      */
     public function subCategories()
     {
@@ -85,7 +85,7 @@ class Product extends Model
     /**
      * The relation between product and brand table
      *
-     * @return void
+     * @return object
      */
     public function brands()
     {
@@ -95,7 +95,7 @@ class Product extends Model
     /**
      * The relation between product and unit table
      *
-     * @return void
+     * @return object
      */
     public function units()
     {
@@ -103,7 +103,10 @@ class Product extends Model
     }
 
     /**
-     * Undocumented function
+     * Boot function
+     * Overwriting for setting the auth user id in
+     * created by while saving
+     * updated by while updating
      *
      * @return void
      */

@@ -30,9 +30,9 @@ class Menu extends Model
     /**
      * Undocumented function
      *
-     * @param $query
-     * @param $q
-     * @return void
+     * @param mixed $query Initial Query to add condition.
+     * @param mixed $q     Token for search in table.
+     * @return array
      */
     public function scopeSearch($query, $q)
     {
@@ -42,7 +42,7 @@ class Menu extends Model
     /**
      * The relation between menu and category table
      *
-     * @return void
+     * @return array
      */
     public function categories()
     {
@@ -52,7 +52,7 @@ class Menu extends Model
     /**
      * The relation between menu and subCategory table
      *
-     * @return void
+     * @return array
      */
     public function subcategories()
     {

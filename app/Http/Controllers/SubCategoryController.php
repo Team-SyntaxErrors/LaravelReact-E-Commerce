@@ -46,7 +46,7 @@ class SubCategoryController extends Controller
             $sub_category = new SubCategory();
             $requested_data = $request->all();
             if ($request->sub_category_icon) {
-                $upload_path = $this->VerifyStore($request, 'sub_category_icon', 'sub_category_icon');
+                $upload_path = $this->verifyStore($request, 'sub_category_icon', 'sub_category_icon');
                 $requested_data = Arr::set($requested_data, "sub_category_icon", $upload_path);
                 $sub_category_slug = Str::slug($request->sub_category_name, '-');
                 $requested_data = Arr::set($requested_data, "sub_category_slug", $sub_category_slug);
@@ -97,7 +97,7 @@ class SubCategoryController extends Controller
                 if (File::exists($sub_category->sub_category_icon)) {
                     File::delete($sub_category->sub_category_icon);
                 }
-                $upload_path = $this->VerifyStore($request, 'sub_category_icon', 'sub_category_icon');
+                $upload_path = $this->verifyStore($request, 'sub_category_icon', 'sub_category_icon');
                 $requested_data = Arr::set($requested_data, "sub_category_icon", $upload_path);
             }
             $sub_category_slug = Str::slug($request->sub_category_name, '-');

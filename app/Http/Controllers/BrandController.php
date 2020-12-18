@@ -43,10 +43,9 @@ class BrandController extends Controller
     {
         try {
             $brand = new Brand();
-
             $requested_data = $request->all();
             if ($request->brand_logo) {
-                $upload_path = $this->VerifyStore($request, 'brand_logo', 'brand_logo');
+                $upload_path = $this->verifyStore($request, 'brand_logo', 'brand_logo');
                 $requested_data = Arr::set($requested_data, "brand_logo", $upload_path);
             }
             $brand->fill($requested_data)->save();
@@ -94,7 +93,7 @@ class BrandController extends Controller
                 if (File::exists($brand->brand_logo)) {
                     File::delete($brand->brand_logo);
                 }
-                $upload_path = $this->VerifyStore($request, 'brand_logo', 'brand_logo');
+                $upload_path = $this->verifyStore($request, 'brand_logo', 'brand_logo');
                 $requested_data = Arr::set($requested_data, "brand_logo", $upload_path);
             }
             $brand->fill($requested_data)->save();

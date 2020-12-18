@@ -28,10 +28,10 @@ class Unit extends Model
     protected $fillable = ['unit_name', 'short_name', 'status', 'created_by', 'updated_by'];
 
     /**
-     * Undocumented function
+     * Status function
      *
-     * @param $query
-     * @return void
+     * @param mixed $query Initial Query to add condition.
+     * @return array
      */
     public function scopeActive($query)
     {
@@ -39,11 +39,11 @@ class Unit extends Model
     }
 
     /**
-     * Undocumented function
+     * Search function
      *
-     * @param $query
-     * @param $search
-     * @return void
+     * @param mixed $query  Initial Query to add condition.
+     * @param mixed $search Token for searching.
+     * @return array
      */
     public function scopeSearch($query, $search)
     {
