@@ -1,7 +1,7 @@
 import "@pathofdev/react-tag-input/build/index.css";
 import "./AddProduct.module.css";
 
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useRef } from "react";
 
 import Axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -34,6 +34,7 @@ const AddProduct = props => {
         status: 0,
         description: ""
     });
+    const formRef = useRef();
 
     const handleChange = event => {
         setProduct({ ...product, [event.target.name]: event.target.value });
@@ -69,13 +70,14 @@ const AddProduct = props => {
     const GetCategory = () => {
         Axios.get("/categories")
             .then(response => {
-                setCategory(response.data);
+                setCategory(response.data.data);
             })
             .catch(error => {
                 console.log(error);
             });
     };
     useEffect(() => {
+        console.log(formRef);
         GetCategory();
     }, []);
 
@@ -95,7 +97,7 @@ const AddProduct = props => {
     const GetSubCategory = category_id => {
         Axios.get("/subcategory_get/" + category_id)
             .then(response => {
-                setSubCategory(response.data);
+                setSubCategory(response.data.data);
             })
             .catch(error => {
                 console.log(error);
@@ -105,7 +107,7 @@ const AddProduct = props => {
     const GetBrand = () => {
         Axios.get("/all_brand_get")
             .then(response => {
-                setBrand(response.data);
+                setBrand(response.data.data);
             })
             .catch(error => {
                 console.log(error);
@@ -118,7 +120,7 @@ const AddProduct = props => {
     const GetUnit = () => {
         Axios.get("/all_unit_get")
             .then(response => {
-                setUnit(response.data);
+                setUnit(response.data.data);
             })
             .catch(error => {
                 console.log(error);
@@ -180,7 +182,7 @@ const AddProduct = props => {
                         </button>{" "}
                     </Link>
                 </div>
-                <form onSubmit={submitHandler} id="product-from">
+                <form onSubmit={submitHandler} id="product-from" ref={formRef}>
                     <div className="card-body">
                         <div className="row">
                             <div className="col-md-4">

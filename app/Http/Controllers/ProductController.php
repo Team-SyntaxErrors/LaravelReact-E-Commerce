@@ -161,10 +161,10 @@ class ProductController extends Controller
     {
         try {
             $product = Product::findOrFail($id);
-            if ($product->status == 1) :
+            if ($product->status == 1):
                 $product->update(['status' => 0]);
                 $status = Response::HTTP_CREATED;
-            else :
+            else:
                 $product->update(['status' => 1]);
                 $status = Response::HTTP_OK;
             endif;

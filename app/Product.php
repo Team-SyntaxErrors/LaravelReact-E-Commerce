@@ -8,40 +8,44 @@ use Illuminate\Support\Facades\Auth;
 class Product extends Model
 {
     /**
-     * Undocumented variable
+     * Table name
      *
      * @var string
      */
     protected $table = 'products';
+
     /**
-     * Undocumented variable
+     * table primary key
      *
      * @var string
      */
     protected $primaryKey = 'product_id';
+
     /**
-     * Undocumented variable
+     * Table other fields name
      *
      * @var array
      */
     protected $fillable = [
-        "product_name",
-        "product_slug",
-        "product_sku",
-        "category_id",
-        "subcategory_id",
-        "brand_id",
-        "unit_id",
-        "product_alert_qty",
-        "purchase_price",
-        "sell_price",
-        "description",
-        "product_has_tag",
-        "status",
+        'product_name',
+        'product_slug',
+        'product_sku',
+        'category_id',
+        'subcategory_id',
+        'brand_id',
+        'unit_id',
+        'product_alert_qty',
+        'purchase_price',
+        'sell_price',
+        'description',
+        'product_has_tag',
+        'status',
     ];
 
     /**
-     * Relation between products table and product_images table
+     * The relation between product and product image table
+     *
+     * @return void
      */
     public function images()
     {
@@ -49,7 +53,9 @@ class Product extends Model
     }
 
     /**
-     * Relation between products table and product_tags table
+     * The relation between product and tag table
+     *
+     * @return void
      */
     public function tags()
     {
@@ -57,7 +63,9 @@ class Product extends Model
     }
 
     /**
-     * Relation between categories table and products table
+     * The relation between product and category table
+     *
+     * @return void
      */
     public function categories()
     {
@@ -65,7 +73,9 @@ class Product extends Model
     }
 
     /**
-     * Relation between sub_categories table and products table
+     * The relation between product and subCategory table
+     *
+     * @return void
      */
     public function subCategories()
     {
@@ -73,7 +83,9 @@ class Product extends Model
     }
 
     /**
-     * Relation between sub_categories table and products table
+     * The relation between product and brand table
+     *
+     * @return void
      */
     public function brands()
     {
@@ -81,7 +93,9 @@ class Product extends Model
     }
 
     /**
-     * Relation between units table and products table
+     * The relation between product and unit table
+     *
+     * @return void
      */
     public function units()
     {
@@ -89,9 +103,9 @@ class Product extends Model
     }
 
     /**
-     * Store created_by when new product inserted
+     * Undocumented function
      *
-     * Updated updated_by when product updated
+     * @return void
      */
     public static function boot()
     {
