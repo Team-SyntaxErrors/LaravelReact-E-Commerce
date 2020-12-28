@@ -45585,22 +45585,20 @@ var AddProduct = function AddProduct(props) {
     product_name: "",
     product_slug: "",
     product_sku: "",
-    category_id: 0,
-    subcategory_id: 0,
-    brand_id: 0,
-    purchase_price: 0,
-    sell_price: 0,
-    unit_id: 0,
-    product_alert_qty: 0,
+    category_id: "",
+    subcategory_id: "",
+    brand_id: "",
+    purchase_price: "",
+    sell_price: "",
+    unit_id: "",
+    product_alert_qty: "",
     tags: [],
-    status: 0,
+    status: "",
     description: ""
   }),
       _useState14 = _slicedToArray(_useState13, 2),
       product = _useState14[0],
       setProduct = _useState14[1];
-
-  var formRef = Object(react__WEBPACK_IMPORTED_MODULE_2__["useRef"])();
 
   var handleChange = function handleChange(event) {
     setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, event.target.name, event.target.value)));
@@ -45640,7 +45638,6 @@ var AddProduct = function AddProduct(props) {
   };
 
   Object(react__WEBPACK_IMPORTED_MODULE_2__["useEffect"])(function () {
-    console.log(formRef);
     GetCategory();
   }, []);
   /**
@@ -45691,21 +45688,12 @@ var AddProduct = function AddProduct(props) {
   }, []);
 
   var ClearFrom = function ClearFrom() {
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "product_name", "")));
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "product_slug", "")));
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "product_sku", "")));
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "category_id", 0)));
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "subcategory_id", 0)));
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "brand_id", 0)));
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "purchase_price", 0)));
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "sell_price", 0)));
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "unit_id", 0)));
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "product_alert_qty", 0)));
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "tags", [])));
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "status", 0)));
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "description", "")));
-    setError([]);
-    document.getElementById("product-from").reset();
+    var form = product;
+    Object.keys(form).forEach(function (key) {
+      form[key] = "";
+    });
+    form.tags = [];
+    setProduct(_objectSpread(_objectSpread({}, product), form));
   };
 
   var submitHandler = function submitHandler(event) {
@@ -45740,8 +45728,7 @@ var AddProduct = function AddProduct(props) {
     className: "ik ik-clipboard"
   }), "Product List"), " ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("form", {
     onSubmit: submitHandler,
-    id: "product-from",
-    ref: formRef
+    id: "product-from"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "card-body"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
@@ -45809,6 +45796,7 @@ var AddProduct = function AddProduct(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("select", {
     className: "form-control",
     name: "category_id",
+    value: product.category_id,
     onChange: function onChange(e) {
       return handleChange(e), CategoryChange(e);
     }
@@ -45816,7 +45804,7 @@ var AddProduct = function AddProduct(props) {
     defaultValue: true
   }, "--Select Category--"), Category.map(function (category, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
-      key: i,
+      key: category.category_id,
       value: category.category_id
     }, category.category_name);
   }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
@@ -45832,7 +45820,8 @@ var AddProduct = function AddProduct(props) {
     name: "subcategory_id",
     onChange: function onChange(e) {
       return handleChange(e);
-    }
+    },
+    value: product.subcategory_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     defaultValue: true
   }, "--Select Sub Category--"), SubCategory.map(function (sub, i) {
@@ -45853,7 +45842,8 @@ var AddProduct = function AddProduct(props) {
     name: "brand_id",
     onChange: function onChange(e) {
       return handleChange(e);
-    }
+    },
+    value: product.brand_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     defaultValue: true
   }, "--Select Brand--"), Brand.map(function (brand, i) {
@@ -45876,6 +45866,7 @@ var AddProduct = function AddProduct(props) {
     name: "purchase_price",
     className: "form-control",
     placeholder: "Enter Product Purchase Price",
+    value: product.purchase_price,
     onChange: function onChange(e) {
       return handleChange(e);
     }
@@ -45891,6 +45882,7 @@ var AddProduct = function AddProduct(props) {
     type: "number",
     name: "sell_price",
     className: "form-control",
+    value: product.sell_price,
     onChange: function onChange(e) {
       return handleChange(e);
     },
@@ -45908,7 +45900,8 @@ var AddProduct = function AddProduct(props) {
     onChange: function onChange(e) {
       return handleChange(e);
     },
-    name: "unit_id"
+    name: "unit_id",
+    value: product.unit_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     defaultValue: true
   }, "--Select Unit--"), Unit.map(function (unit, i) {
@@ -45933,6 +45926,7 @@ var AddProduct = function AddProduct(props) {
     onChange: function onChange(e) {
       return handleChange(e);
     },
+    value: product.product_alert_qty,
     placeholder: "Enter Product Alert Quantity"
   })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
@@ -45961,7 +45955,8 @@ var AddProduct = function AddProduct(props) {
     onChange: function onChange(e) {
       return handleChange(e);
     },
-    className: "form-control"
+    className: "form-control",
+    value: product.status
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", null, "--Select Status--"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     value: "1"
   }, "Active"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
