@@ -23,18 +23,17 @@ const AddProduct = props => {
         product_name: "",
         product_slug: "",
         product_sku: "",
-        category_id: 0,
-        subcategory_id: 0,
-        brand_id: 0,
-        purchase_price: 0,
-        sell_price: 0,
-        unit_id: 0,
-        product_alert_qty: 0,
+        category_id: "",
+        subcategory_id: "",
+        brand_id: "",
+        purchase_price: "",
+        sell_price: "",
+        unit_id: "",
+        product_alert_qty: "",
         tags: [],
-        status: 0,
+        status: "",
         description: ""
     });
-    const formRef = useRef();
 
     const handleChange = event => {
         setProduct({ ...product, [event.target.name]: event.target.value });
@@ -77,7 +76,6 @@ const AddProduct = props => {
             });
     };
     useEffect(() => {
-        console.log(formRef);
         GetCategory();
     }, []);
 
@@ -131,21 +129,12 @@ const AddProduct = props => {
     }, []);
 
     const ClearFrom = () => {
-        setProduct({ ...product, ["product_name"]: "" });
-        setProduct({ ...product, ["product_slug"]: "" });
-        setProduct({ ...product, ["product_sku"]: "" });
-        setProduct({ ...product, ["category_id"]: 0 });
-        setProduct({ ...product, ["subcategory_id"]: 0 });
-        setProduct({ ...product, ["brand_id"]: 0 });
-        setProduct({ ...product, ["purchase_price"]: 0 });
-        setProduct({ ...product, ["sell_price"]: 0 });
-        setProduct({ ...product, ["unit_id"]: 0 });
-        setProduct({ ...product, ["product_alert_qty"]: 0 });
-        setProduct({ ...product, ["tags"]: [] });
-        setProduct({ ...product, ["status"]: 0 });
-        setProduct({ ...product, ["description"]: "" });
-        setError([]);
-        document.getElementById("product-from").reset();
+        let form = product;
+        Object.keys(form).forEach(function(key) {
+            form[key] = "";
+        });
+        form.tags = [];
+        setProduct({ ...product, ...form });
     };
 
     const submitHandler = event => {
@@ -182,7 +171,7 @@ const AddProduct = props => {
                         </button>{" "}
                     </Link>
                 </div>
-                <form onSubmit={submitHandler} id="product-from" ref={formRef}>
+                <form onSubmit={submitHandler} id="product-from">
                     <div className="card-body">
                         <div className="row">
                             <div className="col-md-4">
@@ -252,6 +241,7 @@ const AddProduct = props => {
                                         <select
                                             className="form-control"
                                             name="category_id"
+                                            value={product.category_id}
                                             onChange={e => (
                                                 handleChange(e),
                                                 CategoryChange(e)
@@ -262,7 +252,7 @@ const AddProduct = props => {
                                             </option>
                                             {Category.map((category, i) => (
                                                 <option
-                                                    key={i}
+                                                    key={category.category_id}
                                                     value={category.category_id}
                                                 >
                                                     {category.category_name}
@@ -282,6 +272,7 @@ const AddProduct = props => {
                                             className="form-control"
                                             name="subcategory_id"
                                             onChange={e => handleChange(e)}
+                                            value={product.subcategory_id}
                                         >
                                             <option defaultValue>
                                                 --Select Sub Category--
@@ -308,6 +299,7 @@ const AddProduct = props => {
                                             className="form-control"
                                             name="brand_id"
                                             onChange={e => handleChange(e)}
+                                            value={product.brand_id}
                                         >
                                             <option defaultValue>
                                                 --Select Brand--
@@ -338,6 +330,7 @@ const AddProduct = props => {
                                             name="purchase_price"
                                             className="form-control"
                                             placeholder="Enter Product Purchase Price"
+                                            value={product.purchase_price}
                                             onChange={e => handleChange(e)}
                                         />
                                     </div>
@@ -353,6 +346,7 @@ const AddProduct = props => {
                                             type="number"
                                             name="sell_price"
                                             className="form-control"
+                                            value={product.sell_price}
                                             onChange={e => handleChange(e)}
                                             placeholder="Enter Product Sell Price"
                                         />
@@ -369,6 +363,7 @@ const AddProduct = props => {
                                             className="form-control"
                                             onChange={e => handleChange(e)}
                                             name="unit_id"
+                                            value={product.unit_id}
                                         >
                                             <option defaultValue>
                                                 --Select Unit--
@@ -399,6 +394,7 @@ const AddProduct = props => {
                                             name="product_alert_qty"
                                             className="form-control"
                                             onChange={e => handleChange(e)}
+                                            value={product.product_alert_qty}
                                             placeholder="Enter Product Alert Quantity"
                                         />
                                     </div>
@@ -430,6 +426,7 @@ const AddProduct = props => {
                                             name="status"
                                             onChange={e => handleChange(e)}
                                             className="form-control"
+                                            value={product.status}
                                         >
                                             <option>--Select Status--</option>
                                             <option value="1">Active</option>
