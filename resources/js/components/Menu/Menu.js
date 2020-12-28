@@ -78,7 +78,7 @@ const Menu = props => {
             });
     };
 
-    const DeleteHandler = id => {
+    const DeleteHandler = (id, index) => {
         swal({
             title: "Are you sure?",
             text: `Once deleted, you will not be able to recover this imaginary file!`,
@@ -95,9 +95,14 @@ const Menu = props => {
                                 "Menu Has been Deleted",
                                 "success"
                             );
-                            GetMenuList();
+                            let list = [...menu_list];
+                            console.log(list);
+                            list.splice(index, 1);
+                            console.log(list);
+                            setMenuList(list);
+                            // GetMenuList();
                         } else {
-                            swal("Opps", "Something Went Wrong", "warning");
+                            swal("Oops", "Something Went Wrong", "warning");
                         }
                     })
                     .catch(error => {
@@ -528,7 +533,8 @@ const Menu = props => {
                                                             className="ik ik-trash-2 f-16 text-red"
                                                             onClick={() =>
                                                                 DeleteHandler(
-                                                                    menu.menu_id
+                                                                    menu.menu_id,
+                                                                    i
                                                                 )
                                                             }
                                                         ></i>
