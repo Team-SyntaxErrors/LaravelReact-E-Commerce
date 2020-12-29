@@ -96,11 +96,8 @@ const Menu = props => {
                                 "success"
                             );
                             let list = [...menu_list];
-                            console.log(list);
                             list.splice(index, 1);
-                            console.log(list);
                             setMenuList(list);
-                            // GetMenuList();
                         } else {
                             swal("Oops", "Something Went Wrong", "warning");
                         }

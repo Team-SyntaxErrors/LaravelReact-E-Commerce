@@ -15,10 +15,7 @@ const useForms = initialValues => {
             setValues({ ...values, [e.target.name]: e.target.value });
         }
     };
-    const SetObject = initialValues => {
-        setValues(initialValues);
-    };
-    return [values, SetInputValues, SetObject];
+    return [values, setValues, SetInputValues];
 };
 
 export default useForms;

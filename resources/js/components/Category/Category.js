@@ -12,7 +12,7 @@ import useForms from "../customHooks/useForms";
 
 const Category = props => {
     const [Menu, setMenu] = useState([]);
-    const [category_form, handleChange] = useForms({
+    const [category_form, setCategoryForm, handleChange] = useForms({
         menu_id: "",
         category_name: "",
         category_icon: ""
@@ -26,7 +26,7 @@ const Category = props => {
     const [activePage, setActivePage] = useState(1);
     const [itemsCountPerPage, setItemsCountPerPage] = useState(8);
     const [totalItemsCount, setTotalItemsCount] = useState(450);
-    const [EditForm, EditHandleChange, setEditForm] = useForms({
+    const [EditForm, setEditForm, EditHandleChange] = useForms({
         menu_id: "",
         category_name: "",
         category_icon: ""
@@ -71,10 +71,12 @@ const Category = props => {
     // Clear From
     const ClearFrom = () => {
         setErrors([]);
-        let FORM = category_form;
-        Object.keys(FORM).forEach(function(key, index) {
-            FORM[key] = "";
+        let form = category_form;
+        console.log("form", form);
+        Object.keys(form).forEach(function(key) {
+            form[key] = "";
         });
+        setCategoryForm({ ...category_form, ...form });
     };
     // Data Submit
     const submitHandler = e => {
@@ -82,10 +84,12 @@ const Category = props => {
         console.log(category_form);
         Axios.post("/category", category_form)
             .then(response => {
-                $(".close").click();
-                GetCategoryList();
-                ClearFrom();
-                toast.success("Category Data Inserted Successfully!");
+                if (response.data.code === 201) {
+                    $(".close").click();
+                    GetCategoryList();
+                    ClearFrom();
+                    toast.success("Category Data Inserted Successfully!");
+                }
             })
             .catch(error => {
                 if (error.response.status == 422) {
@@ -106,15 +110,16 @@ const Category = props => {
                 Axios.delete("/category/" + id)
                     .then(response => {
                         if (response.status === 204) {
-                            CategoryList.splice(index, 1);
-                            GetCategoryList();
                             swal(
                                 "Deleted!",
                                 "Category Has been Deleted",
                                 "success"
                             );
+                            let list = [...CategoryList];
+                            list.splice(index, 1);
+                            setCategoryList(list);
                         } else {
-                            swal("Opps", "Something Went Wrong", "warning");
+                            swal("Oops", "Something Went Wrong", "warning");
                         }
                     })
                     .catch(error => {
@@ -129,7 +134,7 @@ const Category = props => {
     const EditHandler = (id, data, index) => {
         CategoryList.category_id = id;
         let value = JSON.parse(JSON.stringify(data));
-        setEditForm(value);
+        setEditForm({ ...EditForm, ...value });
     };
     // Category Data Update
     const updateHandler = e => {
@@ -219,6 +224,7 @@ const Category = props => {
                                                         name="category_icon"
                                                         className="form-control"
                                                         onChange={handleChange}
+                                                        value=""
                                                         placeholder="Enter Menu Icon"
                                                     />
                                                     <span className="text-danger">
@@ -235,6 +241,9 @@ const Category = props => {
                                                         name="menu_id"
                                                         className="form-control"
                                                         onChange={handleChange}
+                                                        value={
+                                                            category_form.menu_id
+                                                        }
                                                     >
                                                         <option
                                                             value
@@ -631,25 +640,6 @@ const Category = props => {
                                                 </tr>
                                             )}
                                         </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th className="text-center">
-                                                    Category Icon
-                                                </th>
-                                                <th className="text-center">
-                                                    Menu Name
-                                                </th>
-                                                <th className="text-center">
-                                                    Category Name
-                                                </th>
-                                                <th className="text-center">
-                                                    Status
-                                                </th>
-                                                <th className="text-center">
-                                                    Action
-                                                </th>
-                                            </tr>
-                                        </tfoot>
                                     </table>
                                 </div>
                             </div>

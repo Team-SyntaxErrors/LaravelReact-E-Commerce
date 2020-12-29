@@ -43025,6 +43025,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(sweetalert__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
 /* harmony import */ var _customHooks_useForms__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../customHooks/useForms */ "./resources/js/components/customHooks/useForms.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -43058,9 +43072,10 @@ var Category = function Category(props) {
     category_name: "",
     category_icon: ""
   }),
-      _useForms2 = _slicedToArray(_useForms, 2),
+      _useForms2 = _slicedToArray(_useForms, 3),
       category_form = _useForms2[0],
-      handleChange = _useForms2[1];
+      setCategoryForm = _useForms2[1],
+      handleChange = _useForms2[2];
 
   var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState4 = _slicedToArray(_useState3, 2),
@@ -43114,8 +43129,8 @@ var Category = function Category(props) {
   }),
       _useForms4 = _slicedToArray(_useForms3, 3),
       EditForm = _useForms4[0],
-      EditHandleChange = _useForms4[1],
-      setEditForm = _useForms4[2];
+      setEditForm = _useForms4[1],
+      EditHandleChange = _useForms4[2];
 
   var handlePageChange = function handlePageChange(pageNumber) {
     setPage(pageNumber);
@@ -43155,10 +43170,12 @@ var Category = function Category(props) {
 
   var ClearFrom = function ClearFrom() {
     setErrors([]);
-    var FORM = category_form;
-    Object.keys(FORM).forEach(function (key, index) {
-      FORM[key] = "";
+    var form = category_form;
+    console.log("form", form);
+    Object.keys(form).forEach(function (key) {
+      form[key] = "";
     });
+    setCategoryForm(_objectSpread(_objectSpread({}, category_form), form));
   }; // Data Submit
 
 
@@ -43166,10 +43183,12 @@ var Category = function Category(props) {
     e.preventDefault();
     console.log(category_form);
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/category", category_form).then(function (response) {
-      $(".close").click();
-      GetCategoryList();
-      ClearFrom();
-      react_toastify__WEBPACK_IMPORTED_MODULE_7__["toast"].success("Category Data Inserted Successfully!");
+      if (response.data.code === 201) {
+        $(".close").click();
+        GetCategoryList();
+        ClearFrom();
+        react_toastify__WEBPACK_IMPORTED_MODULE_7__["toast"].success("Category Data Inserted Successfully!");
+      }
     })["catch"](function (error) {
       if (error.response.status == 422) {
         setErrors(error.response.data.errors);
@@ -43189,11 +43208,14 @@ var Category = function Category(props) {
       if (willDelete) {
         axios__WEBPACK_IMPORTED_MODULE_3___default.a["delete"]("/category/" + id).then(function (response) {
           if (response.status === 204) {
-            CategoryList.splice(index, 1);
-            GetCategoryList();
             sweetalert__WEBPACK_IMPORTED_MODULE_6___default()("Deleted!", "Category Has been Deleted", "success");
+
+            var list = _toConsumableArray(CategoryList);
+
+            list.splice(index, 1);
+            setCategoryList(list);
           } else {
-            sweetalert__WEBPACK_IMPORTED_MODULE_6___default()("Opps", "Something Went Wrong", "warning");
+            sweetalert__WEBPACK_IMPORTED_MODULE_6___default()("Oops", "Something Went Wrong", "warning");
           }
         })["catch"](function (error) {
           console.log(error);
@@ -43208,7 +43230,7 @@ var Category = function Category(props) {
   var EditHandler = function EditHandler(id, data, index) {
     CategoryList.category_id = id;
     var value = JSON.parse(JSON.stringify(data));
-    setEditForm(value);
+    setEditForm(_objectSpread(_objectSpread({}, EditForm), value));
   }; // Category Data Update
 
 
@@ -43297,6 +43319,7 @@ var Category = function Category(props) {
     name: "category_icon",
     className: "form-control",
     onChange: handleChange,
+    value: "",
     placeholder: "Enter Menu Icon"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
@@ -43309,7 +43332,8 @@ var Category = function Category(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("select", {
     name: "menu_id",
     className: "form-control",
-    onChange: handleChange
+    onChange: handleChange,
+    value: category_form.menu_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     value: true,
     defaultValue: true,
@@ -43561,17 +43585,7 @@ var Category = function Category(props) {
   }), totalItemsCount === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("td", {
     colSpan: "5",
     className: "text-center"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("b", null, "No Data Found")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("tfoot", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
-    className: "text-center"
-  }, "Category Icon"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
-    className: "text-center"
-  }, "Menu Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
-    className: "text-center"
-  }, "Category Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
-    className: "text-center"
-  }, "Status"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
-    className: "text-center"
-  }, "Action")))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("b", null, "No Data Found"))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-sm-12 col-md-5"
@@ -45123,10 +45137,8 @@ var Menu = function Menu(props) {
 
             var list = _toConsumableArray(menu_list);
 
-            console.log(list);
             list.splice(index, 1);
-            console.log(list);
-            setMenuList(list); // GetMenuList();
+            setMenuList(list);
           } else {
             sweetalert__WEBPACK_IMPORTED_MODULE_6___default()("Oops", "Something Went Wrong", "warning");
           }
@@ -47435,11 +47447,7 @@ var useForms = function useForms(initialValues) {
     }
   };
 
-  var SetObject = function SetObject(initialValues) {
-    setValues(initialValues);
-  };
-
-  return [values, SetInputValues, SetObject];
+  return [values, setValues, SetInputValues];
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (useForms);

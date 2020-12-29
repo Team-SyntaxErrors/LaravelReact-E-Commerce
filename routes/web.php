@@ -39,9 +39,9 @@ Route::middleware('auth')->group(function () {
     //All menu
     Route::get('/all_menu_get', 'MenuApiController');
     //Menu wise category
-    Route::get('/all_category_get/{id}', 'MenuWiseCategoryApiController');
+    Route::get('/category_get/{id}', 'MenuWiseCategoryApiController');
     //All category
-    Route::get('/categories', 'CategoryApiController');
+    Route::get('/all_categories', 'CategoryApiController');
     //category wise sub-category
     Route::get('/subcategory_get/{id}', 'CategoryWiseSubCategoryApiController');
     //get brand
