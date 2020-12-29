@@ -8,9 +8,10 @@ import PageHeader from "./../Layouts/PageHeader/PageHeader";
 import Pagination from "react-js-pagination";
 import { toast } from "react-toastify";
 import useForms from "../customHooks/useForms";
+import { slice } from "lodash";
 
-const SubCategory = props => {
-    const [SubCategoryList, setSubCategoryList] = useState([]);
+const SubCategory = (props) => {
+    const [subCategoryList, setSubCategoryList] = useState([]);
     const [Search, setSearch] = useState("");
     const [Current_row, setCurrent_row] = useState(8);
     const [page, setPage] = useState("");
@@ -23,25 +24,25 @@ const SubCategory = props => {
 
     const [Menu, setMenu] = useState([]);
     const [Category, setCategory] = useState([]);
-    const [SubCategoryForm, handleChange] = useForms({
+    const [SubCategoryForm, setSubCategoryForm, handleChange] = useForms({
         menu_id: "",
         category_id: "",
         sub_category_name: "",
-        sub_category_icon: ""
+        sub_category_icon: "",
     });
 
-    const [EditForm, EditHandleChange, setEditForm] = useForms({
+    const [EditForm, setEditForm, EditHandleChange] = useForms({
         menu_id: "",
         category_id: "",
         sub_category_name: "",
-        sub_category_icon: ""
+        sub_category_icon: "",
     });
 
-    const handlePageChange = pageNumber => {
+    const handlePageChange = (pageNumber) => {
         setPage(pageNumber);
     };
 
-    const MenuChangeFunctions = e => {
+    const MenuChangeFunctions = (e) => {
         handleChange(e);
         GetCategory(e.target.value);
     };
@@ -51,13 +52,13 @@ const SubCategory = props => {
         const main_url = `sub_category?q=${Search}&row=${Current_row}&page=${page}`;
 
         Axios.get(main_url)
-            .then(response => {
+            .then((response) => {
                 setSubCategoryList(response.data.data.data);
                 setActivePage(response.data.data.current_page);
                 setItemsCountPerPage(parseInt(response.data.data.per_page));
                 setTotalItemsCount(response.data.data.total);
             })
-            .catch(error => console.log(error));
+            .catch((error) => console.log(error));
     };
 
     useEffect(() => {
@@ -71,10 +72,10 @@ const SubCategory = props => {
     // Menu Data Get
     const GetMenu = () => {
         Axios.get("/all_menu_get")
-            .then(response => {
+            .then((response) => {
                 setMenu(response.data.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error);
             });
     };
@@ -85,25 +86,25 @@ const SubCategory = props => {
     // Menu Data Get
 
     // Category Data Get
-    const GetCategory = menu_id => {
-        Axios.get("/all_category_get/" + menu_id)
-            .then(response => {
+    const GetCategory = (menu_id) => {
+        Axios.get("/category_get/" + menu_id)
+            .then((response) => {
                 setCategory(response.data.data);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error);
             });
     };
     // Category Data Get
 
     // Image Render
-    const onImageChangeHandler = e => {
+    const onImageChangeHandler = (e) => {
         let files = e.target.files[0];
         let reader = new FileReader();
-        reader.onload = e => {
+        reader.onload = (e) => {
             setSubCategoryForm({
                 ...SubCategoryForm,
-                sub_category_icon: e.target.result
+                sub_category_icon: e.target.result,
             });
         };
         reader.readAsDataURL(files);
@@ -111,13 +112,13 @@ const SubCategory = props => {
     // Image Render
 
     // Edit Image render
-    const onEditImageChangeHandler = e => {
+    const onEditImageChangeHandler = (e) => {
         let files = e.target.files[0];
         let reader = new FileReader();
-        reader.onload = e => {
+        reader.onload = (e) => {
             setEditForm({
                 ...EditForm,
-                sub_category_icon: e.target.result
+                sub_category_icon: e.target.result,
             });
         };
         reader.readAsDataURL(files);
@@ -125,17 +126,17 @@ const SubCategory = props => {
     // Edit Image render
 
     // Form Submit Handler
-    const submitHandler = e => {
+    const submitHandler = (e) => {
         e.preventDefault();
         Axios.post("/sub_category", SubCategoryForm)
-            .then(response => {
+            .then((response) => {
                 console.log(response);
                 $(".close").click();
                 GetSubCategoryList();
                 ClearFrom();
                 toast.success("Sub Category Data Inserted Successfully!");
             })
-            .catch(error => {
+            .catch((error) => {
                 if (error.response.status == 422) {
                     setErrors(error.response.data.errors);
                 }
@@ -144,29 +145,32 @@ const SubCategory = props => {
     // Form Submit Handler
 
     // Delete Handler
-    const DeleteHandler = id => {
+    const DeleteHandler = (id, index) => {
         swal({
             title: "Are you sure?",
             text: `Once deleted, you will not be able to recover this imaginary file!`,
             icon: "warning",
             buttons: true,
-            dangerMode: true
-        }).then(willDelete => {
+            dangerMode: true,
+        }).then((willDelete) => {
             if (willDelete) {
                 Axios.delete("/sub_category/" + id)
-                    .then(response => {
+                    .then((response) => {
                         if (response.status === 204) {
                             swal(
                                 "Deleted!",
                                 "Sub Category Has been Deleted",
                                 "success"
                             );
+                            let list = [...subCategoryList];
+                            console.log(list);
+                            list.splice(index, 1);
+                            setSubCategoryList(list);
                         } else {
                             swal("Opps", "Something Went Wrong", "warning");
                         }
-                        GetSubCategoryList();
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.log(error);
                     });
             } else {
@@ -186,16 +190,16 @@ const SubCategory = props => {
     // Edit Data Get Handler
 
     // Update Form Submit Handler
-    const updateHandler = e => {
+    const updateHandler = (e) => {
         e.preventDefault();
         Axios.put("/sub_category/" + EditForm.sub_category_id, EditForm)
-            .then(response => {
+            .then((response) => {
                 $(".close").click();
                 GetSubCategoryList();
                 ClearFrom();
                 toast.success("Sub Category Data Update Successfully!");
             })
-            .catch(error => {
+            .catch((error) => {
                 if (error.response.status == 422) {
                     setError(error.response.data.errors);
                 }
@@ -204,9 +208,9 @@ const SubCategory = props => {
     // Update Form Submit Handler
 
     // Change Status Handler
-    const ChangeStatus = id => {
+    const ChangeStatus = (id) => {
         Axios.get("/sub_category/status/" + id)
-            .then(response => {
+            .then((response) => {
                 if (response.data.code === 200) {
                     toast.success("This sub category is active successfully!");
                 }
@@ -217,7 +221,7 @@ const SubCategory = props => {
                 }
                 GetSubCategoryList();
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error);
             });
     };
@@ -227,7 +231,7 @@ const SubCategory = props => {
     const ClearFrom = () => {
         setErrors([]);
         let FORM = SubCategoryForm;
-        Object.keys(FORM).forEach(function(key, index) {
+        Object.keys(FORM).forEach(function (key, index) {
             FORM[key] = "";
         });
     };
@@ -286,6 +290,7 @@ const SubCategory = props => {
                                                         type="file"
                                                         name="sub_category_icon"
                                                         className="form-control"
+                                                        value=""
                                                         placeholder="Enter SubCategory Icon"
                                                         onChange={handleChange}
                                                     />
@@ -304,7 +309,7 @@ const SubCategory = props => {
                                                     <select
                                                         name="menu_id"
                                                         className="form-control"
-                                                        onChange={e =>
+                                                        onChange={(e) =>
                                                             MenuChangeFunctions(
                                                                 e
                                                             )
@@ -634,7 +639,7 @@ const SubCategory = props => {
                                                 name="simpletable_length"
                                                 aria-controls="simpletable"
                                                 className="custom-select custom-select-sm form-control form-control-sm"
-                                                onChange={e =>
+                                                onChange={(e) =>
                                                     setCurrent_row(
                                                         e.target.value
                                                     )
@@ -665,7 +670,7 @@ const SubCategory = props => {
                                                 className="form-control form-control-sm"
                                                 placeholder="Type to filter..."
                                                 aria-controls="simpletable"
-                                                onChange={e =>
+                                                onChange={(e) =>
                                                     setSearch(e.target.value)
                                                 }
                                                 value={Search}
@@ -710,7 +715,7 @@ const SubCategory = props => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {SubCategoryList.map(
+                                            {subCategoryList.map(
                                                 (subCategory, i) => (
                                                     <tr key={i}>
                                                         <td className="text-center">
@@ -787,7 +792,8 @@ const SubCategory = props => {
                                                                 className="ik ik-trash-2 f-16 text-red"
                                                                 onClick={() =>
                                                                     DeleteHandler(
-                                                                        subCategory.sub_category_id
+                                                                        subCategory.sub_category_id,
+                                                                        i
                                                                     )
                                                                 }
                                                             ></i>
@@ -806,31 +812,6 @@ const SubCategory = props => {
                                                 </tr>
                                             )}
                                         </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th className="text-center">
-                                                    Sub Category Icon
-                                                </th>
-                                                <th className="text-center">
-                                                    Sub Category Name
-                                                </th>
-                                                <th className="text-center">
-                                                    Sub Category Slug
-                                                </th>
-                                                <th className="text-center">
-                                                    Menu Name
-                                                </th>
-                                                <th className="text-center">
-                                                    Category Name
-                                                </th>
-                                                <th className="text-center">
-                                                    Status
-                                                </th>
-                                                <th className="text-center">
-                                                    Action
-                                                </th>
-                                            </tr>
-                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
