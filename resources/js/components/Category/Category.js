@@ -11,14 +11,9 @@ import { toast } from "react-toastify";
 import useForms from "../customHooks/useForms";
 
 const Category = props => {
+    const [categoryList, setCategoryList] = useState([]);
     const [Menu, setMenu] = useState([]);
-    const [category_form, setCategoryForm, handleChange] = useForms({
-        menu_id: "",
-        category_name: "",
-        category_icon: ""
-    });
     const [Errors, setErrors] = useState([]);
-    const [CategoryList, setCategoryList] = useState([]);
     const [search, setSearch] = useState("");
     const [select_row, setSelectRow] = useState([8, 10, 20, 30, 40, 50]);
     const [current_row, setCurrentRaw] = useState(8);
@@ -26,17 +21,33 @@ const Category = props => {
     const [activePage, setActivePage] = useState(1);
     const [itemsCountPerPage, setItemsCountPerPage] = useState(8);
     const [totalItemsCount, setTotalItemsCount] = useState(450);
+    const [category_form, setCategoryForm, handleChange] = useForms({
+        menu_id: "",
+        category_name: "",
+        category_icon: ""
+    });
     const [EditForm, setEditForm, EditHandleChange] = useForms({
         menu_id: "",
         category_name: "",
         category_icon: ""
     });
 
-    const handlePageChange = pageNumber => {
-        setPage(pageNumber);
-    };
-    // Menu Data Get
-    const GetMenu = () => {
+    useEffect(() => {
+        getAllMenu();
+    }, []);
+
+    useEffect(() => {
+        getCategories();
+
+        return () => {
+            setCategoryList([]);
+        };
+    }, [current_row, search, page]);
+
+    /**
+     * Get all active menu.
+     */
+    const getAllMenu = () => {
         Axios.get("/all_menu_get")
             .then(response => {
                 setMenu(response.data.data);
@@ -45,11 +56,11 @@ const Category = props => {
                 console.log(error);
             });
     };
-    useEffect(() => {
-        GetMenu();
-    }, []);
-    // Category List Get
-    const GetCategoryList = () => {
+
+    /**
+     * Get all category.
+     */
+    const getCategories = () => {
         const main_url = `category?q=${search}&row=${current_row}&page=${page}`;
         Axios.get(main_url)
             .then(response => {
@@ -62,14 +73,21 @@ const Category = props => {
                 console.log(error);
             });
     };
-    useEffect(() => {
-        GetCategoryList();
-        return () => {
-            setCategoryList([]);
-        };
-    }, [current_row, search, page]);
-    // Clear From
-    const ClearFrom = () => {
+
+    /**
+     * Page change function.
+     *
+     * @param {int} pageNumber Page number pass.
+     */
+    const handlePageChange = pageNumber => {
+        setPage(pageNumber);
+    };
+
+    /**
+     * Clear form function.
+     * Clear state value.
+     */
+    const clearFrom = () => {
         setErrors([]);
         let form = category_form;
         console.log("form", form);
@@ -78,16 +96,20 @@ const Category = props => {
         });
         setCategoryForm({ ...category_form, ...form });
     };
-    // Data Submit
+
+    /**
+     * This function store category data.
+     *
+     * @param {object} e Use for with out reload data submit.
+     */
     const submitHandler = e => {
         e.preventDefault();
-        console.log(category_form);
         Axios.post("/category", category_form)
             .then(response => {
                 if (response.data.code === 201) {
                     $(".close").click();
-                    GetCategoryList();
-                    ClearFrom();
+                    getCategories();
+                    clearFrom();
                     toast.success("Category Data Inserted Successfully!");
                 }
             })
@@ -97,8 +119,14 @@ const Category = props => {
                 }
             });
     };
-    // Category Delete
-    const DeleteHandler = (id, index) => {
+
+    /**
+     * Category delete function.
+     *
+     * @param {int} id
+     * @param {int} index
+     */
+    const deleteHandler = (id, index) => {
         swal({
             title: "Are you sure?",
             text: `Once deleted, you will not be able to recover this imaginary file!`,
@@ -115,7 +143,7 @@ const Category = props => {
                                 "Category Has been Deleted",
                                 "success"
                             );
-                            let list = [...CategoryList];
+                            let list = [...categoryList];
                             list.splice(index, 1);
                             setCategoryList(list);
                         } else {
@@ -130,21 +158,35 @@ const Category = props => {
             }
         });
     };
-    //Edit Data Get
-    const EditHandler = (id, data, index) => {
-        CategoryList.category_id = id;
+
+    /**
+     * Category edit value function.
+     * Set edit value in state.
+     *
+     * @param {int} id
+     * @param {object} data
+     */
+    const editHandler = (id, data) => {
+        categoryList.category_id = id;
         let value = JSON.parse(JSON.stringify(data));
         setEditForm({ ...EditForm, ...value });
     };
-    // Category Data Update
+
+    /**
+     * This function update category data.
+     *
+     * @param {object} e
+     */
     const updateHandler = e => {
         e.preventDefault();
         Axios.put("/category/" + EditForm.category_id, EditForm)
             .then(response => {
-                $(".close").click();
-                GetCategoryList();
-                ClearFrom();
-                toast.success("Category Data Update Successfully!");
+                if (response.data.code === 201) {
+                    $(".close").click();
+                    getCategories();
+                    clearFrom();
+                    toast.success("Category Data Update Successfully!");
+                }
             })
             .catch(error => {
                 if (error.response.status == 422) {
@@ -153,7 +195,12 @@ const Category = props => {
             });
     };
 
-    const ChangeStatus = id => {
+    /**
+     * Category status change function.
+     *
+     * @param {int} id
+     */
+    const changeStatus = id => {
         Axios.get("/category/status/" + id)
             .then(response => {
                 if (response.data.code === 200) {
@@ -162,7 +209,7 @@ const Category = props => {
                 if (response.data.code === 201) {
                     toast.warning("This category is inactive successfully!");
                 }
-                GetCategoryList();
+                getCategories();
             })
             .catch(error => {
                 console.log(error);
@@ -297,7 +344,7 @@ const Category = props => {
                                     type="button"
                                     className="btn btn-secondary"
                                     data-dismiss="modal"
-                                    onClick={ClearFrom}
+                                    onClick={clearFrom}
                                 >
                                     Close
                                 </button>
@@ -437,7 +484,7 @@ const Category = props => {
                                     type="button"
                                     className="btn btn-secondary"
                                     data-dismiss="modal"
-                                    onClick={ClearFrom}
+                                    onClick={clearFrom}
                                 >
                                     Close
                                 </button>
@@ -460,7 +507,7 @@ const Category = props => {
                         className="btn btn-info table-button"
                         data-toggle="modal"
                         data-target="#add_modal"
-                        onClick={ClearFrom}
+                        onClick={clearFrom}
                     >
                         <i className="ik ik-clipboard"></i>
                         Add new
@@ -555,7 +602,7 @@ const Category = props => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {CategoryList.map(
+                                            {categoryList.map(
                                                 (category_data, i) => (
                                                     <tr key={i}>
                                                         <td className="text-center">
@@ -599,7 +646,7 @@ const Category = props => {
                                                                         : "ik ik-repeat f-16 mr-15 text-red"
                                                                 }
                                                                 onClick={() =>
-                                                                    ChangeStatus(
+                                                                    changeStatus(
                                                                         category_data.category_id
                                                                     )
                                                                 }
@@ -609,7 +656,7 @@ const Category = props => {
                                                                 data-toggle="modal"
                                                                 data-target="#edit_modal"
                                                                 onClick={() =>
-                                                                    EditHandler(
+                                                                    editHandler(
                                                                         category_data.category_id,
                                                                         category_data,
                                                                         i
@@ -619,7 +666,7 @@ const Category = props => {
                                                             <i
                                                                 className="ik ik-trash-2 f-16 text-red"
                                                                 onClick={() =>
-                                                                    DeleteHandler(
+                                                                    deleteHandler(
                                                                         category_data.category_id,
                                                                         i
                                                                     )
