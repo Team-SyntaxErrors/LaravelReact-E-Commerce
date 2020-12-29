@@ -60286,28 +60286,18 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var Category = function Category(props) {
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
-      Menu = _useState2[0],
-      setMenu = _useState2[1];
-
-  var _useForms = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_8__["default"])({
-    menu_id: "",
-    category_name: "",
-    category_icon: ""
-  }),
-      _useForms2 = _slicedToArray(_useForms, 3),
-      category_form = _useForms2[0],
-      setCategoryForm = _useForms2[1],
-      handleChange = _useForms2[2];
+      categoryList = _useState2[0],
+      setCategoryList = _useState2[1];
 
   var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState4 = _slicedToArray(_useState3, 2),
-      Errors = _useState4[0],
-      setErrors = _useState4[1];
+      Menu = _useState4[0],
+      setMenu = _useState4[1];
 
   var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState6 = _slicedToArray(_useState5, 2),
-      CategoryList = _useState6[0],
-      setCategoryList = _useState6[1];
+      Errors = _useState6[0],
+      setErrors = _useState6[1];
 
   var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(""),
       _useState8 = _slicedToArray(_useState7, 2),
@@ -60344,6 +60334,16 @@ var Category = function Category(props) {
       totalItemsCount = _useState20[0],
       setTotalItemsCount = _useState20[1];
 
+  var _useForms = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_8__["default"])({
+    menu_id: "",
+    category_name: "",
+    category_icon: ""
+  }),
+      _useForms2 = _slicedToArray(_useForms, 3),
+      category_form = _useForms2[0],
+      setCategoryForm = _useForms2[1],
+      handleChange = _useForms2[2];
+
   var _useForms3 = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_8__["default"])({
     menu_id: "",
     category_name: "",
@@ -60354,24 +60354,32 @@ var Category = function Category(props) {
       setEditForm = _useForms4[1],
       EditHandleChange = _useForms4[2];
 
-  var handlePageChange = function handlePageChange(pageNumber) {
-    setPage(pageNumber);
-  }; // Menu Data Get
+  Object(react__WEBPACK_IMPORTED_MODULE_2__["useEffect"])(function () {
+    getAllMenu();
+  }, []);
+  Object(react__WEBPACK_IMPORTED_MODULE_2__["useEffect"])(function () {
+    getCategories();
+    return function () {
+      setCategoryList([]);
+    };
+  }, [current_row, search, page]);
+  /**
+   * Get all active menu.
+   */
 
-
-  var GetMenu = function GetMenu() {
+  var getAllMenu = function getAllMenu() {
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/all_menu_get").then(function (response) {
       setMenu(response.data.data);
     })["catch"](function (error) {
       console.log(error);
     });
   };
+  /**
+   * Get all category.
+   */
 
-  Object(react__WEBPACK_IMPORTED_MODULE_2__["useEffect"])(function () {
-    GetMenu();
-  }, []); // Category List Get
 
-  var GetCategoryList = function GetCategoryList() {
+  var getCategories = function getCategories() {
     var main_url = "category?q=".concat(search, "&row=").concat(current_row, "&page=").concat(page);
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(main_url).then(function (response) {
       setCategoryList(response.data.data.data);
@@ -60382,15 +60390,23 @@ var Category = function Category(props) {
       console.log(error);
     });
   };
+  /**
+   * Page change function.
+   *
+   * @param {int} pageNumber Page number pass.
+   */
 
-  Object(react__WEBPACK_IMPORTED_MODULE_2__["useEffect"])(function () {
-    GetCategoryList();
-    return function () {
-      setCategoryList([]);
-    };
-  }, [current_row, search, page]); // Clear From
 
-  var ClearFrom = function ClearFrom() {
+  var handlePageChange = function handlePageChange(pageNumber) {
+    setPage(pageNumber);
+  };
+  /**
+   * Clear form function.
+   * Clear state value.
+   */
+
+
+  var clearFrom = function clearFrom() {
     setErrors([]);
     var form = category_form;
     console.log("form", form);
@@ -60398,17 +60414,21 @@ var Category = function Category(props) {
       form[key] = "";
     });
     setCategoryForm(_objectSpread(_objectSpread({}, category_form), form));
-  }; // Data Submit
+  };
+  /**
+   * This function store category data.
+   *
+   * @param {object} e Use for with out reload data submit.
+   */
 
 
   var submitHandler = function submitHandler(e) {
     e.preventDefault();
-    console.log(category_form);
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/category", category_form).then(function (response) {
       if (response.data.code === 201) {
         $(".close").click();
-        GetCategoryList();
-        ClearFrom();
+        getCategories();
+        clearFrom();
         react_toastify__WEBPACK_IMPORTED_MODULE_7__["toast"].success("Category Data Inserted Successfully!");
       }
     })["catch"](function (error) {
@@ -60416,10 +60436,16 @@ var Category = function Category(props) {
         setErrors(error.response.data.errors);
       }
     });
-  }; // Category Delete
+  };
+  /**
+   * Category delete function.
+   *
+   * @param {int} id
+   * @param {int} index
+   */
 
 
-  var DeleteHandler = function DeleteHandler(id, index) {
+  var deleteHandler = function deleteHandler(id, index) {
     sweetalert__WEBPACK_IMPORTED_MODULE_6___default()({
       title: "Are you sure?",
       text: "Once deleted, you will not be able to recover this imaginary file!",
@@ -60432,7 +60458,7 @@ var Category = function Category(props) {
           if (response.status === 204) {
             sweetalert__WEBPACK_IMPORTED_MODULE_6___default()("Deleted!", "Category Has been Deleted", "success");
 
-            var list = _toConsumableArray(CategoryList);
+            var list = _toConsumableArray(categoryList);
 
             list.splice(index, 1);
             setCategoryList(list);
@@ -60446,31 +60472,51 @@ var Category = function Category(props) {
         sweetalert__WEBPACK_IMPORTED_MODULE_6___default()("Your imaginary file is safe!");
       }
     });
-  }; //Edit Data Get
+  };
+  /**
+   * Category edit value function.
+   * Set edit value in state.
+   *
+   * @param {int} id
+   * @param {object} data
+   */
 
 
-  var EditHandler = function EditHandler(id, data, index) {
-    CategoryList.category_id = id;
+  var editHandler = function editHandler(id, data) {
+    categoryList.category_id = id;
     var value = JSON.parse(JSON.stringify(data));
     setEditForm(_objectSpread(_objectSpread({}, EditForm), value));
-  }; // Category Data Update
+  };
+  /**
+   * This function update category data.
+   *
+   * @param {object} e
+   */
 
 
   var updateHandler = function updateHandler(e) {
     e.preventDefault();
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.put("/category/" + EditForm.category_id, EditForm).then(function (response) {
-      $(".close").click();
-      GetCategoryList();
-      ClearFrom();
-      react_toastify__WEBPACK_IMPORTED_MODULE_7__["toast"].success("Category Data Update Successfully!");
+      if (response.data.code === 201) {
+        $(".close").click();
+        getCategories();
+        clearFrom();
+        react_toastify__WEBPACK_IMPORTED_MODULE_7__["toast"].success("Category Data Update Successfully!");
+      }
     })["catch"](function (error) {
       if (error.response.status == 422) {
         setError(error.response.data.errors);
       }
     });
   };
+  /**
+   * Category status change function.
+   *
+   * @param {int} id
+   */
 
-  var ChangeStatus = function ChangeStatus(id) {
+
+  var changeStatus = function changeStatus(id) {
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/category/status/" + id).then(function (response) {
       if (response.data.code === 200) {
         react_toastify__WEBPACK_IMPORTED_MODULE_7__["toast"].success("This category is active successfully!");
@@ -60480,7 +60526,7 @@ var Category = function Category(props) {
         react_toastify__WEBPACK_IMPORTED_MODULE_7__["toast"].warning("This category is inactive successfully!");
       }
 
-      GetCategoryList();
+      getCategories();
     })["catch"](function (error) {
       console.log(error);
     });
@@ -60588,7 +60634,7 @@ var Category = function Category(props) {
     type: "button",
     className: "btn btn-secondary",
     "data-dismiss": "modal",
-    onClick: ClearFrom
+    onClick: clearFrom
   }, "Close"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("button", {
     type: "submit",
     className: "btn btn-primary"
@@ -60689,7 +60735,7 @@ var Category = function Category(props) {
     type: "button",
     className: "btn btn-secondary",
     "data-dismiss": "modal",
-    onClick: ClearFrom
+    onClick: clearFrom
   }, "Close"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("button", {
     type: "submit",
     className: "btn btn-primary"
@@ -60701,7 +60747,7 @@ var Category = function Category(props) {
     className: "btn btn-info table-button",
     "data-toggle": "modal",
     "data-target": "#add_modal",
-    onClick: ClearFrom
+    onClick: clearFrom
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("i", {
     className: "ik ik-clipboard"
   }), "Add new")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
@@ -60768,7 +60814,7 @@ var Category = function Category(props) {
     className: "text-center"
   }, "Status"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
     className: "text-center"
-  }, "Action"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("tbody", null, CategoryList.map(function (category_data, i) {
+  }, "Action"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("tbody", null, categoryList.map(function (category_data, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("tr", {
       key: i
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("td", {
@@ -60789,19 +60835,19 @@ var Category = function Category(props) {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("i", {
       className: category_data.status == 1 ? "ik ik-repeat f-16 mr-15 text-green" : "ik ik-repeat f-16 mr-15 text-red",
       onClick: function onClick() {
-        return ChangeStatus(category_data.category_id);
+        return changeStatus(category_data.category_id);
       }
     }), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("i", {
       className: "ik ik-edit f-16 mr-15 text-blue",
       "data-toggle": "modal",
       "data-target": "#edit_modal",
       onClick: function onClick() {
-        return EditHandler(category_data.category_id, category_data, i);
+        return editHandler(category_data.category_id, category_data, i);
       }
     }), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("i", {
       className: "ik ik-trash-2 f-16 text-red",
       onClick: function onClick() {
-        return DeleteHandler(category_data.category_id, i);
+        return deleteHandler(category_data.category_id, i);
       }
     })));
   }), totalItemsCount === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("td", {
