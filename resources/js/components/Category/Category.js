@@ -5,21 +5,20 @@ import React, { Fragment, useEffect, useState } from "react";
 
 import Axios from "axios";
 import PageHeader from "./../Layouts/PageHeader/PageHeader";
-import Pagination from "react-js-pagination";
 import swal from "sweetalert";
 import { toast } from "react-toastify";
 import useForms from "../customHooks/useForms";
+import Pagination from "../helpers/pagination/CustomPagination";
 
 const Category = props => {
+    const select_row = [8, 10, 20, 30, 40, 50];
     const [categoryList, setCategoryList] = useState([]);
     const [Menu, setMenu] = useState([]);
     const [Errors, setErrors] = useState([]);
     const [search, setSearch] = useState("");
     const [current_row, setCurrentRaw] = useState(8);
     const [activePage, setActivePage] = useState(1);
-    const [itemsCountPerPage, setItemsCountPerPage] = useState(8);
     const [totalItemsCount, setTotalItemsCount] = useState(450);
-    const select_row = [8, 10, 20, 30, 40, 50];
     const [category_form, setCategoryForm, handleChange] = useForms({
         menu_id: "",
         category_name: "",
@@ -65,21 +64,11 @@ const Category = props => {
             .then(response => {
                 setCategoryList(response.data.data.data);
                 setActivePage(response.data.data.current_page);
-                setItemsCountPerPage(parseInt(response.data.data.per_page));
                 setTotalItemsCount(response.data.data.total);
             })
             .catch(error => {
                 console.log(error);
             });
-    };
-
-    /**
-     * Page change function.
-     *
-     * @param {int} pageNumber Page number pass.
-     */
-    const handlePageChange = pageNumber => {
-        getCategories(pageNumber);
     };
 
     /**
@@ -696,15 +685,9 @@ const Category = props => {
                                         ""
                                     ) : (
                                         <Pagination
-                                            innerClass="btn-group"
-                                            linkClass="btn btn-outline-secondary"
                                             activePage={activePage}
-                                            itemsCountPerPage={
-                                                itemsCountPerPage
-                                            }
-                                            totalItemsCount={totalItemsCount}
-                                            pageRangeDisplayed={3}
-                                            onChange={handlePageChange}
+                                            totalItems={totalItemsCount}
+                                            getFunction={getCategories}
                                         />
                                     )}
                                 </div>

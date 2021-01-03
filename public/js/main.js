@@ -60241,12 +60241,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _Layouts_PageHeader_PageHeader__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../Layouts/PageHeader/PageHeader */ "./resources/js/components/Layouts/PageHeader/PageHeader.js");
-/* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-js-pagination */ "./node_modules/react-js-pagination/dist/Pagination.js");
-/* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_js_pagination__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var sweetalert__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! sweetalert */ "./node_modules/sweetalert/dist/sweetalert.min.js");
-/* harmony import */ var sweetalert__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(sweetalert__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
-/* harmony import */ var _customHooks_useForms__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../customHooks/useForms */ "./resources/js/components/customHooks/useForms.js");
+/* harmony import */ var sweetalert__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! sweetalert */ "./node_modules/sweetalert/dist/sweetalert.min.js");
+/* harmony import */ var sweetalert__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(sweetalert__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
+/* harmony import */ var _customHooks_useForms__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../customHooks/useForms */ "./resources/js/components/customHooks/useForms.js");
+/* harmony import */ var _helpers_pagination_CustomPagination__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../helpers/pagination/CustomPagination */ "./resources/js/components/helpers/pagination/CustomPagination.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -60284,6 +60283,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var Category = function Category(props) {
+  var select_row = [8, 10, 20, 30, 40, 50];
+
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
       categoryList = _useState2[0],
@@ -60314,19 +60315,12 @@ var Category = function Category(props) {
       activePage = _useState12[0],
       setActivePage = _useState12[1];
 
-  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(8),
+  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(450),
       _useState14 = _slicedToArray(_useState13, 2),
-      itemsCountPerPage = _useState14[0],
-      setItemsCountPerPage = _useState14[1];
+      totalItemsCount = _useState14[0],
+      setTotalItemsCount = _useState14[1];
 
-  var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(450),
-      _useState16 = _slicedToArray(_useState15, 2),
-      totalItemsCount = _useState16[0],
-      setTotalItemsCount = _useState16[1];
-
-  var select_row = [8, 10, 20, 30, 40, 50];
-
-  var _useForms = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_8__["default"])({
+  var _useForms = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_7__["default"])({
     menu_id: "",
     category_name: "",
     category_icon: ""
@@ -60336,7 +60330,7 @@ var Category = function Category(props) {
       setCategoryForm = _useForms2[1],
       handleChange = _useForms2[2];
 
-  var _useForms3 = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_8__["default"])({
+  var _useForms3 = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_7__["default"])({
     menu_id: "",
     category_name: "",
     category_icon: ""
@@ -60377,21 +60371,10 @@ var Category = function Category(props) {
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(main_url).then(function (response) {
       setCategoryList(response.data.data.data);
       setActivePage(response.data.data.current_page);
-      setItemsCountPerPage(parseInt(response.data.data.per_page));
       setTotalItemsCount(response.data.data.total);
     })["catch"](function (error) {
       console.log(error);
     });
-  };
-  /**
-   * Page change function.
-   *
-   * @param {int} pageNumber Page number pass.
-   */
-
-
-  var handlePageChange = function handlePageChange(pageNumber) {
-    getCategories(pageNumber);
   };
   /**
    * Clear form function.
@@ -60422,7 +60405,7 @@ var Category = function Category(props) {
         $(".close").click();
         getCategories();
         clearFrom();
-        react_toastify__WEBPACK_IMPORTED_MODULE_7__["toast"].success("Category Data Inserted Successfully!");
+        react_toastify__WEBPACK_IMPORTED_MODULE_6__["toast"].success("Category Data Inserted Successfully!");
       }
     })["catch"](function (error) {
       if (error.response.status == 422) {
@@ -60439,7 +60422,7 @@ var Category = function Category(props) {
 
 
   var deleteHandler = function deleteHandler(id, index) {
-    sweetalert__WEBPACK_IMPORTED_MODULE_6___default()({
+    sweetalert__WEBPACK_IMPORTED_MODULE_5___default()({
       title: "Are you sure?",
       text: "Once deleted, you will not be able to recover this imaginary file!",
       icon: "warning",
@@ -60449,20 +60432,20 @@ var Category = function Category(props) {
       if (willDelete) {
         axios__WEBPACK_IMPORTED_MODULE_3___default.a["delete"]("/category/" + id).then(function (response) {
           if (response.status === 204) {
-            sweetalert__WEBPACK_IMPORTED_MODULE_6___default()("Deleted!", "Category Has been Deleted", "success");
+            sweetalert__WEBPACK_IMPORTED_MODULE_5___default()("Deleted!", "Category Has been Deleted", "success");
 
             var list = _toConsumableArray(categoryList);
 
             list.splice(index, 1);
             setCategoryList(list);
           } else {
-            sweetalert__WEBPACK_IMPORTED_MODULE_6___default()("Oops", "Something Went Wrong", "warning");
+            sweetalert__WEBPACK_IMPORTED_MODULE_5___default()("Oops", "Something Went Wrong", "warning");
           }
         })["catch"](function (error) {
           console.log(error);
         });
       } else {
-        sweetalert__WEBPACK_IMPORTED_MODULE_6___default()("Your imaginary file is safe!");
+        sweetalert__WEBPACK_IMPORTED_MODULE_5___default()("Your imaginary file is safe!");
       }
     });
   };
@@ -60494,7 +60477,7 @@ var Category = function Category(props) {
         $(".close").click();
         getCategories();
         clearFrom();
-        react_toastify__WEBPACK_IMPORTED_MODULE_7__["toast"].success("Category Data Update Successfully!");
+        react_toastify__WEBPACK_IMPORTED_MODULE_6__["toast"].success("Category Data Update Successfully!");
       }
     })["catch"](function (error) {
       if (error.response.status == 422) {
@@ -60512,11 +60495,11 @@ var Category = function Category(props) {
   var changeStatus = function changeStatus(id) {
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/category/status/" + id).then(function (response) {
       if (response.data.code === 200) {
-        react_toastify__WEBPACK_IMPORTED_MODULE_7__["toast"].success("This category is active successfully!");
+        react_toastify__WEBPACK_IMPORTED_MODULE_6__["toast"].success("This category is active successfully!");
       }
 
       if (response.data.code === 201) {
-        react_toastify__WEBPACK_IMPORTED_MODULE_7__["toast"].warning("This category is inactive successfully!");
+        react_toastify__WEBPACK_IMPORTED_MODULE_6__["toast"].warning("This category is inactive successfully!");
       }
 
       getCategories();
@@ -60852,14 +60835,10 @@ var Category = function Category(props) {
     className: "col-sm-12 col-md-5"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-sm-12 col-md-7"
-  }, current_row >= totalItemsCount ? "" : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_5___default.a, {
-    innerClass: "btn-group",
-    linkClass: "btn btn-outline-secondary",
+  }, current_row >= totalItemsCount ? "" : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_helpers_pagination_CustomPagination__WEBPACK_IMPORTED_MODULE_8__["default"], {
     activePage: activePage,
-    itemsCountPerPage: itemsCountPerPage,
-    totalItemsCount: totalItemsCount,
-    pageRangeDisplayed: 3,
-    onChange: handlePageChange
+    totalItems: totalItemsCount,
+    getFunction: getCategories
   }))))))));
 };
 
@@ -64726,6 +64705,42 @@ var useForms = function useForms(initialValues) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (useForms);
+
+/***/ }),
+
+/***/ "./resources/js/components/helpers/pagination/CustomPagination.js":
+/*!************************************************************************!*\
+  !*** ./resources/js/components/helpers/pagination/CustomPagination.js ***!
+  \************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-js-pagination */ "./node_modules/react-js-pagination/dist/Pagination.js");
+/* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_js_pagination__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+var CustomPagination = function CustomPagination(_ref) {
+  var activePage = _ref.activePage,
+      totalItems = _ref.totalItems,
+      getFunction = _ref.getFunction;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_1___default.a, {
+    innerClass: "btn-group",
+    linkClass: "btn btn-outline-secondary",
+    activePage: activePage,
+    totalItemsCount: totalItems,
+    pageRangeDisplayed: 3,
+    onChange: getFunction,
+    hideFirstLastPages: true // hideDisabled={true}
+
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (CustomPagination);
 
 /***/ }),
 
