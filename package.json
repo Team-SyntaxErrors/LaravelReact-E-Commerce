@@ -35,6 +35,7 @@
         "react-slug": "^0.1.2",
         "react-slugify": "^2.0.2",
         "react-toastify": "^6.1.0",
+        "simple-react-validator": "^1.6.0",
         "sweetalert": "^2.1.2"
     }
 }
