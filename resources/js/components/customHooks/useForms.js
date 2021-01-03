@@ -2,6 +2,13 @@ import { useState } from "react";
 
 const useForms = initialValues => {
     const [values, setValues] = useState(initialValues);
+
+    /**
+     * Form state set function.
+     *
+     * @param   {object} e Event.
+     * @returns {void}.
+     */
     const SetInputValues = e => {
         if (e.target.files) {
             let files = e.target.files[0];
@@ -15,6 +22,7 @@ const useForms = initialValues => {
             setValues({ ...values, [e.target.name]: e.target.value });
         }
     };
+
     return [values, setValues, SetInputValues];
 };
 

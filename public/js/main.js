@@ -60304,35 +60304,27 @@ var Category = function Category(props) {
       search = _useState8[0],
       setSearch = _useState8[1];
 
-  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([8, 10, 20, 30, 40, 50]),
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(8),
       _useState10 = _slicedToArray(_useState9, 2),
-      select_row = _useState10[0],
-      setSelectRow = _useState10[1];
+      current_row = _useState10[0],
+      setCurrentRaw = _useState10[1];
 
-  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(8),
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(1),
       _useState12 = _slicedToArray(_useState11, 2),
-      current_row = _useState12[0],
-      setCurrentRaw = _useState12[1];
+      activePage = _useState12[0],
+      setActivePage = _useState12[1];
 
-  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(1),
+  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(8),
       _useState14 = _slicedToArray(_useState13, 2),
-      page = _useState14[0],
-      setPage = _useState14[1];
+      itemsCountPerPage = _useState14[0],
+      setItemsCountPerPage = _useState14[1];
 
-  var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(1),
+  var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(450),
       _useState16 = _slicedToArray(_useState15, 2),
-      activePage = _useState16[0],
-      setActivePage = _useState16[1];
+      totalItemsCount = _useState16[0],
+      setTotalItemsCount = _useState16[1];
 
-  var _useState17 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(8),
-      _useState18 = _slicedToArray(_useState17, 2),
-      itemsCountPerPage = _useState18[0],
-      setItemsCountPerPage = _useState18[1];
-
-  var _useState19 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(450),
-      _useState20 = _slicedToArray(_useState19, 2),
-      totalItemsCount = _useState20[0],
-      setTotalItemsCount = _useState20[1];
+  var select_row = [8, 10, 20, 30, 40, 50];
 
   var _useForms = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_8__["default"])({
     menu_id: "",
@@ -60362,7 +60354,7 @@ var Category = function Category(props) {
     return function () {
       setCategoryList([]);
     };
-  }, [current_row, search, page]);
+  }, [current_row, search]);
   /**
    * Get all active menu.
    */
@@ -60380,6 +60372,7 @@ var Category = function Category(props) {
 
 
   var getCategories = function getCategories() {
+    var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
     var main_url = "category?q=".concat(search, "&row=").concat(current_row, "&page=").concat(page);
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(main_url).then(function (response) {
       setCategoryList(response.data.data.data);
@@ -60398,7 +60391,7 @@ var Category = function Category(props) {
 
 
   var handlePageChange = function handlePageChange(pageNumber) {
-    setPage(pageNumber);
+    getCategories(pageNumber);
   };
   /**
    * Clear form function.
@@ -64705,6 +64698,13 @@ var useForms = function useForms(initialValues) {
       _useState2 = _slicedToArray(_useState, 2),
       values = _useState2[0],
       setValues = _useState2[1];
+  /**
+   * Form state set function.
+   *
+   * @param   {object} e Event.
+   * @returns {void}.
+   */
+
 
   var SetInputValues = function SetInputValues(e) {
     if (e.target.files) {
@@ -64779,8 +64779,8 @@ __webpack_require__(/*! ./index */ "./resources/js/index.js");
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/ridoy/Documents/My Project/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
-module.exports = __webpack_require__(/*! /home/ridoy/Documents/My Project/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
+__webpack_require__(/*! /home/professor/Documents/Laravel/Laravel + React_js/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /home/professor/Documents/Laravel/Laravel + React_js/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
 
 
 /***/ })

@@ -15,12 +15,11 @@ const Category = props => {
     const [Menu, setMenu] = useState([]);
     const [Errors, setErrors] = useState([]);
     const [search, setSearch] = useState("");
-    const [select_row, setSelectRow] = useState([8, 10, 20, 30, 40, 50]);
     const [current_row, setCurrentRaw] = useState(8);
-    const [page, setPage] = useState(1);
     const [activePage, setActivePage] = useState(1);
     const [itemsCountPerPage, setItemsCountPerPage] = useState(8);
     const [totalItemsCount, setTotalItemsCount] = useState(450);
+    const select_row = [8, 10, 20, 30, 40, 50];
     const [category_form, setCategoryForm, handleChange] = useForms({
         menu_id: "",
         category_name: "",
@@ -42,7 +41,7 @@ const Category = props => {
         return () => {
             setCategoryList([]);
         };
-    }, [current_row, search, page]);
+    }, [current_row, search]);
 
     /**
      * Get all active menu.
@@ -60,7 +59,7 @@ const Category = props => {
     /**
      * Get all category.
      */
-    const getCategories = () => {
+    const getCategories = (page = 1) => {
         const main_url = `category?q=${search}&row=${current_row}&page=${page}`;
         Axios.get(main_url)
             .then(response => {
@@ -80,7 +79,7 @@ const Category = props => {
      * @param {int} pageNumber Page number pass.
      */
     const handlePageChange = pageNumber => {
-        setPage(pageNumber);
+        getCategories(pageNumber);
     };
 
     /**
