@@ -13,7 +13,7 @@ import useForms from "../customHooks/useForms";
 const Brand = props => {
     const [Brand, setBrand] = useState([]);
 
-    const [brand_form, handleChange] = useForms({
+    const [brand_form, setBrandFrom, handleChange] = useForms({
         brand_name: "",
         contact_person: "",
         phone_number: "",
@@ -30,7 +30,7 @@ const Brand = props => {
     const [activePage, setActivePage] = useState(1);
     const [itemsCountPerPage, setItemsCountPerPage] = useState(8);
     const [totalItemsCount, setTotalItemsCount] = useState(450);
-    const [EditForm, EditHandleChange, setEditForm] = useForms({
+    const [EditForm, setEditForm, EditHandleChange] = useForms({
         brand_name: "",
         contact_person: "",
         phone_number: "",
