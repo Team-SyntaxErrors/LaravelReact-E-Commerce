@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Product;
 use App\ProductTag;
 use Illuminate\Http\Request;
@@ -25,7 +26,11 @@ class ProductController extends Controller
             ->with('units')
             ->Search($request->q)
             ->paginate($request->row);
-        return $this->successResponse($product, "Product Get Successfully", Response::HTTP_OK);
+        return $this->successResponse(
+            $product,
+            "Product Get Successfully",
+            Response::HTTP_OK
+        );
     }
 
     /**
@@ -41,13 +46,13 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request Getting validated form data.
+     * @param  ProductRequest $request Getting validated form data.
+     * @param  Product        $product Dependency injection of product model.
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request, Product $product)
     {
         try {
-            $product   = new Product();
             $requested = $request->all();
 
             //if there is any tag founded 1 will be stored in product_has_tag field
@@ -71,9 +76,16 @@ class ProductController extends Controller
                 ProductTag::insert($data);
             }
 
-            return $this->successResponse($product, "Product Saved Successfully", Response::HTTP_CREATED);
+            return $this->successResponse(
+                $product,
+                "Product Saved Successfully",
+                Response::HTTP_CREATED
+            );
         } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+            return $this->errorResponse(
+                $e->getMessage(),
+                Response::HTTP_BAD_REQUEST
+            );
         }
     }
 
