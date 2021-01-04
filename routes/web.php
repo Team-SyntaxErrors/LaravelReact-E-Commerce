@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/brands', 'BrandController');
 
     Route::get('/brands/status/{id}', 'BrandController@status');
-    Route::get("/product_slug_check", "ProductSlugCheckApiController");
+    Route::get("/product_slug_check/{slug}", "ProductSlugCheckApiController");
     Route::get('/home', 'HomeController@index')->name('home');
     Route::resource('/products', 'ProductController');
     Route::get('/products/status/{id}', 'ProductController@status');

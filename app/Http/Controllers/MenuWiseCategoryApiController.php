@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Category;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class MenuWiseCategoryApiController extends Controller
@@ -18,9 +17,16 @@ class MenuWiseCategoryApiController extends Controller
     {
         try {
             $category = Category::where('menu_id', $id)->get();
-            return $this->successResponse($category, 'menu wise category fetched successfully', Response::HTTP_OK);
+            return $this->successResponse(
+                $category,
+                'menu wise category fetched successfully',
+                Response::HTTP_OK
+            );
         } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+            return $this->errorResponse(
+                $e->getMessage(),
+                Response::HTTP_BAD_REQUEST
+            );
         }
     }
 }

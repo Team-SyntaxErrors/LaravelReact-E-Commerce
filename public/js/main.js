@@ -51647,78 +51647,6 @@ function pathToRegexp (path, keys, options) {
 
 /***/ }),
 
-/***/ "./node_modules/react-slugify/dist/slugify.js":
-/*!****************************************************!*\
-  !*** ./node_modules/react-slugify/dist/slugify.js ***!
-  \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-exports.__esModule = true;
-var stripAccents = function (str) {
-    var accents = 'ÀÁÂÃÄÅĄàáâãäåąÒÓÔÕÕÖØòóôõöøÈÉÊËĘèéêëðęÇĆçćÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠŚšśŸÿýŽŹŻžźżŁłŃń';
-    var fixes = 'AAAAAAAaaaaaaaOOOOOOOooooooEEEEEeeeeeeCCccDIIIIiiiiUUUUuuuuNnSSssYyyZZZzzzLlNn';
-    var split = accents.split('').join('|');
-    var reg = new RegExp("(" + split + ")", 'g');
-    function replacement(a) {
-        return fixes[accents.indexOf(a)] || '';
-    }
-    return str.replace(reg, replacement);
-};
-var harmonize = function (text, delimiter, ignoreInvalid) {
-    if (ignoreInvalid === void 0) { ignoreInvalid = false; }
-    var harmonized = stripAccents(text).trim().toLowerCase();
-    if (ignoreInvalid) {
-        return harmonized.replace(/\s+/g, delimiter);
-    }
-    return harmonized.replace(new RegExp("[^a-z0-9" + delimiter + "]+", 'g'), delimiter);
-};
-var slugify = function (node, options) {
-    if (options === void 0) { options = { delimiter: '-', prefix: '' }; }
-    if (!options.delimiter)
-        options.delimiter = '-';
-    if (!options.prefix)
-        options.prefix = '';
-    if (!node || typeof node === 'boolean') {
-        return '';
-    }
-    var delimiter = options.delimiter, prefix = options.prefix;
-    // string, number
-    if (typeof node === 'string' || typeof node === 'number') {
-        var harmonizedPrefix = harmonize(prefix, delimiter, true);
-        var harmonizedNode = harmonize(String(node), delimiter);
-        if (harmonizedPrefix) {
-            return "" + harmonizedPrefix + delimiter + harmonizedNode;
-        }
-        return harmonizedNode;
-    }
-    // empty object
-    if (typeof node === 'object' && Object.keys(node).length === 0) {
-        return '';
-    }
-    // We did the check about empty object before
-    // const castedNode = node as React.ReactElement<any> | React.ReactNodeArray | React.ReactPortal;
-    // ReactPortal
-    if ('children' in node) {
-        return slugify(node.children);
-    }
-    // ReactNodeArray
-    if (node instanceof Array) {
-        return slugify(node.map(function (n) { return slugify(n, { delimiter: delimiter }); }).join(delimiter), options);
-    }
-    // ReactElement
-    if ('type' in node)
-        return slugify(node.props.children, options);
-    // unhandled case
-    return '';
-};
-exports["default"] = slugify;
-//# sourceMappingURL=slugify.js.map
-
-/***/ }),
-
 /***/ "./node_modules/react-toastify/dist/ReactToastify.css":
 /*!************************************************************!*\
   !*** ./node_modules/react-toastify/dist/ReactToastify.css ***!
@@ -62803,9 +62731,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pathofdev_react_tag_input__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @pathofdev/react-tag-input */ "./node_modules/@pathofdev/react-tag-input/build/module/index.js");
 /* harmony import */ var simple_react_validator__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! simple-react-validator */ "./node_modules/simple-react-validator/dist/simple-react-validator.min.js");
 /* harmony import */ var simple_react_validator__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(simple_react_validator__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var react_slugify__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-slugify */ "./node_modules/react-slugify/dist/slugify.js");
-/* harmony import */ var react_slugify__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_slugify__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -62823,7 +62749,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
 
 
 
@@ -62891,18 +62816,32 @@ var AddProduct = function AddProduct(props) {
 
   var handleChange = function handleChange(event) {
     setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, event.target.name, event.target.value)));
-    simpleValidator.current.showMessageFor(event.target.name);
   };
 
-  var Slugger = function Slugger(event) {
-    var slug = event.target.value;
-    slug = react_slugify__WEBPACK_IMPORTED_MODULE_10___default()(slug);
-    axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/product_slug_check/?slug=" + slug).then(function (response) {
-      if (response.status == 201) {
-        setSlugWarning("");
+  var slugger = function slugger(event) {
+    var name = event.target.value;
+    var slug = "";
+    setSlugWarning(""); // Change to lower case
+
+    var nameLower = name.toLowerCase(); // Letter "e"
+
+    slug = nameLower.replace(/e|é|è|ẽ|ẻ|ẹ|ê|ế|ề|ễ|ể|ệ/gi, "e"); // Letter "a"
+
+    slug = slug.replace(/a|á|à|ã|ả|ạ|ă|ắ|ằ|ẵ|ẳ|ặ|â|ấ|ầ|ẫ|ẩ|ậ/gi, "a"); // Letter "o"
+
+    slug = slug.replace(/o|ó|ò|õ|ỏ|ọ|ô|ố|ồ|ỗ|ổ|ộ|ơ|ớ|ờ|ỡ|ở|ợ/gi, "o"); // Letter "u"
+
+    slug = slug.replace(/u|ú|ù|ũ|ủ|ụ|ư|ứ|ừ|ữ|ử|ự/gi, "u"); // Letter "d"
+
+    slug = slug.replace(/đ/gi, "d"); // Trim the last whitespace
+
+    slug = slug.replace(/\s*$/g, ""); // Change whitespace to "-"
+
+    slug = slug.replace(/\s+/g, "-");
+    slug = slug.replace("'", "");
+    axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/product_slug_check/" + slug).then(function (response) {
+      if (response.status === 204) {
         setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "product_slug", slug)));
-      } else if (response.status == 200) {
-        setSlugWarning("This slug is recorded already");
       } else {
         setSlugWarning("This slug is recorded already");
       }
@@ -62912,13 +62851,11 @@ var AddProduct = function AddProduct(props) {
   };
 
   var setTags = function setTags(newTags) {
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "tags", newTags)));
-    simpleValidator.current.showMessageFor("tags");
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "tags", newTags))); // simpleValidator.current.showMessageFor("tags");
   };
 
   var setDescription = function setDescription(description) {
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "description", description)));
-    simpleValidator.current.showMessageFor("description");
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "description", description))); // simpleValidator.current.showMessageFor("description");
   };
 
   var GetCategory = function GetCategory() {
@@ -62980,6 +62917,7 @@ var AddProduct = function AddProduct(props) {
   }, []);
 
   var ClearFrom = function ClearFrom() {
+    setError([]);
     var form = product;
     Object.keys(form).forEach(function (key) {
       form[key] = "";
@@ -62990,17 +62928,24 @@ var AddProduct = function AddProduct(props) {
 
   var submitHandler = function submitHandler(event) {
     event.preventDefault();
-    axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/products", product).then(function (response) {
-      if (response.data.code === 201) {
-        react_toastify__WEBPACK_IMPORTED_MODULE_11__["toast"].success("Product Data Inserted Successfully!");
-        ClearFrom();
-        simpleValidator.current.purgeFields();
-      }
-    })["catch"](function (error) {
-      if (error.response) {
-        setError(error.response.data.errors);
-      }
-    });
+    console.log(simpleValidator.current);
+
+    if (simpleValidator.current.allValid()) {
+      axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/products", product).then(function (response) {
+        if (response.data.code === 201) {
+          react_toastify__WEBPACK_IMPORTED_MODULE_10__["toast"].success("Product Data Inserted Successfully!");
+          ClearFrom();
+        }
+      })["catch"](function (error) {
+        if (error.response) {
+          setError(error.response.data.errors);
+        }
+      });
+    } else {
+      setError(simpleValidator.current.errorMessages); // simpleValidator.current.showMessages();
+      // console.log(simpleValidator.current);
+      // simpleValidator.current.forceUpdate();
+    }
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_2__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_Layouts_PageHeader_PageHeader__WEBPACK_IMPORTED_MODULE_7__["default"], {
@@ -63041,10 +62986,10 @@ var AddProduct = function AddProduct(props) {
     className: "form-control",
     placeholder: "Enter Product Name",
     onChange: handleChange,
-    onKeyUp: Slugger
-  }), simpleValidator.current.message("product_name", product.product_name, "required", {
+    onKeyUp: slugger
+  }), simpleValidator.current.message("product_name", product.product_name, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.product_name)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
@@ -63078,9 +63023,9 @@ var AddProduct = function AddProduct(props) {
     onChange: function onChange(e) {
       return handleChange(e);
     }
-  }), simpleValidator.current.message("product_sku", product.product_sku, "required", {
+  }), simpleValidator.current.message("product_sku", product.product_sku, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.product_sku))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
@@ -63099,16 +63044,15 @@ var AddProduct = function AddProduct(props) {
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     defaultValue: true,
-    selected: true,
     hidden: true
   }, "--Select Category--"), Category.map(function (category, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: category.category_id,
       value: category.category_id
     }, category.category_name);
-  })), simpleValidator.current.message("category_id", product.category_id, "required", {
+  })), simpleValidator.current.message("category_id", product.category_id, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.category_id)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
@@ -63125,16 +63069,15 @@ var AddProduct = function AddProduct(props) {
     value: product.subcategory_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     defaultValue: true,
-    selected: true,
     hidden: true
   }, "--Select Sub Category--"), SubCategory.map(function (sub, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: i,
       value: sub.sub_category_id
     }, sub.sub_category_name);
-  })), simpleValidator.current.message("subcategory_id", product.subcategory_id, "required", {
+  })), simpleValidator.current.message("subcategory_id", product.subcategory_id, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.subcategory_id)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
@@ -63150,15 +63093,16 @@ var AddProduct = function AddProduct(props) {
     },
     value: product.brand_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
-    defaultValue: true
+    defaultValue: true,
+    hidden: true
   }, "--Select Brand--"), Brand.map(function (brand, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: i,
       value: brand.brand_id
     }, brand.brand_name);
-  })), simpleValidator.current.message("brand_id", product.brand_id, "required", {
+  })), simpleValidator.current.message("brand_id", product.brand_id, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.brand_id))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
@@ -63177,9 +63121,9 @@ var AddProduct = function AddProduct(props) {
     onChange: function onChange(e) {
       return handleChange(e);
     }
-  }), simpleValidator.current.message("purchase_price", product.purchase_price, "required", {
+  }), simpleValidator.current.message("purchase_price", product.purchase_price, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.purchase_price)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
@@ -63196,9 +63140,9 @@ var AddProduct = function AddProduct(props) {
       return handleChange(e);
     },
     placeholder: "Enter Product Sell Price"
-  }), simpleValidator.current.message("sell_price", product.sell_price, "required", {
+  }), simpleValidator.current.message("sell_price", product.sell_price, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.sell_price)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
@@ -63214,15 +63158,16 @@ var AddProduct = function AddProduct(props) {
     name: "unit_id",
     value: product.unit_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
-    defaultValue: true
+    defaultValue: true,
+    hidden: true
   }, "--Select Unit--"), Unit.map(function (unit, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: i,
       value: unit.unit_id
     }, unit.unit_name);
-  })), simpleValidator.current.message("unit_id", product.unit_id, "required", {
+  })), simpleValidator.current.message("unit_id", product.unit_id, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.unit_id))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
@@ -63241,9 +63186,9 @@ var AddProduct = function AddProduct(props) {
     },
     value: product.product_alert_qty,
     placeholder: "Enter Product Alert Quantity"
-  }), simpleValidator.current.message("product_alert_qty", product.product_alert_qty, "required", {
+  }), simpleValidator.current.message("product_alert_qty", product.product_alert_qty, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.product_alert_qty)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
@@ -63257,9 +63202,9 @@ var AddProduct = function AddProduct(props) {
       return setTags(newTags);
     },
     placeholder: "Product Tags"
-  }), simpleValidator.current.message("tags", product.tags, "required", {
+  }), simpleValidator.current.message("tags", product.tags, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.tags)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
@@ -63274,13 +63219,16 @@ var AddProduct = function AddProduct(props) {
     },
     className: "form-control",
     value: product.status
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", null, "--Select Status--"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
+    defaultValue: true,
+    hidden: true
+  }, "--Select Status--"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     value: "1"
   }, "Active"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     value: "0"
-  }, "Inactive")), simpleValidator.current.message("status", product.status, "required", {
+  }, "Inactive")), simpleValidator.current.message("status", product.status, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.status))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-12"
@@ -63298,9 +63246,9 @@ var AddProduct = function AddProduct(props) {
       setDescription(data);
     },
     data: product.description
-  }), simpleValidator.current.message("description", product.description, "required", {
+  }), simpleValidator.current.message("description", product.description, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.description)))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "card-footer"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("button", {
     className: "btn btn-default"
