@@ -62724,7 +62724,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pathofdev_react_tag_input__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @pathofdev/react-tag-input */ "./node_modules/@pathofdev/react-tag-input/build/module/index.js");
 /* harmony import */ var simple_react_validator__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! simple-react-validator */ "./node_modules/simple-react-validator/dist/simple-react-validator.min.js");
 /* harmony import */ var simple_react_validator__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(simple_react_validator__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
+/* harmony import */ var _helpers_slugger_Slugger__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./../helpers/slugger/Slugger */ "./resources/js/components/helpers/slugger/Slugger.js");
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -62742,6 +62743,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -62840,25 +62842,8 @@ var AddProduct = function AddProduct(props) {
       return;
     }
 
-    var slug = "";
-    setSlugWarning(""); // Change to lower case
-
-    var nameLower = name.toLowerCase(); // Letter "e"
-
-    slug = nameLower.replace(/e|é|è|ẽ|ẻ|ẹ|ê|ế|ề|ễ|ể|ệ/gi, "e"); // Letter "a"
-
-    slug = slug.replace(/a|á|à|ã|ả|ạ|ă|ắ|ằ|ẵ|ẳ|ặ|â|ấ|ầ|ẫ|ẩ|ậ/gi, "a"); // Letter "o"
-
-    slug = slug.replace(/o|ó|ò|õ|ỏ|ọ|ô|ố|ồ|ỗ|ổ|ộ|ơ|ớ|ờ|ỡ|ở|ợ/gi, "o"); // Letter "u"
-
-    slug = slug.replace(/u|ú|ù|ũ|ủ|ụ|ư|ứ|ừ|ữ|ử|ự/gi, "u"); // Letter "d"
-
-    slug = slug.replace(/đ/gi, "d"); // Trim the last whitespace
-
-    slug = slug.replace(/\s*$/g, ""); // Change whitespace to "-"
-
-    slug = slug.replace(/\s+/g, "-");
-    slug = slug.replace("'", ""); // Check slug availability from database
+    setSlugWarning("");
+    var slug = Object(_helpers_slugger_Slugger__WEBPACK_IMPORTED_MODULE_10__["default"])(name); // Check slug availability from database
 
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/product_slug_check/" + slug).then(function (response) {
       if (response.status == 204) {
@@ -62979,7 +62964,7 @@ var AddProduct = function AddProduct(props) {
     if (simpleValidator.current.allValid()) {
       axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/products", product).then(function (response) {
         if (response.data.code === 201) {
-          react_toastify__WEBPACK_IMPORTED_MODULE_10__["toast"].success("Product Data Inserted Successfully!");
+          react_toastify__WEBPACK_IMPORTED_MODULE_11__["toast"].success("Product Data Inserted Successfully!");
           clearFrom();
         }
       })["catch"](function (error) {
@@ -64771,6 +64756,41 @@ var CustomPagination = function CustomPagination(_ref) {
 
 
 /* harmony default export */ __webpack_exports__["default"] = (CustomPagination);
+
+/***/ }),
+
+/***/ "./resources/js/components/helpers/slugger/Slugger.js":
+/*!************************************************************!*\
+  !*** ./resources/js/components/helpers/slugger/Slugger.js ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var Slugger = function Slugger(name) {
+  var slug = ""; // Change to lower case
+
+  var nameLower = name.toLowerCase(); // Letter "e"
+
+  slug = nameLower.replace(/e|é|è|ẽ|ẻ|ẹ|ê|ế|ề|ễ|ể|ệ/gi, "e"); // Letter "a"
+
+  slug = slug.replace(/a|á|à|ã|ả|ạ|ă|ắ|ằ|ẵ|ẳ|ặ|â|ấ|ầ|ẫ|ẩ|ậ/gi, "a"); // Letter "o"
+
+  slug = slug.replace(/o|ó|ò|õ|ỏ|ọ|ô|ố|ồ|ỗ|ổ|ộ|ơ|ớ|ờ|ỡ|ở|ợ/gi, "o"); // Letter "u"
+
+  slug = slug.replace(/u|ú|ù|ũ|ủ|ụ|ư|ứ|ừ|ữ|ử|ự/gi, "u"); // Letter "d"
+
+  slug = slug.replace(/đ/gi, "d"); // Trim the last whitespace
+
+  slug = slug.replace(/\s*$/g, ""); // Change whitespace to "-"
+
+  slug = slug.replace(/\s+/g, "-");
+  slug = slug.replace("'", "");
+  return slug;
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Slugger);
 
 /***/ }),
 
