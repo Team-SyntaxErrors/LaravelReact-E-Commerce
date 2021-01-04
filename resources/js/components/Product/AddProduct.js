@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 import PageHeader from "./../Layouts/PageHeader/PageHeader";
 import ReactTagInput from "@pathofdev/react-tag-input";
 import SimpleReactValidator from "simple-react-validator";
-import slugify from "react-slugify";
 import { toast } from "react-toastify";
 
 const AddProduct = props => {

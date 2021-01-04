@@ -51647,78 +51647,6 @@ function pathToRegexp (path, keys, options) {
 
 /***/ }),
 
-/***/ "./node_modules/react-slugify/dist/slugify.js":
-/*!****************************************************!*\
-  !*** ./node_modules/react-slugify/dist/slugify.js ***!
-  \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-exports.__esModule = true;
-var stripAccents = function (str) {
-    var accents = 'ÀÁÂÃÄÅĄàáâãäåąÒÓÔÕÕÖØòóôõöøÈÉÊËĘèéêëðęÇĆçćÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠŚšśŸÿýŽŹŻžźżŁłŃń';
-    var fixes = 'AAAAAAAaaaaaaaOOOOOOOooooooEEEEEeeeeeeCCccDIIIIiiiiUUUUuuuuNnSSssYyyZZZzzzLlNn';
-    var split = accents.split('').join('|');
-    var reg = new RegExp("(" + split + ")", 'g');
-    function replacement(a) {
-        return fixes[accents.indexOf(a)] || '';
-    }
-    return str.replace(reg, replacement);
-};
-var harmonize = function (text, delimiter, ignoreInvalid) {
-    if (ignoreInvalid === void 0) { ignoreInvalid = false; }
-    var harmonized = stripAccents(text).trim().toLowerCase();
-    if (ignoreInvalid) {
-        return harmonized.replace(/\s+/g, delimiter);
-    }
-    return harmonized.replace(new RegExp("[^a-z0-9" + delimiter + "]+", 'g'), delimiter);
-};
-var slugify = function (node, options) {
-    if (options === void 0) { options = { delimiter: '-', prefix: '' }; }
-    if (!options.delimiter)
-        options.delimiter = '-';
-    if (!options.prefix)
-        options.prefix = '';
-    if (!node || typeof node === 'boolean') {
-        return '';
-    }
-    var delimiter = options.delimiter, prefix = options.prefix;
-    // string, number
-    if (typeof node === 'string' || typeof node === 'number') {
-        var harmonizedPrefix = harmonize(prefix, delimiter, true);
-        var harmonizedNode = harmonize(String(node), delimiter);
-        if (harmonizedPrefix) {
-            return "" + harmonizedPrefix + delimiter + harmonizedNode;
-        }
-        return harmonizedNode;
-    }
-    // empty object
-    if (typeof node === 'object' && Object.keys(node).length === 0) {
-        return '';
-    }
-    // We did the check about empty object before
-    // const castedNode = node as React.ReactElement<any> | React.ReactNodeArray | React.ReactPortal;
-    // ReactPortal
-    if ('children' in node) {
-        return slugify(node.children);
-    }
-    // ReactNodeArray
-    if (node instanceof Array) {
-        return slugify(node.map(function (n) { return slugify(n, { delimiter: delimiter }); }).join(delimiter), options);
-    }
-    // ReactElement
-    if ('type' in node)
-        return slugify(node.props.children, options);
-    // unhandled case
-    return '';
-};
-exports["default"] = slugify;
-//# sourceMappingURL=slugify.js.map
-
-/***/ }),
-
 /***/ "./node_modules/react-toastify/dist/ReactToastify.css":
 /*!************************************************************!*\
   !*** ./node_modules/react-toastify/dist/ReactToastify.css ***!
@@ -62787,9 +62715,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pathofdev_react_tag_input__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @pathofdev/react-tag-input */ "./node_modules/@pathofdev/react-tag-input/build/module/index.js");
 /* harmony import */ var simple_react_validator__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! simple-react-validator */ "./node_modules/simple-react-validator/dist/simple-react-validator.min.js");
 /* harmony import */ var simple_react_validator__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(simple_react_validator__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var react_slugify__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-slugify */ "./node_modules/react-slugify/dist/slugify.js");
-/* harmony import */ var react_slugify__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_slugify__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -62807,7 +62733,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
 
 
 
@@ -62992,7 +62917,7 @@ var AddProduct = function AddProduct(props) {
     if (simpleValidator.current.allValid()) {
       axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/products", product).then(function (response) {
         if (response.data.code === 201) {
-          react_toastify__WEBPACK_IMPORTED_MODULE_11__["toast"].success("Product Data Inserted Successfully!");
+          react_toastify__WEBPACK_IMPORTED_MODULE_10__["toast"].success("Product Data Inserted Successfully!");
           ClearFrom();
         }
       })["catch"](function (error) {
