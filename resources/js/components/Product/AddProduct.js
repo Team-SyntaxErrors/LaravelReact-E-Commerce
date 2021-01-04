@@ -13,11 +13,11 @@ import SimpleReactValidator from "simple-react-validator";
 import { toast } from "react-toastify";
 
 const AddProduct = props => {
-    const [Category, setCategory] = useState([]);
-    const [SubCategory, setSubCategory] = useState([]);
-    const [Brand, setBrand] = useState([]);
-    const [Unit, setUnit] = useState([]);
-    const [SlugWarning, setSlugWarning] = useState("");
+    const [category, setCategory] = useState([]);
+    const [subCategory, setSubCategory] = useState([]);
+    const [brand, setBrand] = useState([]);
+    const [unit, setUnit] = useState([]);
+    const [slugWarning, setSlugWarning] = useState("");
     const [error, setError] = useState([]);
     const simpleValidator = useRef(new SimpleReactValidator());
     const [product, setProduct] = useState({
@@ -36,12 +36,36 @@ const AddProduct = props => {
         description: ""
     });
 
+    useEffect(() => {
+        getCategory();
+        getBrand();
+        getUnit();
+    }, []);
+
+    /**
+     * Handles the change of fields
+     * to assign field value inside object
+     *
+     * @param  {object} event
+     * @return {void}
+     */
     const handleChange = event => {
         setProduct({ ...product, [event.target.name]: event.target.value });
     };
 
+    /**
+     * It's slugify the product name using regex
+     * And check if the slug already recorded
+     *
+     * @param  {object} event
+     * @return {void}
+     */
     const slugger = event => {
         let name = event.target.value;
+        if (name == "") {
+            setSlugWarning("Name field is empty");
+            return;
+        }
         let slug = "";
         setSlugWarning("");
         // Change to lower case
@@ -62,9 +86,10 @@ const AddProduct = props => {
         slug = slug.replace(/\s+/g, "-");
         slug = slug.replace("'", "");
 
+        // Check slug availability from database
         Axios.get("/product_slug_check/" + slug)
             .then(response => {
-                if (response.status === 204) {
+                if (response.status == 204) {
                     setProduct({ ...product, ["product_slug"]: slug });
                 } else {
                     setSlugWarning("This slug is recorded already");
@@ -75,17 +100,34 @@ const AddProduct = props => {
             });
     };
 
+    /**
+     * Assigning product tags as an array to product object
+     *
+     * @param  {array} newTags
+     * @return {void}
+     */
     const setTags = newTags => {
         setProduct({ ...product, ["tags"]: newTags });
         // simpleValidator.current.showMessageFor("tags");
     };
 
+    /**
+     * Assigning product description to product object
+     *
+     * @param  {string} description
+     * @return {void}
+     */
     const setDescription = description => {
         setProduct({ ...product, ["description"]: description });
         // simpleValidator.current.showMessageFor("description");
     };
 
-    const GetCategory = () => {
+    /**
+     * Getting the active category list
+     *
+     * @return {void}
+     */
+    const getCategory = () => {
         Axios.get("/all_categories")
             .then(response => {
                 setCategory(response.data.data);
@@ -94,24 +136,14 @@ const AddProduct = props => {
                 console.log(error);
             });
     };
-    useEffect(() => {
-        GetCategory();
-    }, []);
-
-    /**
-     *
-     * @param {object} event
-     */
-    const CategoryChange = event => {
-        GetSubCategory(event.target.value);
-    };
 
     /**
      * Get category wise sub category.
      *
      * @param {int} category_id
      */
-    const GetSubCategory = category_id => {
+    const getSubCategory = event => {
+        let category_id = event.target.value;
         Axios.get("/subcategory_get/" + category_id)
             .then(response => {
                 setSubCategory(response.data.data);
@@ -121,7 +153,12 @@ const AddProduct = props => {
             });
     };
 
-    const GetBrand = () => {
+    /**
+     * Getting the active brand list
+     *
+     * @return {void}
+     */
+    const getBrand = () => {
         Axios.get("/all_brand_get")
             .then(response => {
                 setBrand(response.data.data);
@@ -130,11 +167,13 @@ const AddProduct = props => {
                 console.log(error);
             });
     };
-    useEffect(() => {
-        GetBrand();
-    }, []);
 
-    const GetUnit = () => {
+    /**
+     * Getting the active unit list
+     *
+     * @return {void}
+     */
+    const getUnit = () => {
         Axios.get("/all_unit_get")
             .then(response => {
                 setUnit(response.data.data);
@@ -143,11 +182,13 @@ const AddProduct = props => {
                 console.log(error);
             });
     };
-    useEffect(() => {
-        GetUnit();
-    }, []);
 
-    const ClearFrom = () => {
+    /**
+     * Clear form data
+     *
+     * @return {void}
+     */
+    const clearFrom = () => {
         setError([]);
         let form = product;
         Object.keys(form).forEach(function(key) {
@@ -157,6 +198,11 @@ const AddProduct = props => {
         setProduct({ ...product, ...form });
     };
 
+    /**
+     * Submitting the product data.
+     *
+     * @param {object} event
+     */
     const submitHandler = event => {
         event.preventDefault();
         console.log(simpleValidator.current);
@@ -165,7 +211,7 @@ const AddProduct = props => {
                 .then(response => {
                     if (response.data.code === 201) {
                         toast.success("Product Data Inserted Successfully!");
-                        ClearFrom();
+                        clearFrom();
                     }
                 })
                 .catch(error => {
@@ -175,9 +221,6 @@ const AddProduct = props => {
                 });
         } else {
             setError(simpleValidator.current.errorMessages);
-            // simpleValidator.current.showMessages();
-            // console.log(simpleValidator.current);
-            // simpleValidator.current.forceUpdate();
         }
     };
     return (
@@ -215,7 +258,7 @@ const AddProduct = props => {
                                             className="form-control"
                                             placeholder="Enter Product Name"
                                             onChange={handleChange}
-                                            onKeyUp={slugger}
+                                            onBlur={slugger}
                                         />
                                         {simpleValidator.current.message(
                                             "product_name",
@@ -243,7 +286,7 @@ const AddProduct = props => {
                                             readOnly
                                         />
                                         <span className="text-danger">
-                                            {SlugWarning}
+                                            {slugWarning}
                                         </span>
                                     </div>
                                 </div>
@@ -288,13 +331,13 @@ const AddProduct = props => {
                                             value={product.category_id}
                                             onChange={e => (
                                                 handleChange(e),
-                                                CategoryChange(e)
+                                                getSubCategory(e)
                                             )}
                                         >
                                             <option defaultValue hidden>
                                                 --Select Category--
                                             </option>
-                                            {Category.map((category, i) => (
+                                            {category.map((category, i) => (
                                                 <option
                                                     key={category.category_id}
                                                     value={category.category_id}
@@ -329,7 +372,7 @@ const AddProduct = props => {
                                             <option defaultValue hidden>
                                                 --Select Sub Category--
                                             </option>
-                                            {SubCategory.map((sub, i) => (
+                                            {subCategory.map((sub, i) => (
                                                 <option
                                                     key={i}
                                                     value={sub.sub_category_id}
@@ -364,7 +407,7 @@ const AddProduct = props => {
                                             <option defaultValue hidden>
                                                 --Select Brand--
                                             </option>
-                                            {Brand.map((brand, i) => (
+                                            {brand.map((brand, i) => (
                                                 <option
                                                     key={i}
                                                     value={brand.brand_id}
@@ -452,7 +495,7 @@ const AddProduct = props => {
                                             <option defaultValue hidden>
                                                 --Select Unit--
                                             </option>
-                                            {Unit.map((unit, i) => (
+                                            {unit.map((unit, i) => (
                                                 <option
                                                     key={i}
                                                     value={unit.unit_id}

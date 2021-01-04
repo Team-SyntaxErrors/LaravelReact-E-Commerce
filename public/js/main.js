@@ -59349,13 +59349,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../router */ "./resources/js/router.js");
 
 
- // import AddProduct from "../components/Product/AddProduct";
-// import Brand from "../components/Brand/Brand";
-// import Category from "../components/Category/Category";
-// import DashBoard from "../components/DashBoard/DashBoard";
-// import Menu from "../components/Menu/Menu";
-// import SubCategory from "../components/SubCategory/SubCategory";
-// import Unit from "../components/Unit/Unit";
 
 var AddProduct = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
   return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../components/Product/AddProduct */ "./resources/js/components/Product/AddProduct.js"));
@@ -62765,27 +62758,27 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var AddProduct = function AddProduct(props) {
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
-      Category = _useState2[0],
+      category = _useState2[0],
       setCategory = _useState2[1];
 
   var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState4 = _slicedToArray(_useState3, 2),
-      SubCategory = _useState4[0],
+      subCategory = _useState4[0],
       setSubCategory = _useState4[1];
 
   var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState6 = _slicedToArray(_useState5, 2),
-      Brand = _useState6[0],
+      brand = _useState6[0],
       setBrand = _useState6[1];
 
   var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState8 = _slicedToArray(_useState7, 2),
-      Unit = _useState8[0],
+      unit = _useState8[0],
       setUnit = _useState8[1];
 
   var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(""),
       _useState10 = _slicedToArray(_useState9, 2),
-      SlugWarning = _useState10[0],
+      slugWarning = _useState10[0],
       setSlugWarning = _useState10[1];
 
   var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
@@ -62814,12 +62807,39 @@ var AddProduct = function AddProduct(props) {
       product = _useState14[0],
       setProduct = _useState14[1];
 
+  Object(react__WEBPACK_IMPORTED_MODULE_2__["useEffect"])(function () {
+    getCategory();
+    getBrand();
+    getUnit();
+  }, []);
+  /**
+   * Handles the change of fields
+   * to assign field value inside object
+   *
+   * @param  {object} event
+   * @return {void}
+   */
+
   var handleChange = function handleChange(event) {
     setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, event.target.name, event.target.value)));
   };
+  /**
+   * It's slugify the product name using regex
+   * And check if the slug already recorded
+   *
+   * @param  {object} event
+   * @return {void}
+   */
+
 
   var slugger = function slugger(event) {
     var name = event.target.value;
+
+    if (name == "") {
+      setSlugWarning("Name field is empty");
+      return;
+    }
+
     var slug = "";
     setSlugWarning(""); // Change to lower case
 
@@ -62838,9 +62858,10 @@ var AddProduct = function AddProduct(props) {
     slug = slug.replace(/\s*$/g, ""); // Change whitespace to "-"
 
     slug = slug.replace(/\s+/g, "-");
-    slug = slug.replace("'", "");
+    slug = slug.replace("'", ""); // Check slug availability from database
+
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/product_slug_check/" + slug).then(function (response) {
-      if (response.status === 204) {
+      if (response.status == 204) {
         setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "product_slug", slug)));
       } else {
         setSlugWarning("This slug is recorded already");
@@ -62849,33 +62870,41 @@ var AddProduct = function AddProduct(props) {
       console.log(error);
     });
   };
+  /**
+   * Assigning product tags as an array to product object
+   *
+   * @param  {array} newTags
+   * @return {void}
+   */
+
 
   var setTags = function setTags(newTags) {
     setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "tags", newTags))); // simpleValidator.current.showMessageFor("tags");
   };
+  /**
+   * Assigning product description to product object
+   *
+   * @param  {string} description
+   * @return {void}
+   */
+
 
   var setDescription = function setDescription(description) {
     setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "description", description))); // simpleValidator.current.showMessageFor("description");
   };
+  /**
+   * Getting the active category list
+   *
+   * @return {void}
+   */
 
-  var GetCategory = function GetCategory() {
+
+  var getCategory = function getCategory() {
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/all_categories").then(function (response) {
       setCategory(response.data.data);
     })["catch"](function (error) {
       console.log(error);
     });
-  };
-
-  Object(react__WEBPACK_IMPORTED_MODULE_2__["useEffect"])(function () {
-    GetCategory();
-  }, []);
-  /**
-   *
-   * @param {object} event
-   */
-
-  var CategoryChange = function CategoryChange(event) {
-    GetSubCategory(event.target.value);
   };
   /**
    * Get category wise sub category.
@@ -62884,39 +62913,50 @@ var AddProduct = function AddProduct(props) {
    */
 
 
-  var GetSubCategory = function GetSubCategory(category_id) {
+  var getSubCategory = function getSubCategory(event) {
+    var category_id = event.target.value;
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/subcategory_get/" + category_id).then(function (response) {
       setSubCategory(response.data.data);
     })["catch"](function (error) {
       console.log(error);
     });
   };
+  /**
+   * Getting the active brand list
+   *
+   * @return {void}
+   */
 
-  var GetBrand = function GetBrand() {
+
+  var getBrand = function getBrand() {
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/all_brand_get").then(function (response) {
       setBrand(response.data.data);
     })["catch"](function (error) {
       console.log(error);
     });
   };
+  /**
+   * Getting the active unit list
+   *
+   * @return {void}
+   */
 
-  Object(react__WEBPACK_IMPORTED_MODULE_2__["useEffect"])(function () {
-    GetBrand();
-  }, []);
 
-  var GetUnit = function GetUnit() {
+  var getUnit = function getUnit() {
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/all_unit_get").then(function (response) {
       setUnit(response.data.data);
     })["catch"](function (error) {
       console.log(error);
     });
   };
+  /**
+   * Clear form data
+   *
+   * @return {void}
+   */
 
-  Object(react__WEBPACK_IMPORTED_MODULE_2__["useEffect"])(function () {
-    GetUnit();
-  }, []);
 
-  var ClearFrom = function ClearFrom() {
+  var clearFrom = function clearFrom() {
     setError([]);
     var form = product;
     Object.keys(form).forEach(function (key) {
@@ -62925,6 +62965,12 @@ var AddProduct = function AddProduct(props) {
     form.tags = [];
     setProduct(_objectSpread(_objectSpread({}, product), form));
   };
+  /**
+   * Submitting the product data.
+   *
+   * @param {object} event
+   */
+
 
   var submitHandler = function submitHandler(event) {
     event.preventDefault();
@@ -62934,7 +62980,7 @@ var AddProduct = function AddProduct(props) {
       axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/products", product).then(function (response) {
         if (response.data.code === 201) {
           react_toastify__WEBPACK_IMPORTED_MODULE_10__["toast"].success("Product Data Inserted Successfully!");
-          ClearFrom();
+          clearFrom();
         }
       })["catch"](function (error) {
         if (error.response) {
@@ -62942,9 +62988,7 @@ var AddProduct = function AddProduct(props) {
         }
       });
     } else {
-      setError(simpleValidator.current.errorMessages); // simpleValidator.current.showMessages();
-      // console.log(simpleValidator.current);
-      // simpleValidator.current.forceUpdate();
+      setError(simpleValidator.current.errorMessages);
     }
   };
 
@@ -62986,7 +63030,7 @@ var AddProduct = function AddProduct(props) {
     className: "form-control",
     placeholder: "Enter Product Name",
     onChange: handleChange,
-    onKeyUp: slugger
+    onBlur: slugger
   }), simpleValidator.current.message("product_name", product.product_name, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
   }, error.product_name)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
@@ -63006,7 +63050,7 @@ var AddProduct = function AddProduct(props) {
     readOnly: true
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  }, SlugWarning)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, slugWarning)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
@@ -63040,12 +63084,12 @@ var AddProduct = function AddProduct(props) {
     name: "category_id",
     value: product.category_id,
     onChange: function onChange(e) {
-      return handleChange(e), CategoryChange(e);
+      return handleChange(e), getSubCategory(e);
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     defaultValue: true,
     hidden: true
-  }, "--Select Category--"), Category.map(function (category, i) {
+  }, "--Select Category--"), category.map(function (category, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: category.category_id,
       value: category.category_id
@@ -63070,7 +63114,7 @@ var AddProduct = function AddProduct(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     defaultValue: true,
     hidden: true
-  }, "--Select Sub Category--"), SubCategory.map(function (sub, i) {
+  }, "--Select Sub Category--"), subCategory.map(function (sub, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: i,
       value: sub.sub_category_id
@@ -63095,7 +63139,7 @@ var AddProduct = function AddProduct(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     defaultValue: true,
     hidden: true
-  }, "--Select Brand--"), Brand.map(function (brand, i) {
+  }, "--Select Brand--"), brand.map(function (brand, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: i,
       value: brand.brand_id
@@ -63160,7 +63204,7 @@ var AddProduct = function AddProduct(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     defaultValue: true,
     hidden: true
-  }, "--Select Unit--"), Unit.map(function (unit, i) {
+  }, "--Select Unit--"), unit.map(function (unit, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: i,
       value: unit.unit_id
@@ -64846,8 +64890,8 @@ var router = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/professor/Documents/Laravel/Laravel + React_js/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
-module.exports = __webpack_require__(/*! /home/professor/Documents/Laravel/Laravel + React_js/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
+__webpack_require__(/*! /home/tanvir/Work/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /home/tanvir/Work/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
 
 
 /***/ })

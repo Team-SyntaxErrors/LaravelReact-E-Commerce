@@ -17,9 +17,16 @@ class MenuApiController extends Controller
     {
         try {
             $menu = Menu::all();
-            return $this->successResponse($menu, 'menu fetched successfully', Response::HTTP_OK);
+            return $this->successResponse(
+                $menu,
+                'menu fetched successfully',
+                Response::HTTP_OK
+            );
         } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+            return $this->errorResponse(
+                $e->getMessage(),
+                Response::HTTP_BAD_REQUEST
+            );
         }
     }
 }
