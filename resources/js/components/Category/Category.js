@@ -1,14 +1,12 @@
 import "./Category.css";
 import "react-toastify/dist/ReactToastify.css";
-
-import React, { Fragment, useEffect, useState } from "react";
-
+import React, { Fragment, Suspense, useEffect, useState } from "react";
 import Axios from "axios";
 import PageHeader from "./../Layouts/PageHeader/PageHeader";
 import swal from "sweetalert";
 import { toast } from "react-toastify";
 import useForms from "../customHooks/useForms";
-import Pagination from "../helpers/pagination/CustomPagination";
+import CustomPagination from "../helpers/pagination/CustomPagination";
 
 const Category = props => {
     const select_row = [8, 10, 20, 30, 40, 50];
@@ -681,10 +679,8 @@ const Category = props => {
                             <div className="row">
                                 <div className="col-sm-12 col-md-5"></div>
                                 <div className="col-sm-12 col-md-7">
-                                    {current_row >= totalItemsCount ? (
-                                        ""
-                                    ) : (
-                                        <Pagination
+                                    {totalItemsCount >= current_row && (
+                                        <CustomPagination
                                             activePage={activePage}
                                             totalItems={totalItemsCount}
                                             getFunction={getCategories}
