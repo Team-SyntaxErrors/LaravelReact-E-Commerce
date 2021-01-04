@@ -62875,18 +62875,32 @@ var AddProduct = function AddProduct(props) {
 
   var handleChange = function handleChange(event) {
     setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, event.target.name, event.target.value)));
-    simpleValidator.current.showMessageFor(event.target.name);
   };
 
-  var Slugger = function Slugger(event) {
-    var slug = event.target.value;
-    slug = react_slugify__WEBPACK_IMPORTED_MODULE_10___default()(slug);
-    axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/product_slug_check/?slug=" + slug).then(function (response) {
-      if (response.status == 201) {
-        setSlugWarning("");
+  var slugger = function slugger(event) {
+    var name = event.target.value;
+    var slug = "";
+    setSlugWarning(""); // Change to lower case
+
+    var nameLower = name.toLowerCase(); // Letter "e"
+
+    slug = nameLower.replace(/e|é|è|ẽ|ẻ|ẹ|ê|ế|ề|ễ|ể|ệ/gi, "e"); // Letter "a"
+
+    slug = slug.replace(/a|á|à|ã|ả|ạ|ă|ắ|ằ|ẵ|ẳ|ặ|â|ấ|ầ|ẫ|ẩ|ậ/gi, "a"); // Letter "o"
+
+    slug = slug.replace(/o|ó|ò|õ|ỏ|ọ|ô|ố|ồ|ỗ|ổ|ộ|ơ|ớ|ờ|ỡ|ở|ợ/gi, "o"); // Letter "u"
+
+    slug = slug.replace(/u|ú|ù|ũ|ủ|ụ|ư|ứ|ừ|ữ|ử|ự/gi, "u"); // Letter "d"
+
+    slug = slug.replace(/đ/gi, "d"); // Trim the last whitespace
+
+    slug = slug.replace(/\s*$/g, ""); // Change whitespace to "-"
+
+    slug = slug.replace(/\s+/g, "-");
+    slug = slug.replace("'", "");
+    axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/product_slug_check/" + slug).then(function (response) {
+      if (response.status === 204) {
         setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "product_slug", slug)));
-      } else if (response.status == 200) {
-        setSlugWarning("This slug is recorded already");
       } else {
         setSlugWarning("This slug is recorded already");
       }
@@ -62896,13 +62910,11 @@ var AddProduct = function AddProduct(props) {
   };
 
   var setTags = function setTags(newTags) {
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "tags", newTags)));
-    simpleValidator.current.showMessageFor("tags");
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "tags", newTags))); // simpleValidator.current.showMessageFor("tags");
   };
 
   var setDescription = function setDescription(description) {
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "description", description)));
-    simpleValidator.current.showMessageFor("description");
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "description", description))); // simpleValidator.current.showMessageFor("description");
   };
 
   var GetCategory = function GetCategory() {
@@ -62964,6 +62976,7 @@ var AddProduct = function AddProduct(props) {
   }, []);
 
   var ClearFrom = function ClearFrom() {
+    setError([]);
     var form = product;
     Object.keys(form).forEach(function (key) {
       form[key] = "";
@@ -62974,17 +62987,24 @@ var AddProduct = function AddProduct(props) {
 
   var submitHandler = function submitHandler(event) {
     event.preventDefault();
-    axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/products", product).then(function (response) {
-      if (response.data.code === 201) {
-        react_toastify__WEBPACK_IMPORTED_MODULE_11__["toast"].success("Product Data Inserted Successfully!");
-        ClearFrom();
-        simpleValidator.current.purgeFields();
-      }
-    })["catch"](function (error) {
-      if (error.response) {
-        setError(error.response.data.errors);
-      }
-    });
+    console.log(simpleValidator.current);
+
+    if (simpleValidator.current.allValid()) {
+      axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/products", product).then(function (response) {
+        if (response.data.code === 201) {
+          react_toastify__WEBPACK_IMPORTED_MODULE_11__["toast"].success("Product Data Inserted Successfully!");
+          ClearFrom();
+        }
+      })["catch"](function (error) {
+        if (error.response) {
+          setError(error.response.data.errors);
+        }
+      });
+    } else {
+      setError(simpleValidator.current.errorMessages); // simpleValidator.current.showMessages();
+      // console.log(simpleValidator.current);
+      // simpleValidator.current.forceUpdate();
+    }
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_2__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_Layouts_PageHeader_PageHeader__WEBPACK_IMPORTED_MODULE_7__["default"], {
@@ -63025,10 +63045,10 @@ var AddProduct = function AddProduct(props) {
     className: "form-control",
     placeholder: "Enter Product Name",
     onChange: handleChange,
-    onKeyUp: Slugger
-  }), simpleValidator.current.message("product_name", product.product_name, "required", {
+    onKeyUp: slugger
+  }), simpleValidator.current.message("product_name", product.product_name, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.product_name)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
@@ -63062,9 +63082,9 @@ var AddProduct = function AddProduct(props) {
     onChange: function onChange(e) {
       return handleChange(e);
     }
-  }), simpleValidator.current.message("product_sku", product.product_sku, "required", {
+  }), simpleValidator.current.message("product_sku", product.product_sku, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.product_sku))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
@@ -63083,16 +63103,15 @@ var AddProduct = function AddProduct(props) {
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     defaultValue: true,
-    selected: true,
     hidden: true
   }, "--Select Category--"), Category.map(function (category, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: category.category_id,
       value: category.category_id
     }, category.category_name);
-  })), simpleValidator.current.message("category_id", product.category_id, "required", {
+  })), simpleValidator.current.message("category_id", product.category_id, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.category_id)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
@@ -63109,16 +63128,15 @@ var AddProduct = function AddProduct(props) {
     value: product.subcategory_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     defaultValue: true,
-    selected: true,
     hidden: true
   }, "--Select Sub Category--"), SubCategory.map(function (sub, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: i,
       value: sub.sub_category_id
     }, sub.sub_category_name);
-  })), simpleValidator.current.message("subcategory_id", product.subcategory_id, "required", {
+  })), simpleValidator.current.message("subcategory_id", product.subcategory_id, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.subcategory_id)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
@@ -63134,15 +63152,16 @@ var AddProduct = function AddProduct(props) {
     },
     value: product.brand_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
-    defaultValue: true
+    defaultValue: true,
+    hidden: true
   }, "--Select Brand--"), Brand.map(function (brand, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: i,
       value: brand.brand_id
     }, brand.brand_name);
-  })), simpleValidator.current.message("brand_id", product.brand_id, "required", {
+  })), simpleValidator.current.message("brand_id", product.brand_id, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.brand_id))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
@@ -63161,9 +63180,9 @@ var AddProduct = function AddProduct(props) {
     onChange: function onChange(e) {
       return handleChange(e);
     }
-  }), simpleValidator.current.message("purchase_price", product.purchase_price, "required", {
+  }), simpleValidator.current.message("purchase_price", product.purchase_price, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.purchase_price)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
@@ -63180,9 +63199,9 @@ var AddProduct = function AddProduct(props) {
       return handleChange(e);
     },
     placeholder: "Enter Product Sell Price"
-  }), simpleValidator.current.message("sell_price", product.sell_price, "required", {
+  }), simpleValidator.current.message("sell_price", product.sell_price, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.sell_price)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
@@ -63198,15 +63217,16 @@ var AddProduct = function AddProduct(props) {
     name: "unit_id",
     value: product.unit_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
-    defaultValue: true
+    defaultValue: true,
+    hidden: true
   }, "--Select Unit--"), Unit.map(function (unit, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: i,
       value: unit.unit_id
     }, unit.unit_name);
-  })), simpleValidator.current.message("unit_id", product.unit_id, "required", {
+  })), simpleValidator.current.message("unit_id", product.unit_id, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.unit_id))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
@@ -63225,9 +63245,9 @@ var AddProduct = function AddProduct(props) {
     },
     value: product.product_alert_qty,
     placeholder: "Enter Product Alert Quantity"
-  }), simpleValidator.current.message("product_alert_qty", product.product_alert_qty, "required", {
+  }), simpleValidator.current.message("product_alert_qty", product.product_alert_qty, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.product_alert_qty)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
@@ -63241,9 +63261,9 @@ var AddProduct = function AddProduct(props) {
       return setTags(newTags);
     },
     placeholder: "Product Tags"
-  }), simpleValidator.current.message("tags", product.tags, "required", {
+  }), simpleValidator.current.message("tags", product.tags, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.tags)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-4"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
@@ -63258,13 +63278,16 @@ var AddProduct = function AddProduct(props) {
     },
     className: "form-control",
     value: product.status
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", null, "--Select Status--"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
+    defaultValue: true,
+    hidden: true
+  }, "--Select Status--"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     value: "1"
   }, "Active"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     value: "0"
-  }, "Inactive")), simpleValidator.current.message("status", product.status, "required", {
+  }, "Inactive")), simpleValidator.current.message("status", product.status, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.status))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-md-12"
@@ -63282,9 +63305,9 @@ var AddProduct = function AddProduct(props) {
       setDescription(data);
     },
     data: product.description
-  }), simpleValidator.current.message("description", product.description, "required", {
+  }), simpleValidator.current.message("description", product.description, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, error.description)))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "card-footer"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("button", {
     className: "btn btn-default"

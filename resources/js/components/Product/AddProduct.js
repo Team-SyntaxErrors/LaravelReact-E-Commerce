@@ -39,19 +39,34 @@ const AddProduct = props => {
 
     const handleChange = event => {
         setProduct({ ...product, [event.target.name]: event.target.value });
-        simpleValidator.current.showMessageFor(event.target.name);
     };
 
-    const Slugger = event => {
-        let slug = event.target.value;
-        slug = slugify(slug);
-        Axios.get("/product_slug_check/?slug=" + slug)
+    const slugger = event => {
+        let name = event.target.value;
+        let slug = "";
+        setSlugWarning("");
+        // Change to lower case
+        let nameLower = name.toLowerCase();
+        // Letter "e"
+        slug = nameLower.replace(/e|é|è|ẽ|ẻ|ẹ|ê|ế|ề|ễ|ể|ệ/gi, "e");
+        // Letter "a"
+        slug = slug.replace(/a|á|à|ã|ả|ạ|ă|ắ|ằ|ẵ|ẳ|ặ|â|ấ|ầ|ẫ|ẩ|ậ/gi, "a");
+        // Letter "o"
+        slug = slug.replace(/o|ó|ò|õ|ỏ|ọ|ô|ố|ồ|ỗ|ổ|ộ|ơ|ớ|ờ|ỡ|ở|ợ/gi, "o");
+        // Letter "u"
+        slug = slug.replace(/u|ú|ù|ũ|ủ|ụ|ư|ứ|ừ|ữ|ử|ự/gi, "u");
+        // Letter "d"
+        slug = slug.replace(/đ/gi, "d");
+        // Trim the last whitespace
+        slug = slug.replace(/\s*$/g, "");
+        // Change whitespace to "-"
+        slug = slug.replace(/\s+/g, "-");
+        slug = slug.replace("'", "");
+
+        Axios.get("/product_slug_check/" + slug)
             .then(response => {
-                if (response.status == 201) {
-                    setSlugWarning("");
+                if (response.status === 204) {
                     setProduct({ ...product, ["product_slug"]: slug });
-                } else if (response.status == 200) {
-                    setSlugWarning("This slug is recorded already");
                 } else {
                     setSlugWarning("This slug is recorded already");
                 }
@@ -63,12 +78,12 @@ const AddProduct = props => {
 
     const setTags = newTags => {
         setProduct({ ...product, ["tags"]: newTags });
-        simpleValidator.current.showMessageFor("tags");
+        // simpleValidator.current.showMessageFor("tags");
     };
 
     const setDescription = description => {
         setProduct({ ...product, ["description"]: description });
-        simpleValidator.current.showMessageFor("description");
+        // simpleValidator.current.showMessageFor("description");
     };
 
     const GetCategory = () => {
@@ -134,6 +149,7 @@ const AddProduct = props => {
     }, []);
 
     const ClearFrom = () => {
+        setError([]);
         let form = product;
         Object.keys(form).forEach(function(key) {
             form[key] = "";
@@ -144,19 +160,26 @@ const AddProduct = props => {
 
     const submitHandler = event => {
         event.preventDefault();
-        Axios.post("/products", product)
-            .then(response => {
-                if (response.data.code === 201) {
-                    toast.success("Product Data Inserted Successfully!");
-                    ClearFrom();
-                    simpleValidator.current.purgeFields();
-                }
-            })
-            .catch(error => {
-                if (error.response) {
-                    setError(error.response.data.errors);
-                }
-            });
+        console.log(simpleValidator.current);
+        if (simpleValidator.current.allValid()) {
+            Axios.post("/products", product)
+                .then(response => {
+                    if (response.data.code === 201) {
+                        toast.success("Product Data Inserted Successfully!");
+                        ClearFrom();
+                    }
+                })
+                .catch(error => {
+                    if (error.response) {
+                        setError(error.response.data.errors);
+                    }
+                });
+        } else {
+            setError(simpleValidator.current.errorMessages);
+            // simpleValidator.current.showMessages();
+            // console.log(simpleValidator.current);
+            // simpleValidator.current.forceUpdate();
+        }
     };
     return (
         <Fragment>
@@ -193,14 +216,16 @@ const AddProduct = props => {
                                             className="form-control"
                                             placeholder="Enter Product Name"
                                             onChange={handleChange}
-                                            onKeyUp={Slugger}
+                                            onKeyUp={slugger}
                                         />
                                         {simpleValidator.current.message(
                                             "product_name",
                                             product.product_name,
-                                            "required",
-                                            { className: "text-danger" }
+                                            "required"
                                         )}
+                                        <span className="text-danger">
+                                            {error.product_name}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -241,9 +266,11 @@ const AddProduct = props => {
                                         {simpleValidator.current.message(
                                             "product_sku",
                                             product.product_sku,
-                                            "required",
-                                            { className: "text-danger" }
+                                            "required"
                                         )}
+                                        <span className="text-danger">
+                                            {error.product_sku}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -265,11 +292,7 @@ const AddProduct = props => {
                                                 CategoryChange(e)
                                             )}
                                         >
-                                            <option
-                                                defaultValue
-                                                selected
-                                                hidden
-                                            >
+                                            <option defaultValue hidden>
                                                 --Select Category--
                                             </option>
                                             {Category.map((category, i) => (
@@ -284,9 +307,11 @@ const AddProduct = props => {
                                         {simpleValidator.current.message(
                                             "category_id",
                                             product.category_id,
-                                            "required",
-                                            { className: "text-danger" }
+                                            "required"
                                         )}
+                                        <span className="text-danger">
+                                            {error.category_id}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -302,11 +327,7 @@ const AddProduct = props => {
                                             onChange={e => handleChange(e)}
                                             value={product.subcategory_id}
                                         >
-                                            <option
-                                                defaultValue
-                                                selected
-                                                hidden
-                                            >
+                                            <option defaultValue hidden>
                                                 --Select Sub Category--
                                             </option>
                                             {SubCategory.map((sub, i) => (
@@ -321,9 +342,11 @@ const AddProduct = props => {
                                         {simpleValidator.current.message(
                                             "subcategory_id",
                                             product.subcategory_id,
-                                            "required",
-                                            { className: "text-danger" }
+                                            "required"
                                         )}
+                                        <span className="text-danger">
+                                            {error.subcategory_id}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -339,7 +362,7 @@ const AddProduct = props => {
                                             onChange={e => handleChange(e)}
                                             value={product.brand_id}
                                         >
-                                            <option defaultValue>
+                                            <option defaultValue hidden>
                                                 --Select Brand--
                                             </option>
                                             {Brand.map((brand, i) => (
@@ -354,9 +377,11 @@ const AddProduct = props => {
                                         {simpleValidator.current.message(
                                             "brand_id",
                                             product.brand_id,
-                                            "required",
-                                            { className: "text-danger" }
+                                            "required"
                                         )}
+                                        <span className="text-danger">
+                                            {error.brand_id}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -380,9 +405,11 @@ const AddProduct = props => {
                                         {simpleValidator.current.message(
                                             "purchase_price",
                                             product.purchase_price,
-                                            "required",
-                                            { className: "text-danger" }
+                                            "required"
                                         )}
+                                        <span className="text-danger">
+                                            {error.purchase_price}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -403,9 +430,11 @@ const AddProduct = props => {
                                         {simpleValidator.current.message(
                                             "sell_price",
                                             product.sell_price,
-                                            "required",
-                                            { className: "text-danger" }
+                                            "required"
                                         )}
+                                        <span className="text-danger">
+                                            {error.sell_price}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -421,7 +450,7 @@ const AddProduct = props => {
                                             name="unit_id"
                                             value={product.unit_id}
                                         >
-                                            <option defaultValue>
+                                            <option defaultValue hidden>
                                                 --Select Unit--
                                             </option>
                                             {Unit.map((unit, i) => (
@@ -436,9 +465,11 @@ const AddProduct = props => {
                                         {simpleValidator.current.message(
                                             "unit_id",
                                             product.unit_id,
-                                            "required",
-                                            { className: "text-danger" }
+                                            "required"
                                         )}
+                                        <span className="text-danger">
+                                            {error.unit_id}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -462,9 +493,11 @@ const AddProduct = props => {
                                         {simpleValidator.current.message(
                                             "product_alert_qty",
                                             product.product_alert_qty,
-                                            "required",
-                                            { className: "text-danger" }
+                                            "required"
                                         )}
+                                        <span className="text-danger">
+                                            {error.product_alert_qty}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -484,9 +517,11 @@ const AddProduct = props => {
                                         {simpleValidator.current.message(
                                             "tags",
                                             product.tags,
-                                            "required",
-                                            { className: "text-danger" }
+                                            "required"
                                         )}
+                                        <span className="text-danger">
+                                            {error.tags}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -502,16 +537,20 @@ const AddProduct = props => {
                                             className="form-control"
                                             value={product.status}
                                         >
-                                            <option>--Select Status--</option>
+                                            <option defaultValue hidden>
+                                                --Select Status--
+                                            </option>
                                             <option value="1">Active</option>
                                             <option value="0">Inactive</option>
                                         </select>
                                         {simpleValidator.current.message(
                                             "status",
                                             product.status,
-                                            "required",
-                                            { className: "text-danger" }
+                                            "required"
                                         )}
+                                        <span className="text-danger">
+                                            {error.status}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -536,9 +575,11 @@ const AddProduct = props => {
                                         {simpleValidator.current.message(
                                             "description",
                                             product.description,
-                                            "required",
-                                            { className: "text-danger" }
+                                            "required"
                                         )}
+                                        <span className="text-danger">
+                                            {error.description}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
