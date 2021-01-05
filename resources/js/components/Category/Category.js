@@ -7,6 +7,7 @@ import swal from "sweetalert";
 import { toast } from "react-toastify";
 import useForms from "../customHooks/useForms";
 import CustomPagination from "../helpers/pagination/CustomPagination";
+import ClearForm from "../helpers/clearForm/ClearForm";
 
 const Category = props => {
     const select_row = [8, 10, 20, 30, 40, 50];
@@ -16,7 +17,7 @@ const Category = props => {
     const [search, setSearch] = useState("");
     const [current_row, setCurrentRaw] = useState(8);
     const [activePage, setActivePage] = useState(1);
-    const [totalItemsCount, setTotalItemsCount] = useState(450);
+    const [totalItemsCount, setTotalItemsCount] = useState(0);
     const [category_form, setCategoryForm, handleChange] = useForms({
         menu_id: "",
         category_name: "",
@@ -75,11 +76,7 @@ const Category = props => {
      */
     const clearFrom = () => {
         setErrors([]);
-        let form = category_form;
-        console.log("form", form);
-        Object.keys(form).forEach(function(key) {
-            form[key] = "";
-        });
+        let form = ClearForm(category_form);
         setCategoryForm({ ...category_form, ...form });
     };
 
@@ -679,13 +676,11 @@ const Category = props => {
                             <div className="row">
                                 <div className="col-sm-12 col-md-5"></div>
                                 <div className="col-sm-12 col-md-7">
-                                    {totalItemsCount >= current_row && (
-                                        <CustomPagination
-                                            activePage={activePage}
-                                            totalItems={totalItemsCount}
-                                            getFunction={getCategories}
-                                        />
-                                    )}
+                                    <CustomPagination
+                                        activePage={activePage}
+                                        totalItems={totalItemsCount}
+                                        getFunction={getCategories}
+                                    />
                                 </div>
                             </div>
                         </div>
