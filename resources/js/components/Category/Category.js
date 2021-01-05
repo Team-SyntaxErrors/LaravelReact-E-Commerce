@@ -17,15 +17,15 @@ const Category = props => {
     const [menu, setMenu] = useState([]);
     const [errors, setErrors] = useState([]);
     const [search, setSearch] = useState("");
-    const [current_row, setCurrentRow] = useState(10);
+    const [currentRow, setCurrentRow] = useState(10);
     const [activePage, setActivePage] = useState(1);
     const [totalItemsCount, setTotalItemsCount] = useState(0);
-    const [category_form, setCategoryForm, handleChange] = useForms({
+    const [categoryForm, setCategoryForm, handleChange] = useForms({
         menu_id: "",
         category_name: "",
         category_icon: ""
     });
-    const [EditForm, setEditForm, EditHandleChange] = useForms({
+    const [editForm, setEditForm, editHandleChange] = useForms({
         menu_id: "",
         category_name: "",
         category_icon: ""
@@ -39,7 +39,7 @@ const Category = props => {
         getCategories();
 
         return () => setCategoryList([]);
-    }, [current_row, search]);
+    }, [currentRow, search]);
 
     /**
      * Get all active menu.
@@ -58,7 +58,7 @@ const Category = props => {
      * Get all category.
      */
     const getCategories = (page = 1) => {
-        const main_url = `category?q=${search}&row=${current_row}&page=${page}`;
+        const main_url = `category?q=${search}&row=${currentRow}&page=${page}`;
         Axios.get(main_url)
             .then(response => {
                 setCategoryList(response.data.data.data);
@@ -76,8 +76,8 @@ const Category = props => {
      */
     const clearFrom = () => {
         setErrors([]);
-        let form = ClearForm(category_form);
-        setCategoryForm({ ...category_form, ...form });
+        let form = ClearForm(categoryForm);
+        setCategoryForm({ ...categoryForm, ...form });
     };
 
     /**
@@ -87,7 +87,7 @@ const Category = props => {
      */
     const submitHandler = e => {
         e.preventDefault();
-        Axios.post("/category", category_form)
+        Axios.post("/category", categoryForm)
             .then(response => {
                 if (response.data.code === 201) {
                     $(".close").click();
@@ -152,7 +152,7 @@ const Category = props => {
     const editHandler = (id, data) => {
         categoryList.category_id = id;
         let value = JSON.parse(JSON.stringify(data));
-        setEditForm({ ...EditForm, ...value });
+        setEditForm({ ...editForm, ...value });
     };
 
     /**
@@ -162,7 +162,7 @@ const Category = props => {
      */
     const updateHandler = e => {
         e.preventDefault();
-        Axios.put("/category/" + EditForm.category_id, EditForm)
+        Axios.put("/category/" + editForm.category_id, editForm)
             .then(response => {
                 if (response.data.code === 201) {
                     $(".close").click();
@@ -236,9 +236,9 @@ const Category = props => {
                                             <img
                                                 className="custom-icon rounded-circle"
                                                 src={
-                                                    !category_form.category_icon
+                                                    !categoryForm.category_icon
                                                         ? "backend_assets/img/menu-icon.png"
-                                                        : category_form.category_icon
+                                                        : categoryForm.category_icon
                                                 }
                                             />
                                             <span className="text-danger" />
@@ -272,7 +272,7 @@ const Category = props => {
                                                         className="form-control"
                                                         onChange={handleChange}
                                                         value={
-                                                            category_form.menu_id
+                                                            categoryForm.menu_id
                                                         }
                                                     >
                                                         <option
@@ -309,7 +309,7 @@ const Category = props => {
                                                         className="form-control"
                                                         onChange={handleChange}
                                                         value={
-                                                            category_form.category_name
+                                                            categoryForm.category_name
                                                         }
                                                         placeholder="Enter Menu Name"
                                                     />
@@ -377,9 +377,9 @@ const Category = props => {
                                             <img
                                                 className="custom-icon rounded-circle"
                                                 src={
-                                                    !EditForm.category_icon
+                                                    !editForm.category_icon
                                                         ? "backend_assets/img/menu-icon.png"
-                                                        : EditForm.category_icon
+                                                        : editForm.category_icon
                                                 }
                                             />
                                             <span className="text-danger" />
@@ -395,7 +395,7 @@ const Category = props => {
                                                         name="category_icon"
                                                         className="form-control"
                                                         onChange={
-                                                            EditHandleChange
+                                                            editHandleChange
                                                         }
                                                         placeholder="Enter Menu Icon"
                                                     />
@@ -413,9 +413,9 @@ const Category = props => {
                                                         className="form-control"
                                                         name="menu_id"
                                                         onChange={
-                                                            EditHandleChange
+                                                            editHandleChange
                                                         }
-                                                        value={EditForm.menu_id}
+                                                        value={editForm.menu_id}
                                                     >
                                                         <option value hidden>
                                                             --Select One--
@@ -446,10 +446,10 @@ const Category = props => {
                                                         name="category_name"
                                                         className="form-control"
                                                         onChange={
-                                                            EditHandleChange
+                                                            editHandleChange
                                                         }
                                                         value={
-                                                            EditForm.category_name
+                                                            editForm.category_name
                                                         }
                                                         placeholder="Enter Menu Name"
                                                     />
@@ -678,6 +678,7 @@ const Category = props => {
                                 <div className="col-sm-12 col-md-7">
                                     <CustomPagination
                                         activePage={activePage}
+                                        currentRow={currentRow}
                                         totalItems={totalItemsCount}
                                         getFunction={getCategories}
                                     />
