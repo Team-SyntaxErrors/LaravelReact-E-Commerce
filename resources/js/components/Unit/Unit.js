@@ -4,40 +4,37 @@ import "react-toastify/dist/ReactToastify.css";
 import React, { Fragment, useEffect, useState } from "react";
 
 import Axios from "axios";
+import CustomPagination from "../helpers/pagination/CustomPagination";
 import PageHeader from "./../Layouts/PageHeader/PageHeader";
-import Pagination from "react-js-pagination";
 import swal from "sweetalert";
 import { toast } from "react-toastify";
-import { useForm } from "react-hook-form";
+import useForms from "../customHooks/useForms";
 
 const Unit = props => {
     const [search, setSearch] = useState("");
     const [select_row, setSelectRow] = useState([8, 10, 20, 30, 40, 50]);
-    const [current_row, setCurrentRaw] = useState(8);
-    const [page, setPage] = useState(1);
     const [error, setError] = useState([]);
     const [unit_list, setUnitList] = useState([]);
+    const [current_row, setCurrentRow] = useState(10);
     const [activePage, setActivePage] = useState(1);
-    const [itemsCountPerPage, setItemsCountPerPage] = useState(8);
-    const [totalItemsCount, setTotalItemsCount] = useState(450);
-    const { register, errors, handleSubmit } = useForm();
-    const {
-        register: register2,
-        errors: errors2,
-        handleSubmit: handleSubmit2,
-        setValue
-    } = useForm();
+    const [totalItemsCount, setTotalItemsCount] = useState(0);
+    const [unit_form, setUnitForm, handleChange] = useForms({
+        unit_name: "",
+        short_name: "",
+        status: ""
+    });
+    const [EditForm, setEditForm, EditHandleChange] = useForms({
+        unit_name: "",
+        short_name: "",
+        status: ""
+    });
 
-    const handlePageChange = pageNumber => {
-        setPage(pageNumber);
-    };
-    const GetUnitList = () => {
+    const getUnitList = (page = 1) => {
         const main_url = `units?q=${search}&row=${current_row}&page=${page}`;
         Axios.get(main_url)
             .then(response => {
                 setUnitList(response.data.data.data);
                 setActivePage(response.data.data.current_page);
-                setItemsCountPerPage(parseInt(response.data.data.per_page));
                 setTotalItemsCount(response.data.data.total);
             })
             .catch(error => {
@@ -46,16 +43,16 @@ const Unit = props => {
     };
 
     useEffect(() => {
-        GetUnitList();
-    }, [current_row, search, page]);
+        getUnitList();
+        return () => setUnitList([]);
+    }, [current_row, search]);
 
-    const onAddSubmit = (data, e) => {
-        console.log(data);
-        Axios.post("/units", data)
+    const submitHandler = e => {
+        e.preventDefault();
+        Axios.post("/units", unit_form)
             .then(response => {
-                e.target.reset();
                 setError([]);
-                GetUnitList();
+                getUnitList();
                 $("#close").click();
                 toast.success("Unit Data Inserted Successfully!");
             })
@@ -83,7 +80,7 @@ const Unit = props => {
                                 "Unit Has been Deleted",
                                 "success"
                             );
-                            GetUnitList();
+                            getUnitList();
                         } else {
                             swal("Opps", "Something Went Wrong", "warning");
                         }
@@ -97,19 +94,17 @@ const Unit = props => {
         });
     };
 
-    const EditHandler = (id, data, index) => {
-        unit_list.id = id;
+    const editHandler = (id, data) => {
+        unit_list.unit_id = id;
         let value = JSON.parse(JSON.stringify(data));
-        Object.entries(value).forEach(([name, value]) => {
-            setValue(name, value);
-        });
+        setEditForm({ ...EditForm, ...value });
     };
 
-    const onUpdateSubmit = data => {
-        console.log(data);
-        Axios.put("/units/" + data.unit_id, data)
+    const updateHandler = e => {
+        e.preventDefault();
+        Axios.put("/units/" + EditForm.unit_id, EditForm)
             .then(response => {
-                GetUnitList();
+                getUnitList();
                 $("#edit_close").click();
                 setError([]);
                 toast.success("Unit Data Update Successfully!");
@@ -131,7 +126,7 @@ const Unit = props => {
                 if (response.data.code === 201) {
                     toast.warning("This unit is inactive successfully!");
                 }
-                GetUnitList();
+                getUnitList();
             })
             .catch(error => {
                 console.log(error);
@@ -140,7 +135,7 @@ const Unit = props => {
     return (
         <Fragment>
             <PageHeader breadCrumbs={props.breadCrumbs} Module={props.Module} />
-            <form onSubmit={handleSubmit(onAddSubmit)}>
+            <form onSubmit={submitHandler}>
                 <div
                     className="modal fade"
                     id="add_modal"
@@ -182,15 +177,9 @@ const Unit = props => {
                                                         type="text"
                                                         className="form-control"
                                                         name="unit_name"
-                                                        ref={register({
-                                                            required: true
-                                                        })}
+                                                        onChange={handleChange}
                                                         placeholder="Enter Unit Name"
                                                     />
-                                                    <span className="text-danger">
-                                                        {errors.unit_name &&
-                                                            "Unit name is required"}
-                                                    </span>
                                                     <span className="text-danger">
                                                         {error.unit_name}
                                                     </span>
@@ -205,15 +194,9 @@ const Unit = props => {
                                                         type="text"
                                                         className="form-control"
                                                         name="short_name"
-                                                        ref={register({
-                                                            required: true
-                                                        })}
+                                                        onChange={handleChange}
                                                         placeholder="Enter Unit Short Name"
                                                     />
-                                                    <span className="text-danger">
-                                                        {errors.short_name &&
-                                                            "Unit short name is required"}
-                                                    </span>
                                                     <span className="text-danger">
                                                         {error.short_name}
                                                     </span>
@@ -227,9 +210,7 @@ const Unit = props => {
                                                     <select
                                                         className="form-control"
                                                         name="status"
-                                                        ref={register({
-                                                            required: true
-                                                        })}
+                                                        onChange={handleChange}
                                                     >
                                                         <option
                                                             value=""
@@ -245,10 +226,6 @@ const Unit = props => {
                                                             Inactive
                                                         </option>
                                                     </select>
-                                                    <span className="text-danger">
-                                                        {errors.status &&
-                                                            "Select unit status"}
-                                                    </span>
                                                     <span className="text-danger">
                                                         {error.status}
                                                     </span>
@@ -279,7 +256,7 @@ const Unit = props => {
                 </div>
             </form>
 
-            <form onSubmit={handleSubmit2(onUpdateSubmit)}>
+            <form onSubmit={updateHandler}>
                 <div
                     className="modal fade"
                     id="edit_modal"
@@ -322,15 +299,14 @@ const Unit = props => {
                                                         type="text"
                                                         className="form-control"
                                                         name="unit_name"
-                                                        ref={register2({
-                                                            required: true
-                                                        })}
+                                                        onChange={
+                                                            EditHandleChange
+                                                        }
+                                                        value={
+                                                            EditForm.unit_name
+                                                        }
                                                         placeholder="Enter Unit Name"
                                                     />
-                                                    <span className="text-danger">
-                                                        {errors2.unit_name &&
-                                                            "Unit name is required"}
-                                                    </span>
                                                     <span className="text-danger">
                                                         {error.unit_name}
                                                     </span>
@@ -339,10 +315,8 @@ const Unit = props => {
                                             <input
                                                 name="unit_id"
                                                 type="hidden"
-                                                ref={register2({
-                                                    required: true
-                                                })}
-                                            ></input>
+                                                value={EditForm.unit_id}
+                                            />
                                             <div className="form-group ">
                                                 <label className="col-lg-6 control-label">
                                                     Short Name:
@@ -352,15 +326,14 @@ const Unit = props => {
                                                         type="text"
                                                         className="form-control"
                                                         name="short_name"
-                                                        ref={register2({
-                                                            required: true
-                                                        })}
+                                                        onChange={
+                                                            EditHandleChange
+                                                        }
+                                                        value={
+                                                            EditForm.short_name
+                                                        }
                                                         placeholder="Enter Unit Short Name"
                                                     />
-                                                    <span className="text-danger">
-                                                        {errors2.short_name &&
-                                                            "Unit Short Name is required"}
-                                                    </span>
                                                     <span className="text-danger">
                                                         {error.short_name}
                                                     </span>
@@ -374,9 +347,10 @@ const Unit = props => {
                                                     <select
                                                         className="form-control"
                                                         name="status"
-                                                        ref={register2({
-                                                            required: true
-                                                        })}
+                                                        onChange={
+                                                            EditHandleChange
+                                                        }
+                                                        value={EditForm.status}
                                                     >
                                                         <option
                                                             value=""
@@ -392,10 +366,6 @@ const Unit = props => {
                                                             Inactive
                                                         </option>
                                                     </select>
-                                                    <span className="text-danger">
-                                                        {errors2.status &&
-                                                            "Select Unit Status"}
-                                                    </span>
                                                     <span className="text-danger">
                                                         {error.status}
                                                     </span>
@@ -457,7 +427,7 @@ const Unit = props => {
                                                 aria-controls="simpletable"
                                                 className="custom-select custom-select-sm form-control form-control-sm"
                                                 onChange={e =>
-                                                    setCurrentRaw(
+                                                    setCurrentRow(
                                                         e.target.value
                                                     )
                                                 }
@@ -559,7 +529,7 @@ const Unit = props => {
                                                             data-toggle="modal"
                                                             data-target="#edit_modal"
                                                             onClick={() =>
-                                                                EditHandler(
+                                                                editHandler(
                                                                     unit.unit_id,
                                                                     unit,
                                                                     i
@@ -610,21 +580,11 @@ const Unit = props => {
                             <div className="row">
                                 <div className="col-sm-12 col-md-5"></div>
                                 <div className="col-sm-12 col-md-7">
-                                    {current_row >= totalItemsCount ? (
-                                        ""
-                                    ) : (
-                                        <Pagination
-                                            innerClass="btn-group"
-                                            linkClass="btn btn-outline-secondary"
-                                            activePage={activePage}
-                                            itemsCountPerPage={
-                                                itemsCountPerPage
-                                            }
-                                            totalItemsCount={totalItemsCount}
-                                            pageRangeDisplayed={3}
-                                            onChange={handlePageChange}
-                                        />
-                                    )}
+                                    <CustomPagination
+                                        activePage={activePage}
+                                        totalItems={totalItemsCount}
+                                        getFunction={getUnitList}
+                                    />
                                 </div>
                             </div>
                         </div>
