@@ -1,21 +1,23 @@
 import "./Category.css";
 import "react-toastify/dist/ReactToastify.css";
+
 import React, { Fragment, useEffect, useState } from "react";
+
 import Axios from "axios";
+import ClearForm from "../helpers/clearForm/ClearForm";
+import CustomPagination from "../helpers/pagination/CustomPagination";
 import PageHeader from "./../Layouts/PageHeader/PageHeader";
 import swal from "sweetalert";
 import { toast } from "react-toastify";
 import useForms from "../customHooks/useForms";
-import CustomPagination from "../helpers/pagination/CustomPagination";
-import ClearForm from "../helpers/clearForm/ClearForm";
 
 const Category = props => {
     const select_row = [10, 20, 30, 40, 50];
     const [categoryList, setCategoryList] = useState([]);
-    const [Menu, setMenu] = useState([]);
-    const [Errors, setErrors] = useState([]);
+    const [menu, setMenu] = useState([]);
+    const [errors, setErrors] = useState([]);
     const [search, setSearch] = useState("");
-    const [current_row, setCurrentRaw] = useState(10);
+    const [current_row, setCurrentRow] = useState(10);
     const [activePage, setActivePage] = useState(1);
     const [totalItemsCount, setTotalItemsCount] = useState(0);
     const [category_form, setCategoryForm, handleChange] = useForms({
@@ -36,9 +38,7 @@ const Category = props => {
     useEffect(() => {
         getCategories();
 
-        return () => {
-            setCategoryList([]);
-        };
+        return () => setCategoryList([]);
     }, [current_row, search]);
 
     /**
@@ -258,7 +258,7 @@ const Category = props => {
                                                         placeholder="Enter Menu Icon"
                                                     />
                                                     <span className="text-danger">
-                                                        {Errors.category_icon}
+                                                        {errors.category_icon}
                                                     </span>
                                                 </div>
                                             </div>
@@ -282,7 +282,7 @@ const Category = props => {
                                                         >
                                                             --Select One--
                                                         </option>
-                                                        {Menu.map((menu, i) => (
+                                                        {menu.map((menu, i) => (
                                                             <option
                                                                 key={i}
                                                                 value={
@@ -294,7 +294,7 @@ const Category = props => {
                                                         ))}
                                                     </select>
                                                     <span className="text-danger">
-                                                        {Errors.menu_id}
+                                                        {errors.menu_id}
                                                     </span>
                                                 </div>
                                             </div>
@@ -314,7 +314,7 @@ const Category = props => {
                                                         placeholder="Enter Menu Name"
                                                     />
                                                     <span className="text-danger">
-                                                        {Errors.category_name}
+                                                        {errors.category_name}
                                                     </span>
                                                 </div>
                                             </div>
@@ -400,7 +400,7 @@ const Category = props => {
                                                         placeholder="Enter Menu Icon"
                                                     />
                                                     <span className="text-danger">
-                                                        {Errors.category_icon}
+                                                        {errors.category_icon}
                                                     </span>
                                                 </div>
                                             </div>
@@ -420,7 +420,7 @@ const Category = props => {
                                                         <option value hidden>
                                                             --Select One--
                                                         </option>
-                                                        {Menu.map((menu, i) => (
+                                                        {menu.map((menu, i) => (
                                                             <option
                                                                 key={i}
                                                                 value={
@@ -432,7 +432,7 @@ const Category = props => {
                                                         ))}
                                                     </select>
                                                     <span className="text-danger">
-                                                        {Errors.menu_id}
+                                                        {errors.menu_id}
                                                     </span>
                                                 </div>
                                             </div>
@@ -454,7 +454,7 @@ const Category = props => {
                                                         placeholder="Enter Menu Name"
                                                     />
                                                     <span className="text-danger">
-                                                        {Errors.category_name}
+                                                        {errors.category_name}
                                                     </span>
                                                 </div>
                                             </div>
@@ -515,7 +515,7 @@ const Category = props => {
                                                 aria-controls="simpletable"
                                                 className="custom-select custom-select-sm form-control form-control-sm"
                                                 onChange={e =>
-                                                    setCurrentRaw(
+                                                    setCurrentRow(
                                                         e.target.value
                                                     )
                                                 }
