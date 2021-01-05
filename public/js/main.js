@@ -48147,7 +48147,6 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
     const fieldsWithValidationRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])({});
     const validFieldsRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])({});
     const defaultValuesRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(defaultValues);
-    const defaultValuesAtRenderRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])({});
     const isUnMount = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(false);
     const isWatchAllRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(false);
     const handleChangeRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])();
@@ -48161,6 +48160,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
     const isValidateAllFieldCriteria = criteriaMode === VALIDATION_MODE.all;
     const [formState, setFormState] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
         isDirty: false,
+        isValidating: false,
         dirtyFields: {},
         isSubmitted: false,
         submitCount: 0,
@@ -48174,6 +48174,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         isDirty: !isProxyEnabled,
         dirtyFields: !isProxyEnabled,
         touched: !isProxyEnabled || isOnTouch,
+        isValidating: !isProxyEnabled,
         isSubmitting: !isProxyEnabled,
         isValid: !isProxyEnabled,
     });
@@ -48194,6 +48195,10 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             setFormState(formStateRef.current);
         }
     }, []);
+    const updateIsValidating = () => readFormStateRef.current.isValidating &&
+        updateFormState({
+            isValidating: true,
+        });
     const shouldRenderBaseOnError = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, error, shouldRender = false, state = {}, isValid) => {
         let shouldReRender = shouldRender ||
             isErrorStateChanged({
@@ -48220,8 +48225,9 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             unset(formStateRef.current.errors, name);
         }
         if ((shouldReRender && !isNullOrUndefined(shouldRender)) ||
-            !isEmptyObject(state)) {
-            updateFormState(Object.assign(Object.assign({}, state), (resolverRef.current ? { isValid: !!isValid } : {})));
+            !isEmptyObject(state) ||
+            readFormStateRef.current.isValidating) {
+            updateFormState(Object.assign(Object.assign(Object.assign({}, state), (resolverRef.current ? { isValid: !!isValid } : {})), { isValidating: false }));
         }
     }, []);
     const setFieldValue = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, rawValue) => {
@@ -48253,16 +48259,14 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         if (readFormStateRef.current.isDirty) {
             const formValues = getValues();
             name && data && set(formValues, name, data);
-            return !deepEqual(formValues, isEmptyObject(defaultValuesRef.current)
-                ? defaultValuesAtRenderRef.current
-                : defaultValuesRef.current);
+            return !deepEqual(formValues, defaultValuesRef.current);
         }
         return false;
     }, []);
     const updateAndGetDirtyState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, shouldRender = true) => {
         if (readFormStateRef.current.isDirty ||
             readFormStateRef.current.dirtyFields) {
-            const isFieldDirty = !deepEqual(get(defaultValuesAtRenderRef.current, name), getFieldValue(fieldsRef, name, shallowFieldsStateRef));
+            const isFieldDirty = !deepEqual(get(defaultValuesRef.current, name), getFieldValue(fieldsRef, name, shallowFieldsStateRef));
             const isDirtyFieldExist = get(formStateRef.current.dirtyFields, name);
             const previousIsDirty = formStateRef.current.isDirty;
             isFieldDirty
@@ -48307,6 +48311,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 .every(Boolean);
             updateFormState({
                 isValid: isEmptyObject(errors),
+                isValidating: false,
             });
             return isInputsValid;
         }
@@ -48318,13 +48323,16 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
     }, [shouldRenderBaseOnError, isValidateAllFieldCriteria]);
     const trigger = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(async (name) => {
         const fields = name || Object.keys(fieldsRef.current);
+        updateIsValidating();
         if (resolverRef.current) {
             return executeSchemaOrResolverValidation(fields);
         }
         if (Array.isArray(fields)) {
             !name && (formStateRef.current.errors = {});
             const result = await Promise.all(fields.map(async (data) => await executeValidation(data, null)));
-            updateFormState();
+            updateFormState({
+                isValidating: false,
+            });
             return result.every(Boolean);
         }
         return await executeValidation(fields);
@@ -48341,8 +48349,9 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         }
     }, [trigger, setFieldValue, updateAndGetDirtyState]);
     const setInternalValue = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, value, config) => {
-        !isPrimitive(value) &&
-            set(shallowFieldsStateRef.current, name, cloneObject(value));
+        !shouldUnregister &&
+            !isPrimitive(value) &&
+            set(shallowFieldsStateRef.current, name, Object.assign({}, value));
         if (fieldsRef.current[name]) {
             setFieldValue(name, value);
             config.shouldDirty && updateAndGetDirtyState(name);
@@ -48354,7 +48363,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 const parentName = getFieldArrayParentName(name) || name;
                 set(fieldArrayDefaultValuesRef.current, name, value);
                 resetFieldArrayFunctionRef.current[parentName]({
-                    [parentName]: fieldArrayDefaultValuesRef.current[parentName],
+                    [parentName]: get(fieldArrayDefaultValuesRef.current, parentName),
                 });
                 if ((readFormStateRef.current.isDirty ||
                     readFormStateRef.current.dirtyFields) &&
@@ -48405,7 +48414,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                     isReValidateOnBlur, isTouched: !!get(formStateRef.current.touched, name), isSubmitted: formStateRef.current.isSubmitted }, modeRef.current));
                 let state = updateAndGetDirtyState(name, false);
                 let shouldRender = !isEmptyObject(state) ||
-                    isFieldWatched(name);
+                    (!isBlurEvent && isFieldWatched(name));
                 if (isBlurEvent &&
                     !get(formStateRef.current.touched, name) &&
                     readFormStateRef.current.touched) {
@@ -48416,11 +48425,12 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                     set(shallowFieldsStateRef.current, name, getFieldValue(fieldsRef, name));
                 }
                 if (shouldSkipValidation) {
-                    renderWatchedInputs(name);
+                    !isBlurEvent && renderWatchedInputs(name);
                     return ((!isEmptyObject(state) ||
                         (shouldRender && isEmptyObject(state))) &&
                         updateFormState(state));
                 }
+                updateIsValidating();
                 if (resolverRef.current) {
                     const { errors } = await resolverRef.current(getValues(), contextRef.current, isValidateAllFieldCriteria);
                     const previousFormIsValid = formStateRef.current.isValid;
@@ -48445,7 +48455,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 else {
                     error = (await validateField(fieldsRef, isValidateAllFieldCriteria, field, shallowFieldsStateRef))[name];
                 }
-                renderWatchedInputs(name);
+                !isBlurEvent && renderWatchedInputs(name);
                 shouldRenderBaseOnError(name, error, shouldRender, state, isValid);
             }
         };
@@ -48501,7 +48511,6 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         if (field) {
             removeFieldEventListener(field, forceDelete);
             if (shouldUnregister && !compact(field.options || []).length) {
-                unset(defaultValuesAtRenderRef.current, field.ref.name);
                 unset(validFieldsRef.current, field.ref.name);
                 unset(fieldsWithValidationRef.current, field.ref.name);
                 unset(formStateRef.current.errors, field.ref.name);
@@ -48636,13 +48645,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 });
             }
         }
-        if (!defaultValuesAtRenderRef.current[name] &&
-            !(isFieldArray && isEmptyDefaultValue)) {
-            const fieldValue = getFieldValue(fieldsRef, name, shallowFieldsStateRef);
-            set(defaultValuesAtRenderRef.current, name, isEmptyDefaultValue
-                ? isObject(fieldValue)
-                    ? Object.assign({}, fieldValue) : fieldValue
-                : defaultValue);
+        if (!(isFieldArray && isEmptyDefaultValue)) {
             !isFieldArray && unset(formStateRef.current.dirtyFields, name);
         }
         if (type) {
@@ -48728,7 +48731,6 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             validFieldsRef.current = {};
             fieldsWithValidationRef.current = {};
         }
-        defaultValuesAtRenderRef.current = {};
         fieldArrayDefaultValuesRef.current = {};
         watchFieldsRef.current = new Set();
         isWatchAllRef.current = false;
@@ -48987,7 +48989,7 @@ const useFieldArray = ({ control, name, keyName = 'id', }) => {
         return rest;
     });
     fieldArrayNamesRef.current.add(name);
-    const getFieldArrayValue = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(() => get(fieldArrayValuesRef.current, name, []), []);
+    const getFieldArrayValue = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(() => get(fieldArrayValuesRef.current, name, []), [name]);
     const getCurrentFieldsValues = () => mapIds(get(getValues(), name, getFieldArrayValue()).map((item, index) => (Object.assign(Object.assign({}, getFieldArrayValue()[index]), item))), keyName, true);
     fieldArrayNamesRef.current.add(name);
     if (fieldArrayParentName &&
@@ -60199,6 +60201,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
 /* harmony import */ var _customHooks_useForms__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../customHooks/useForms */ "./resources/js/components/customHooks/useForms.js");
 /* harmony import */ var _helpers_pagination_CustomPagination__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../helpers/pagination/CustomPagination */ "./resources/js/components/helpers/pagination/CustomPagination.js");
+/* harmony import */ var _helpers_clearForm_ClearForm__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../helpers/clearForm/ClearForm */ "./resources/js/components/helpers/clearForm/ClearForm.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -60224,6 +60227,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -60268,7 +60272,7 @@ var Category = function Category(props) {
       activePage = _useState12[0],
       setActivePage = _useState12[1];
 
-  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(450),
+  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(0),
       _useState14 = _slicedToArray(_useState13, 2),
       totalItemsCount = _useState14[0],
       setTotalItemsCount = _useState14[1];
@@ -60337,11 +60341,7 @@ var Category = function Category(props) {
 
   var clearFrom = function clearFrom() {
     setErrors([]);
-    var form = category_form;
-    console.log("form", form);
-    Object.keys(form).forEach(function (key) {
-      form[key] = "";
-    });
+    var form = Object(_helpers_clearForm_ClearForm__WEBPACK_IMPORTED_MODULE_9__["default"])(category_form);
     setCategoryForm(_objectSpread(_objectSpread({}, category_form), form));
   };
   /**
@@ -60788,7 +60788,7 @@ var Category = function Category(props) {
     className: "col-sm-12 col-md-5"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-sm-12 col-md-7"
-  }, totalItemsCount >= current_row && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_helpers_pagination_CustomPagination__WEBPACK_IMPORTED_MODULE_8__["default"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_helpers_pagination_CustomPagination__WEBPACK_IMPORTED_MODULE_8__["default"], {
     activePage: activePage,
     totalItems: totalItemsCount,
     getFunction: getCategories
@@ -64718,6 +64718,27 @@ var useForms = function useForms(initialValues) {
 
 /***/ }),
 
+/***/ "./resources/js/components/helpers/clearForm/ClearForm.js":
+/*!****************************************************************!*\
+  !*** ./resources/js/components/helpers/clearForm/ClearForm.js ***!
+  \****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// CLear the object state value.
+var ClearForm = function ClearForm(initialValues) {
+  Object.keys(initialValues).forEach(function (key) {
+    initialValues[key] = "";
+  });
+  return initialValues;
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (ClearForm);
+
+/***/ }),
+
 /***/ "./resources/js/components/helpers/pagination/CustomPagination.js":
 /*!************************************************************************!*\
   !*** ./resources/js/components/helpers/pagination/CustomPagination.js ***!
@@ -64738,7 +64759,7 @@ var CustomPagination = function CustomPagination(_ref) {
   var activePage = _ref.activePage,
       totalItems = _ref.totalItems,
       getFunction = _ref.getFunction;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_1___default.a, {
+  return totalItems > 8 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_1___default.a, {
     innerClass: "btn-group",
     linkClass: "btn btn-outline-secondary",
     activePage: activePage,
@@ -64910,8 +64931,8 @@ var router = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/tanvir/Work/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
-module.exports = __webpack_require__(/*! /home/tanvir/Work/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
+__webpack_require__(/*! /home/professor/Documents/Laravel/Laravel + React_js/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /home/professor/Documents/Laravel/Laravel + React_js/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
 
 
 /***/ })
