@@ -1,110 +1,100 @@
 import "./SubCategory.css";
 import "react-toastify/dist/ReactToastify.css";
-
 import React, { Fragment, useEffect, useState } from "react";
-
 import Axios from "axios";
 import PageHeader from "./../Layouts/PageHeader/PageHeader";
-import Pagination from "react-js-pagination";
 import { toast } from "react-toastify";
 import useForms from "../customHooks/useForms";
 import { slice } from "lodash";
+import CustomPagination from "../helpers/pagination/CustomPagination";
+import ClearForm from "../helpers/clearForm/ClearForm";
 
-const SubCategory = (props) => {
+const SubCategory = props => {
+    const selectRow = [10, 20, 30, 40, 50];
     const [subCategoryList, setSubCategoryList] = useState([]);
-    const [Search, setSearch] = useState("");
-    const [Current_row, setCurrent_row] = useState(8);
-    const [page, setPage] = useState("");
-    const [select_row, setSelectRow] = useState([8, 10, 20, 30, 40, 50]);
+    const [search, setSearch] = useState("");
+    const [currentRow, setCurrentRow] = useState(8);
     const [activePage, setActivePage] = useState(1);
-    const [itemsCountPerPage, setItemsCountPerPage] = useState(8);
-    const [totalItemsCount, setTotalItemsCount] = useState(450);
-
-    const [Errors, setErrors] = useState([]);
-
-    const [Menu, setMenu] = useState([]);
-    const [Category, setCategory] = useState([]);
-    const [SubCategoryForm, setSubCategoryForm, handleChange] = useForms({
+    const [totalItemsCount, setTotalItemsCount] = useState(0);
+    const [errors, setErrors] = useState([]);
+    const [menu, setMenu] = useState([]);
+    const [category, setCategory] = useState([]);
+    const [subCategoryForm, setSubCategoryForm, handleChange] = useForms({
         menu_id: "",
         category_id: "",
         sub_category_name: "",
-        sub_category_icon: "",
+        sub_category_icon: ""
     });
 
-    const [EditForm, setEditForm, EditHandleChange] = useForms({
+    const [editForm, setEditForm, editHandleChange] = useForms({
         menu_id: "",
         category_id: "",
         sub_category_name: "",
-        sub_category_icon: "",
+        sub_category_icon: ""
     });
 
-    const handlePageChange = (pageNumber) => {
-        setPage(pageNumber);
-    };
-
-    const MenuChangeFunctions = (e) => {
+    const menuChangeFunctions = e => {
         handleChange(e);
-        GetCategory(e.target.value);
+        getCategory(e.target.value);
     };
 
     // Sub Category List
-    const GetSubCategoryList = () => {
-        const main_url = `sub_category?q=${Search}&row=${Current_row}&page=${page}`;
+    const getSubCategoryList = (page = 1) => {
+        const main_url = `sub_category?q=${search}&row=${currentRow}&page=${page}`;
 
         Axios.get(main_url)
-            .then((response) => {
+            .then(response => {
                 setSubCategoryList(response.data.data.data);
                 setActivePage(response.data.data.current_page);
-                setItemsCountPerPage(parseInt(response.data.data.per_page));
                 setTotalItemsCount(response.data.data.total);
             })
-            .catch((error) => console.log(error));
+            .catch(error => console.log(error));
     };
 
     useEffect(() => {
-        GetSubCategoryList();
+        getSubCategoryList();
         return () => {
             setSubCategoryList([]);
         };
-    }, [Search, Current_row, page]);
+    }, [search, currentRow]);
     // Sub Category List
 
     // Menu Data Get
-    const GetMenu = () => {
+    const getMenu = () => {
         Axios.get("/all_menu_get")
-            .then((response) => {
+            .then(response => {
                 setMenu(response.data.data);
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log(error);
             });
     };
 
     useEffect(() => {
-        GetMenu();
+        getMenu();
     }, []);
     // Menu Data Get
 
     // Category Data Get
-    const GetCategory = (menu_id) => {
+    const getCategory = menu_id => {
         Axios.get("/category_get/" + menu_id)
-            .then((response) => {
+            .then(response => {
                 setCategory(response.data.data);
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log(error);
             });
     };
     // Category Data Get
 
     // Image Render
-    const onImageChangeHandler = (e) => {
+    const onImageChangeHandler = e => {
         let files = e.target.files[0];
         let reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = e => {
             setSubCategoryForm({
-                ...SubCategoryForm,
-                sub_category_icon: e.target.result,
+                ...subCategoryForm,
+                sub_category_icon: e.target.result
             });
         };
         reader.readAsDataURL(files);
@@ -112,13 +102,13 @@ const SubCategory = (props) => {
     // Image Render
 
     // Edit Image render
-    const onEditImageChangeHandler = (e) => {
+    const onEditImageChangeHandler = e => {
         let files = e.target.files[0];
         let reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = e => {
             setEditForm({
-                ...EditForm,
-                sub_category_icon: e.target.result,
+                ...editForm,
+                sub_category_icon: e.target.result
             });
         };
         reader.readAsDataURL(files);
@@ -126,17 +116,17 @@ const SubCategory = (props) => {
     // Edit Image render
 
     // Form Submit Handler
-    const submitHandler = (e) => {
+    const submitHandler = e => {
         e.preventDefault();
-        Axios.post("/sub_category", SubCategoryForm)
-            .then((response) => {
+        Axios.post("/sub_category", subCategoryForm)
+            .then(response => {
                 console.log(response);
                 $(".close").click();
-                GetSubCategoryList();
-                ClearFrom();
+                getSubCategoryList();
+                clearFrom();
                 toast.success("Sub Category Data Inserted Successfully!");
             })
-            .catch((error) => {
+            .catch(error => {
                 if (error.response.status == 422) {
                     setErrors(error.response.data.errors);
                 }
@@ -145,17 +135,17 @@ const SubCategory = (props) => {
     // Form Submit Handler
 
     // Delete Handler
-    const DeleteHandler = (id, index) => {
+    const deleteHandler = (id, index) => {
         swal({
             title: "Are you sure?",
             text: `Once deleted, you will not be able to recover this imaginary file!`,
             icon: "warning",
             buttons: true,
-            dangerMode: true,
-        }).then((willDelete) => {
+            dangerMode: true
+        }).then(willDelete => {
             if (willDelete) {
                 Axios.delete("/sub_category/" + id)
-                    .then((response) => {
+                    .then(response => {
                         if (response.status === 204) {
                             swal(
                                 "Deleted!",
@@ -170,7 +160,7 @@ const SubCategory = (props) => {
                             swal("Opps", "Something Went Wrong", "warning");
                         }
                     })
-                    .catch((error) => {
+                    .catch(error => {
                         console.log(error);
                     });
             } else {
@@ -181,25 +171,25 @@ const SubCategory = (props) => {
     // Delete Handler
 
     // Edit Data Get Handler
-    const EditHandler = (id, data, index) => {
+    const editHandler = (id, data, index) => {
         SubCategoryList.sub_category_id = id;
         let value = JSON.parse(JSON.stringify(data));
         setEditForm(value);
-        GetCategory(value.menu_id);
+        getCategory(value.menu_id);
     };
     // Edit Data Get Handler
 
     // Update Form Submit Handler
-    const updateHandler = (e) => {
+    const updateHandler = e => {
         e.preventDefault();
-        Axios.put("/sub_category/" + EditForm.sub_category_id, EditForm)
-            .then((response) => {
+        Axios.put("/sub_category/" + editForm.sub_category_id, editForm)
+            .then(response => {
                 $(".close").click();
-                GetSubCategoryList();
-                ClearFrom();
+                getSubCategoryList();
+                clearFrom();
                 toast.success("Sub Category Data Update Successfully!");
             })
-            .catch((error) => {
+            .catch(error => {
                 if (error.response.status == 422) {
                     setError(error.response.data.errors);
                 }
@@ -208,9 +198,9 @@ const SubCategory = (props) => {
     // Update Form Submit Handler
 
     // Change Status Handler
-    const ChangeStatus = (id) => {
+    const changeStatus = id => {
         Axios.get("/sub_category/status/" + id)
-            .then((response) => {
+            .then(response => {
                 if (response.data.code === 200) {
                     toast.success("This sub category is active successfully!");
                 }
@@ -219,21 +209,19 @@ const SubCategory = (props) => {
                         "This sub category is inactive successfully!"
                     );
                 }
-                GetSubCategoryList();
+                getSubCategoryList();
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log(error);
             });
     };
     // Change Status Handler
 
     // Clear From
-    const ClearFrom = () => {
+    const clearFrom = () => {
         setErrors([]);
-        let FORM = SubCategoryForm;
-        Object.keys(FORM).forEach(function (key, index) {
-            FORM[key] = "";
-        });
+        let form = ClearForm(subCategoryForm);
+        setCategoryForm({ ...subCategoryForm, ...form });
     };
     // Clear From
 
@@ -273,9 +261,9 @@ const SubCategory = (props) => {
                                             <img
                                                 className="custom-icon rounded-circle"
                                                 src={
-                                                    !SubCategoryForm.sub_category_icon
+                                                    !subCategoryForm.sub_category_icon
                                                         ? "backend_assets/img/menu-icon.png"
-                                                        : SubCategoryForm.sub_category_icon
+                                                        : subCategoryForm.sub_category_icon
                                                 }
                                             />
                                             <span className="text-danger" />
@@ -296,7 +284,7 @@ const SubCategory = (props) => {
                                                     />
                                                     <span className="text-danger">
                                                         {
-                                                            Errors.sub_category_icon
+                                                            errors.sub_category_icon
                                                         }
                                                     </span>
                                                 </div>
@@ -309,8 +297,8 @@ const SubCategory = (props) => {
                                                     <select
                                                         name="menu_id"
                                                         className="form-control"
-                                                        onChange={(e) =>
-                                                            MenuChangeFunctions(
+                                                        onChange={e =>
+                                                            menuChangeFunctions(
                                                                 e
                                                             )
                                                         }
@@ -322,7 +310,7 @@ const SubCategory = (props) => {
                                                         >
                                                             --Select One--
                                                         </option>
-                                                        {Menu.map((menu, i) => (
+                                                        {menu.map((menu, i) => (
                                                             <option
                                                                 key={i}
                                                                 value={
@@ -334,7 +322,7 @@ const SubCategory = (props) => {
                                                         ))}
                                                     </select>
                                                     <span className="text-danger">
-                                                        {Errors.menu_id}
+                                                        {errors.menu_id}
                                                     </span>
                                                 </div>
                                             </div>
@@ -355,7 +343,7 @@ const SubCategory = (props) => {
                                                         >
                                                             --Select One--
                                                         </option>
-                                                        {Category.map(
+                                                        {category.map(
                                                             (category, i) => (
                                                                 <option
                                                                     key={i}
@@ -371,7 +359,7 @@ const SubCategory = (props) => {
                                                         )}
                                                     </select>
                                                     <span className="text-danger">
-                                                        {Errors.category_id}
+                                                        {errors.category_id}
                                                     </span>
                                                 </div>
                                             </div>
@@ -389,7 +377,7 @@ const SubCategory = (props) => {
                                                     />
                                                     <span className="text-danger">
                                                         {
-                                                            Errors.sub_category_name
+                                                            errors.sub_category_name
                                                         }
                                                     </span>
                                                 </div>
@@ -403,7 +391,7 @@ const SubCategory = (props) => {
                                     type="button"
                                     className="btn btn-secondary"
                                     data-dismiss="modal"
-                                    onClick={ClearFrom}
+                                    onClick={clearFrom}
                                 >
                                     Close
                                 </button>
@@ -452,9 +440,9 @@ const SubCategory = (props) => {
                                             <img
                                                 className="custom-icon rounded-circle"
                                                 src={
-                                                    !EditForm.sub_category_icon
+                                                    !editForm.sub_category_icon
                                                         ? "backend_assets/img/menu-icon.png"
-                                                        : EditForm.sub_category_icon
+                                                        : editForm.sub_category_icon
                                                 }
                                             />
                                             <span className="text-danger" />
@@ -471,12 +459,12 @@ const SubCategory = (props) => {
                                                         name="sub_category_icon"
                                                         placeholder="Enter SubCategory Icon"
                                                         onChange={
-                                                            EditHandleChange
+                                                            editHandleChange
                                                         }
                                                     />
                                                     <span className="text-danger">
                                                         {
-                                                            Errors.sub_category_icon
+                                                            errors.sub_category_icon
                                                         }
                                                     </span>
                                                 </div>
@@ -490,9 +478,9 @@ const SubCategory = (props) => {
                                                         className="form-control"
                                                         name="menu_id"
                                                         onChange={
-                                                            EditHandleChange
+                                                            editHandleChange
                                                         }
-                                                        value={EditForm.menu_id}
+                                                        value={editForm.menu_id}
                                                     >
                                                         <option
                                                             value
@@ -501,7 +489,7 @@ const SubCategory = (props) => {
                                                         >
                                                             --Select One--
                                                         </option>
-                                                        {Menu.map((menu, i) => (
+                                                        {menu.map((menu, i) => (
                                                             <option
                                                                 key={i}
                                                                 value={
@@ -513,7 +501,7 @@ const SubCategory = (props) => {
                                                         ))}
                                                     </select>
                                                     <span className="text-danger">
-                                                        {Errors.menu_id}
+                                                        {errors.menu_id}
                                                     </span>
                                                 </div>
                                             </div>
@@ -526,10 +514,10 @@ const SubCategory = (props) => {
                                                         className="form-control"
                                                         name="category_id"
                                                         onChange={
-                                                            EditHandleChange
+                                                            editHandleChange
                                                         }
                                                         value={
-                                                            EditForm.category_id
+                                                            editForm.category_id
                                                         }
                                                     >
                                                         <option
@@ -539,7 +527,7 @@ const SubCategory = (props) => {
                                                         >
                                                             --Select One--
                                                         </option>
-                                                        {Category.map(
+                                                        {category.map(
                                                             (category, i) => (
                                                                 <option
                                                                     key={i}
@@ -555,7 +543,7 @@ const SubCategory = (props) => {
                                                         )}
                                                     </select>
                                                     <span className="text-danger">
-                                                        {Errors.category_id}
+                                                        {errors.category_id}
                                                     </span>
                                                 </div>
                                             </div>
@@ -570,15 +558,15 @@ const SubCategory = (props) => {
                                                         name="sub_category_name"
                                                         placeholder="Enter Sub Category Name"
                                                         onChange={
-                                                            EditHandleChange
+                                                            editHandleChange
                                                         }
                                                         value={
-                                                            EditForm.sub_category_name
+                                                            editForm.sub_category_name
                                                         }
                                                     />
                                                     <span className="text-danger">
                                                         {
-                                                            Errors.sub_category_name
+                                                            errors.sub_category_name
                                                         }
                                                     </span>
                                                 </div>
@@ -592,7 +580,7 @@ const SubCategory = (props) => {
                                     type="button"
                                     className="btn btn-secondary"
                                     data-dismiss="modal"
-                                    onClick={ClearFrom}
+                                    onClick={clearFrom}
                                 >
                                     Close
                                 </button>
@@ -615,7 +603,7 @@ const SubCategory = (props) => {
                         className="btn btn-info table-button"
                         data-toggle="modal"
                         data-target="#add_modal"
-                        onClick={ClearFrom}
+                        onClick={clearFrom}
                     >
                         <i className="ik ik-clipboard"></i>
                         Add new
@@ -639,13 +627,13 @@ const SubCategory = (props) => {
                                                 name="simpletable_length"
                                                 aria-controls="simpletable"
                                                 className="custom-select custom-select-sm form-control form-control-sm"
-                                                onChange={(e) =>
-                                                    setCurrent_row(
+                                                onChange={e =>
+                                                    setCurrentRow(
                                                         e.target.value
                                                     )
                                                 }
                                             >
-                                                {select_row.map((rows, i) => (
+                                                {selectRow.map((rows, i) => (
                                                     <option
                                                         key={i}
                                                         value={rows}
@@ -670,10 +658,10 @@ const SubCategory = (props) => {
                                                 className="form-control form-control-sm"
                                                 placeholder="Type to filter..."
                                                 aria-controls="simpletable"
-                                                onChange={(e) =>
+                                                onChange={e =>
                                                     setSearch(e.target.value)
                                                 }
-                                                value={Search}
+                                                value={search}
                                             />
                                         </label>
                                     </div>
@@ -771,7 +759,7 @@ const SubCategory = (props) => {
                                                                         : "ik ik-repeat f-16 mr-15 text-red"
                                                                 }
                                                                 onClick={() =>
-                                                                    ChangeStatus(
+                                                                    changeStatus(
                                                                         subCategory.sub_category_id
                                                                     )
                                                                 }
@@ -781,7 +769,7 @@ const SubCategory = (props) => {
                                                                 data-toggle="modal"
                                                                 data-target="#edit_modal"
                                                                 onClick={() =>
-                                                                    EditHandler(
+                                                                    editHandler(
                                                                         subCategory.sub_category_id,
                                                                         subCategory,
                                                                         i
@@ -791,7 +779,7 @@ const SubCategory = (props) => {
                                                             <i
                                                                 className="ik ik-trash-2 f-16 text-red"
                                                                 onClick={() =>
-                                                                    DeleteHandler(
+                                                                    deleteHandler(
                                                                         subCategory.sub_category_id,
                                                                         i
                                                                     )
@@ -818,21 +806,12 @@ const SubCategory = (props) => {
                             <div className="row">
                                 <div className="col-sm-12 col-md-5"></div>
                                 <div className="col-sm-12 col-md-7">
-                                    {Current_row >= totalItemsCount ? (
-                                        ""
-                                    ) : (
-                                        <Pagination
-                                            innerClass="btn-group"
-                                            linkClass="btn btn-outline-secondary"
-                                            activePage={activePage}
-                                            itemsCountPerPage={
-                                                itemsCountPerPage
-                                            }
-                                            totalItemsCount={totalItemsCount}
-                                            pageRangeDisplayed={3}
-                                            onChange={handlePageChange}
-                                        />
-                                    )}
+                                    <CustomPagination
+                                        activePage={activePage}
+                                        currentRow={currentRow}
+                                        totalItems={totalItemsCount}
+                                        getFunction={getSubCategoryList}
+                                    />
                                 </div>
                             </div>
                         </div>

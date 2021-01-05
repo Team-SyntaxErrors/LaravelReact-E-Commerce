@@ -61458,12 +61458,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _Layouts_PageHeader_PageHeader__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../Layouts/PageHeader/PageHeader */ "./resources/js/components/Layouts/PageHeader/PageHeader.js");
-/* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-js-pagination */ "./node_modules/react-js-pagination/dist/Pagination.js");
-/* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_js_pagination__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
-/* harmony import */ var _customHooks_useForms__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../customHooks/useForms */ "./resources/js/components/customHooks/useForms.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
+/* harmony import */ var _customHooks_useForms__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../customHooks/useForms */ "./resources/js/components/customHooks/useForms.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _helpers_pagination_CustomPagination__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../helpers/pagination/CustomPagination */ "./resources/js/components/helpers/pagination/CustomPagination.js");
+/* harmony import */ var _helpers_clearForm_ClearForm__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../helpers/clearForm/ClearForm */ "./resources/js/components/helpers/clearForm/ClearForm.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -61500,7 +61500,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var SubCategory = function SubCategory(props) {
+  var selectRow = [10, 20, 30, 40, 50];
+
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
       subCategoryList = _useState2[0],
@@ -61508,92 +61511,73 @@ var SubCategory = function SubCategory(props) {
 
   var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(""),
       _useState4 = _slicedToArray(_useState3, 2),
-      Search = _useState4[0],
+      search = _useState4[0],
       setSearch = _useState4[1];
 
   var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(8),
       _useState6 = _slicedToArray(_useState5, 2),
-      Current_row = _useState6[0],
-      setCurrent_row = _useState6[1];
+      currentRow = _useState6[0],
+      setCurrentRow = _useState6[1];
 
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(""),
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(1),
       _useState8 = _slicedToArray(_useState7, 2),
-      page = _useState8[0],
-      setPage = _useState8[1];
+      activePage = _useState8[0],
+      setActivePage = _useState8[1];
 
-  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([8, 10, 20, 30, 40, 50]),
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(0),
       _useState10 = _slicedToArray(_useState9, 2),
-      select_row = _useState10[0],
-      setSelectRow = _useState10[1];
+      totalItemsCount = _useState10[0],
+      setTotalItemsCount = _useState10[1];
 
-  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(1),
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState12 = _slicedToArray(_useState11, 2),
-      activePage = _useState12[0],
-      setActivePage = _useState12[1];
+      errors = _useState12[0],
+      setErrors = _useState12[1];
 
-  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(8),
+  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState14 = _slicedToArray(_useState13, 2),
-      itemsCountPerPage = _useState14[0],
-      setItemsCountPerPage = _useState14[1];
+      menu = _useState14[0],
+      setMenu = _useState14[1];
 
-  var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(450),
+  var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState16 = _slicedToArray(_useState15, 2),
-      totalItemsCount = _useState16[0],
-      setTotalItemsCount = _useState16[1];
+      category = _useState16[0],
+      setCategory = _useState16[1];
 
-  var _useState17 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
-      _useState18 = _slicedToArray(_useState17, 2),
-      Errors = _useState18[0],
-      setErrors = _useState18[1];
-
-  var _useState19 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
-      _useState20 = _slicedToArray(_useState19, 2),
-      Menu = _useState20[0],
-      setMenu = _useState20[1];
-
-  var _useState21 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
-      _useState22 = _slicedToArray(_useState21, 2),
-      Category = _useState22[0],
-      setCategory = _useState22[1];
-
-  var _useForms = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_7__["default"])({
+  var _useForms = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_6__["default"])({
     menu_id: "",
     category_id: "",
     sub_category_name: "",
     sub_category_icon: ""
   }),
       _useForms2 = _slicedToArray(_useForms, 3),
-      SubCategoryForm = _useForms2[0],
+      subCategoryForm = _useForms2[0],
       setSubCategoryForm = _useForms2[1],
       handleChange = _useForms2[2];
 
-  var _useForms3 = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_7__["default"])({
+  var _useForms3 = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_6__["default"])({
     menu_id: "",
     category_id: "",
     sub_category_name: "",
     sub_category_icon: ""
   }),
       _useForms4 = _slicedToArray(_useForms3, 3),
-      EditForm = _useForms4[0],
+      editForm = _useForms4[0],
       setEditForm = _useForms4[1],
-      EditHandleChange = _useForms4[2];
+      editHandleChange = _useForms4[2];
 
-  var handlePageChange = function handlePageChange(pageNumber) {
-    setPage(pageNumber);
-  };
-
-  var MenuChangeFunctions = function MenuChangeFunctions(e) {
+  var menuChangeFunctions = function menuChangeFunctions(e) {
     handleChange(e);
-    GetCategory(e.target.value);
+    getCategory(e.target.value);
   }; // Sub Category List
 
 
-  var GetSubCategoryList = function GetSubCategoryList() {
-    var main_url = "sub_category?q=".concat(Search, "&row=").concat(Current_row, "&page=").concat(page);
+  var getSubCategoryList = function getSubCategoryList() {
+    var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+    var main_url = "sub_category?q=".concat(search, "&row=").concat(currentRow, "&page=").concat(page);
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(main_url).then(function (response) {
       setSubCategoryList(response.data.data.data);
       setActivePage(response.data.data.current_page);
-      setItemsCountPerPage(parseInt(response.data.data.per_page));
       setTotalItemsCount(response.data.data.total);
     })["catch"](function (error) {
       return console.log(error);
@@ -61601,14 +61585,14 @@ var SubCategory = function SubCategory(props) {
   };
 
   Object(react__WEBPACK_IMPORTED_MODULE_2__["useEffect"])(function () {
-    GetSubCategoryList();
+    getSubCategoryList();
     return function () {
       setSubCategoryList([]);
     };
-  }, [Search, Current_row, page]); // Sub Category List
+  }, [search, currentRow]); // Sub Category List
   // Menu Data Get
 
-  var GetMenu = function GetMenu() {
+  var getMenu = function getMenu() {
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/all_menu_get").then(function (response) {
       setMenu(response.data.data);
     })["catch"](function (error) {
@@ -61617,11 +61601,11 @@ var SubCategory = function SubCategory(props) {
   };
 
   Object(react__WEBPACK_IMPORTED_MODULE_2__["useEffect"])(function () {
-    GetMenu();
+    getMenu();
   }, []); // Menu Data Get
   // Category Data Get
 
-  var GetCategory = function GetCategory(menu_id) {
+  var getCategory = function getCategory(menu_id) {
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/category_get/" + menu_id).then(function (response) {
       setCategory(response.data.data);
     })["catch"](function (error) {
@@ -61636,7 +61620,7 @@ var SubCategory = function SubCategory(props) {
     var reader = new FileReader();
 
     reader.onload = function (e) {
-      setSubCategoryForm(_objectSpread(_objectSpread({}, SubCategoryForm), {}, {
+      setSubCategoryForm(_objectSpread(_objectSpread({}, subCategoryForm), {}, {
         sub_category_icon: e.target.result
       }));
     };
@@ -61651,7 +61635,7 @@ var SubCategory = function SubCategory(props) {
     var reader = new FileReader();
 
     reader.onload = function (e) {
-      setEditForm(_objectSpread(_objectSpread({}, EditForm), {}, {
+      setEditForm(_objectSpread(_objectSpread({}, editForm), {}, {
         sub_category_icon: e.target.result
       }));
     };
@@ -61663,12 +61647,12 @@ var SubCategory = function SubCategory(props) {
 
   var submitHandler = function submitHandler(e) {
     e.preventDefault();
-    axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/sub_category", SubCategoryForm).then(function (response) {
+    axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/sub_category", subCategoryForm).then(function (response) {
       console.log(response);
       $(".close").click();
-      GetSubCategoryList();
-      ClearFrom();
-      react_toastify__WEBPACK_IMPORTED_MODULE_6__["toast"].success("Sub Category Data Inserted Successfully!");
+      getSubCategoryList();
+      clearFrom();
+      react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].success("Sub Category Data Inserted Successfully!");
     })["catch"](function (error) {
       if (error.response.status == 422) {
         setErrors(error.response.data.errors);
@@ -61678,7 +61662,7 @@ var SubCategory = function SubCategory(props) {
   // Delete Handler
 
 
-  var DeleteHandler = function DeleteHandler(id, index) {
+  var deleteHandler = function deleteHandler(id, index) {
     swal({
       title: "Are you sure?",
       text: "Once deleted, you will not be able to recover this imaginary file!",
@@ -61710,22 +61694,22 @@ var SubCategory = function SubCategory(props) {
   // Edit Data Get Handler
 
 
-  var EditHandler = function EditHandler(id, data, index) {
+  var editHandler = function editHandler(id, data, index) {
     SubCategoryList.sub_category_id = id;
     var value = JSON.parse(JSON.stringify(data));
     setEditForm(value);
-    GetCategory(value.menu_id);
+    getCategory(value.menu_id);
   }; // Edit Data Get Handler
   // Update Form Submit Handler
 
 
   var updateHandler = function updateHandler(e) {
     e.preventDefault();
-    axios__WEBPACK_IMPORTED_MODULE_3___default.a.put("/sub_category/" + EditForm.sub_category_id, EditForm).then(function (response) {
+    axios__WEBPACK_IMPORTED_MODULE_3___default.a.put("/sub_category/" + editForm.sub_category_id, editForm).then(function (response) {
       $(".close").click();
-      GetSubCategoryList();
-      ClearFrom();
-      react_toastify__WEBPACK_IMPORTED_MODULE_6__["toast"].success("Sub Category Data Update Successfully!");
+      getSubCategoryList();
+      clearFrom();
+      react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].success("Sub Category Data Update Successfully!");
     })["catch"](function (error) {
       if (error.response.status == 422) {
         setError(error.response.data.errors);
@@ -61735,17 +61719,17 @@ var SubCategory = function SubCategory(props) {
   // Change Status Handler
 
 
-  var ChangeStatus = function ChangeStatus(id) {
+  var changeStatus = function changeStatus(id) {
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/sub_category/status/" + id).then(function (response) {
       if (response.data.code === 200) {
-        react_toastify__WEBPACK_IMPORTED_MODULE_6__["toast"].success("This sub category is active successfully!");
+        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].success("This sub category is active successfully!");
       }
 
       if (response.data.code === 201) {
-        react_toastify__WEBPACK_IMPORTED_MODULE_6__["toast"].warning("This sub category is inactive successfully!");
+        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].warning("This sub category is inactive successfully!");
       }
 
-      GetSubCategoryList();
+      getSubCategoryList();
     })["catch"](function (error) {
       console.log(error);
     });
@@ -61753,12 +61737,10 @@ var SubCategory = function SubCategory(props) {
   // Clear From
 
 
-  var ClearFrom = function ClearFrom() {
+  var clearFrom = function clearFrom() {
     setErrors([]);
-    var FORM = SubCategoryForm;
-    Object.keys(FORM).forEach(function (key, index) {
-      FORM[key] = "";
-    });
+    var form = Object(_helpers_clearForm_ClearForm__WEBPACK_IMPORTED_MODULE_9__["default"])(subCategoryForm);
+    setCategoryForm(_objectSpread(_objectSpread({}, subCategoryForm), form));
   }; // Clear From
 
 
@@ -61800,7 +61782,7 @@ var SubCategory = function SubCategory(props) {
     className: "col-md-3 col-sm-12 mt-3 text-center"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("img", {
     className: "custom-icon rounded-circle",
-    src: !SubCategoryForm.sub_category_icon ? "backend_assets/img/menu-icon.png" : SubCategoryForm.sub_category_icon
+    src: !subCategoryForm.sub_category_icon ? "backend_assets/img/menu-icon.png" : subCategoryForm.sub_category_icon
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
@@ -61820,7 +61802,7 @@ var SubCategory = function SubCategory(props) {
     onChange: handleChange
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  }, Errors.sub_category_icon))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, errors.sub_category_icon))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("label", {
     className: "col-lg-6 control-label"
@@ -61830,20 +61812,20 @@ var SubCategory = function SubCategory(props) {
     name: "menu_id",
     className: "form-control",
     onChange: function onChange(e) {
-      return MenuChangeFunctions(e);
+      return menuChangeFunctions(e);
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     value: true,
     defaultValue: true,
     hidden: true
-  }, "--Select One--"), Menu.map(function (menu, i) {
+  }, "--Select One--"), menu.map(function (menu, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: i,
       value: menu.menu_id
     }, menu.menu_name);
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  }, Errors.menu_id))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, errors.menu_id))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("label", {
     className: "col-lg-6 control-label"
@@ -61857,14 +61839,14 @@ var SubCategory = function SubCategory(props) {
     value: true,
     defaultValue: true,
     hidden: true
-  }, "--Select One--"), Category.map(function (category, i) {
+  }, "--Select One--"), category.map(function (category, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: i,
       value: category.category_id
     }, category.category_name);
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  }, Errors.category_id))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, errors.category_id))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("label", {
     className: "col-lg-6 control-label"
@@ -61878,13 +61860,13 @@ var SubCategory = function SubCategory(props) {
     onChange: handleChange
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  }, Errors.sub_category_name))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, errors.sub_category_name))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "modal-footer"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("button", {
     type: "button",
     className: "btn btn-secondary",
     "data-dismiss": "modal",
-    onClick: ClearFrom
+    onClick: clearFrom
   }, "Close"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("button", {
     type: "submit",
     className: "btn btn-primary"
@@ -61923,7 +61905,7 @@ var SubCategory = function SubCategory(props) {
     className: "col-md-3 col-sm-12 mt-3 text-center"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("img", {
     className: "custom-icon rounded-circle",
-    src: !EditForm.sub_category_icon ? "backend_assets/img/menu-icon.png" : EditForm.sub_category_icon
+    src: !editForm.sub_category_icon ? "backend_assets/img/menu-icon.png" : editForm.sub_category_icon
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
@@ -61939,10 +61921,10 @@ var SubCategory = function SubCategory(props) {
     className: "form-control",
     name: "sub_category_icon",
     placeholder: "Enter SubCategory Icon",
-    onChange: EditHandleChange
+    onChange: editHandleChange
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  }, Errors.sub_category_icon))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, errors.sub_category_icon))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("label", {
     className: "col-lg-6 control-label"
@@ -61951,20 +61933,20 @@ var SubCategory = function SubCategory(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("select", {
     className: "form-control",
     name: "menu_id",
-    onChange: EditHandleChange,
-    value: EditForm.menu_id
+    onChange: editHandleChange,
+    value: editForm.menu_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     value: true,
     defaultValue: true,
     hidden: true
-  }, "--Select One--"), Menu.map(function (menu, i) {
+  }, "--Select One--"), menu.map(function (menu, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: i,
       value: menu.menu_id
     }, menu.menu_name);
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  }, Errors.menu_id))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, errors.menu_id))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("label", {
     className: "col-lg-6 control-label"
@@ -61973,20 +61955,20 @@ var SubCategory = function SubCategory(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("select", {
     className: "form-control",
     name: "category_id",
-    onChange: EditHandleChange,
-    value: EditForm.category_id
+    onChange: editHandleChange,
+    value: editForm.category_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     value: true,
     defaultValue: true,
     hidden: true
-  }, "--Select One--"), Category.map(function (category, i) {
+  }, "--Select One--"), category.map(function (category, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: i,
       value: category.category_id
     }, category.category_name);
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  }, Errors.category_id))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, errors.category_id))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("label", {
     className: "col-lg-6 control-label"
@@ -61997,17 +61979,17 @@ var SubCategory = function SubCategory(props) {
     className: "form-control",
     name: "sub_category_name",
     placeholder: "Enter Sub Category Name",
-    onChange: EditHandleChange,
-    value: EditForm.sub_category_name
+    onChange: editHandleChange,
+    value: editForm.sub_category_name
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
-  }, Errors.sub_category_name))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, errors.sub_category_name))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "modal-footer"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("button", {
     type: "button",
     className: "btn btn-secondary",
     "data-dismiss": "modal",
-    onClick: ClearFrom
+    onClick: clearFrom
   }, "Close"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("button", {
     type: "submit",
     className: "btn btn-primary"
@@ -62019,7 +62001,7 @@ var SubCategory = function SubCategory(props) {
     className: "btn btn-info table-button",
     "data-toggle": "modal",
     "data-target": "#add_modal",
-    onClick: ClearFrom
+    onClick: clearFrom
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("i", {
     className: "ik ik-clipboard"
   }), "Add new")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
@@ -62041,9 +62023,9 @@ var SubCategory = function SubCategory(props) {
     "aria-controls": "simpletable",
     className: "custom-select custom-select-sm form-control form-control-sm",
     onChange: function onChange(e) {
-      return setCurrent_row(e.target.value);
+      return setCurrentRow(e.target.value);
     }
-  }, select_row.map(function (rows, i) {
+  }, selectRow.map(function (rows, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: i,
       value: rows
@@ -62061,7 +62043,7 @@ var SubCategory = function SubCategory(props) {
     onChange: function onChange(e) {
       return setSearch(e.target.value);
     },
-    value: Search
+    value: search
   }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
@@ -62114,19 +62096,19 @@ var SubCategory = function SubCategory(props) {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("i", {
       className: subCategory.status == 1 ? "ik ik-repeat f-16 mr-15 text-green" : "ik ik-repeat f-16 mr-15 text-red",
       onClick: function onClick() {
-        return ChangeStatus(subCategory.sub_category_id);
+        return changeStatus(subCategory.sub_category_id);
       }
     }), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("i", {
       className: "ik ik-edit f-16 mr-15 text-blue",
       "data-toggle": "modal",
       "data-target": "#edit_modal",
       onClick: function onClick() {
-        return EditHandler(subCategory.sub_category_id, subCategory, i);
+        return editHandler(subCategory.sub_category_id, subCategory, i);
       }
     }), " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("i", {
       className: "ik ik-trash-2 f-16 text-red",
       onClick: function onClick() {
-        return DeleteHandler(subCategory.sub_category_id, i);
+        return deleteHandler(subCategory.sub_category_id, i);
       }
     })));
   }), totalItemsCount === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("td", {
@@ -62138,14 +62120,11 @@ var SubCategory = function SubCategory(props) {
     className: "col-sm-12 col-md-5"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-sm-12 col-md-7"
-  }, Current_row >= totalItemsCount ? "" : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_5___default.a, {
-    innerClass: "btn-group",
-    linkClass: "btn btn-outline-secondary",
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_helpers_pagination_CustomPagination__WEBPACK_IMPORTED_MODULE_8__["default"], {
     activePage: activePage,
-    itemsCountPerPage: itemsCountPerPage,
-    totalItemsCount: totalItemsCount,
-    pageRangeDisplayed: 3,
-    onChange: handlePageChange
+    currentRow: currentRow,
+    totalItems: totalItemsCount,
+    getFunction: getSubCategoryList
   }))))))));
 };
 
