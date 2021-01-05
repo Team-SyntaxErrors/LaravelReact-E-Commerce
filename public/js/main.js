@@ -48147,7 +48147,6 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
     const fieldsWithValidationRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])({});
     const validFieldsRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])({});
     const defaultValuesRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(defaultValues);
-    const defaultValuesAtRenderRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])({});
     const isUnMount = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(false);
     const isWatchAllRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(false);
     const handleChangeRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])();
@@ -48161,6 +48160,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
     const isValidateAllFieldCriteria = criteriaMode === VALIDATION_MODE.all;
     const [formState, setFormState] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
         isDirty: false,
+        isValidating: false,
         dirtyFields: {},
         isSubmitted: false,
         submitCount: 0,
@@ -48174,6 +48174,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         isDirty: !isProxyEnabled,
         dirtyFields: !isProxyEnabled,
         touched: !isProxyEnabled || isOnTouch,
+        isValidating: !isProxyEnabled,
         isSubmitting: !isProxyEnabled,
         isValid: !isProxyEnabled,
     });
@@ -48194,6 +48195,10 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             setFormState(formStateRef.current);
         }
     }, []);
+    const updateIsValidating = () => readFormStateRef.current.isValidating &&
+        updateFormState({
+            isValidating: true,
+        });
     const shouldRenderBaseOnError = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, error, shouldRender = false, state = {}, isValid) => {
         let shouldReRender = shouldRender ||
             isErrorStateChanged({
@@ -48220,8 +48225,9 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             unset(formStateRef.current.errors, name);
         }
         if ((shouldReRender && !isNullOrUndefined(shouldRender)) ||
-            !isEmptyObject(state)) {
-            updateFormState(Object.assign(Object.assign({}, state), (resolverRef.current ? { isValid: !!isValid } : {})));
+            !isEmptyObject(state) ||
+            readFormStateRef.current.isValidating) {
+            updateFormState(Object.assign(Object.assign(Object.assign({}, state), (resolverRef.current ? { isValid: !!isValid } : {})), { isValidating: false }));
         }
     }, []);
     const setFieldValue = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, rawValue) => {
@@ -48253,16 +48259,14 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         if (readFormStateRef.current.isDirty) {
             const formValues = getValues();
             name && data && set(formValues, name, data);
-            return !deepEqual(formValues, isEmptyObject(defaultValuesRef.current)
-                ? defaultValuesAtRenderRef.current
-                : defaultValuesRef.current);
+            return !deepEqual(formValues, defaultValuesRef.current);
         }
         return false;
     }, []);
     const updateAndGetDirtyState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, shouldRender = true) => {
         if (readFormStateRef.current.isDirty ||
             readFormStateRef.current.dirtyFields) {
-            const isFieldDirty = !deepEqual(get(defaultValuesAtRenderRef.current, name), getFieldValue(fieldsRef, name, shallowFieldsStateRef));
+            const isFieldDirty = !deepEqual(get(defaultValuesRef.current, name), getFieldValue(fieldsRef, name, shallowFieldsStateRef));
             const isDirtyFieldExist = get(formStateRef.current.dirtyFields, name);
             const previousIsDirty = formStateRef.current.isDirty;
             isFieldDirty
@@ -48307,6 +48311,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 .every(Boolean);
             updateFormState({
                 isValid: isEmptyObject(errors),
+                isValidating: false,
             });
             return isInputsValid;
         }
@@ -48318,13 +48323,16 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
     }, [shouldRenderBaseOnError, isValidateAllFieldCriteria]);
     const trigger = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(async (name) => {
         const fields = name || Object.keys(fieldsRef.current);
+        updateIsValidating();
         if (resolverRef.current) {
             return executeSchemaOrResolverValidation(fields);
         }
         if (Array.isArray(fields)) {
             !name && (formStateRef.current.errors = {});
             const result = await Promise.all(fields.map(async (data) => await executeValidation(data, null)));
-            updateFormState();
+            updateFormState({
+                isValidating: false,
+            });
             return result.every(Boolean);
         }
         return await executeValidation(fields);
@@ -48341,8 +48349,9 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         }
     }, [trigger, setFieldValue, updateAndGetDirtyState]);
     const setInternalValue = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])((name, value, config) => {
-        !isPrimitive(value) &&
-            set(shallowFieldsStateRef.current, name, cloneObject(value));
+        !shouldUnregister &&
+            !isPrimitive(value) &&
+            set(shallowFieldsStateRef.current, name, Object.assign({}, value));
         if (fieldsRef.current[name]) {
             setFieldValue(name, value);
             config.shouldDirty && updateAndGetDirtyState(name);
@@ -48354,7 +48363,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 const parentName = getFieldArrayParentName(name) || name;
                 set(fieldArrayDefaultValuesRef.current, name, value);
                 resetFieldArrayFunctionRef.current[parentName]({
-                    [parentName]: fieldArrayDefaultValuesRef.current[parentName],
+                    [parentName]: get(fieldArrayDefaultValuesRef.current, parentName),
                 });
                 if ((readFormStateRef.current.isDirty ||
                     readFormStateRef.current.dirtyFields) &&
@@ -48405,7 +48414,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                     isReValidateOnBlur, isTouched: !!get(formStateRef.current.touched, name), isSubmitted: formStateRef.current.isSubmitted }, modeRef.current));
                 let state = updateAndGetDirtyState(name, false);
                 let shouldRender = !isEmptyObject(state) ||
-                    isFieldWatched(name);
+                    (!isBlurEvent && isFieldWatched(name));
                 if (isBlurEvent &&
                     !get(formStateRef.current.touched, name) &&
                     readFormStateRef.current.touched) {
@@ -48416,11 +48425,12 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                     set(shallowFieldsStateRef.current, name, getFieldValue(fieldsRef, name));
                 }
                 if (shouldSkipValidation) {
-                    renderWatchedInputs(name);
+                    !isBlurEvent && renderWatchedInputs(name);
                     return ((!isEmptyObject(state) ||
                         (shouldRender && isEmptyObject(state))) &&
                         updateFormState(state));
                 }
+                updateIsValidating();
                 if (resolverRef.current) {
                     const { errors } = await resolverRef.current(getValues(), contextRef.current, isValidateAllFieldCriteria);
                     const previousFormIsValid = formStateRef.current.isValid;
@@ -48445,7 +48455,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 else {
                     error = (await validateField(fieldsRef, isValidateAllFieldCriteria, field, shallowFieldsStateRef))[name];
                 }
-                renderWatchedInputs(name);
+                !isBlurEvent && renderWatchedInputs(name);
                 shouldRenderBaseOnError(name, error, shouldRender, state, isValid);
             }
         };
@@ -48501,7 +48511,6 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
         if (field) {
             removeFieldEventListener(field, forceDelete);
             if (shouldUnregister && !compact(field.options || []).length) {
-                unset(defaultValuesAtRenderRef.current, field.ref.name);
                 unset(validFieldsRef.current, field.ref.name);
                 unset(fieldsWithValidationRef.current, field.ref.name);
                 unset(formStateRef.current.errors, field.ref.name);
@@ -48636,13 +48645,7 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
                 });
             }
         }
-        if (!defaultValuesAtRenderRef.current[name] &&
-            !(isFieldArray && isEmptyDefaultValue)) {
-            const fieldValue = getFieldValue(fieldsRef, name, shallowFieldsStateRef);
-            set(defaultValuesAtRenderRef.current, name, isEmptyDefaultValue
-                ? isObject(fieldValue)
-                    ? Object.assign({}, fieldValue) : fieldValue
-                : defaultValue);
+        if (!(isFieldArray && isEmptyDefaultValue)) {
             !isFieldArray && unset(formStateRef.current.dirtyFields, name);
         }
         if (type) {
@@ -48728,7 +48731,6 @@ function useForm({ mode = VALIDATION_MODE.onSubmit, reValidateMode = VALIDATION_
             validFieldsRef.current = {};
             fieldsWithValidationRef.current = {};
         }
-        defaultValuesAtRenderRef.current = {};
         fieldArrayDefaultValuesRef.current = {};
         watchFieldsRef.current = new Set();
         isWatchAllRef.current = false;
@@ -48987,7 +48989,7 @@ const useFieldArray = ({ control, name, keyName = 'id', }) => {
         return rest;
     });
     fieldArrayNamesRef.current.add(name);
-    const getFieldArrayValue = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(() => get(fieldArrayValuesRef.current, name, []), []);
+    const getFieldArrayValue = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(() => get(fieldArrayValuesRef.current, name, []), [name]);
     const getCurrentFieldsValues = () => mapIds(get(getValues(), name, getFieldArrayValue()).map((item, index) => (Object.assign(Object.assign({}, getFieldArrayValue()[index]), item))), keyName, true);
     fieldArrayNamesRef.current.add(name);
     if (fieldArrayParentName &&
@@ -59357,7 +59359,7 @@ var Brand = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(func
   return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../components/Brand/Brand */ "./resources/js/components/Brand/Brand.js"));
 });
 var Category = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../components/Category/Category */ "./resources/js/components/Category/Category.js"));
+  return Promise.resolve(/*! import() */).then(__webpack_require__.t.bind(null, /*! ../components/Category/Category */ "./resources/js/components/Category/Category.js", 7));
 });
 var DashBoard = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
   return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../components/DashBoard/DashBoard */ "./resources/js/components/DashBoard/DashBoard.js"));
@@ -60262,7 +60264,7 @@ var Category = function Category(props) {
 
   var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(10),
       _useState10 = _slicedToArray(_useState9, 2),
-      current_row = _useState10[0],
+      currentRow = _useState10[0],
       setCurrentRow = _useState10[1];
 
   var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(1),
@@ -60281,7 +60283,7 @@ var Category = function Category(props) {
     category_icon: ""
   }),
       _useForms2 = _slicedToArray(_useForms, 3),
-      category_form = _useForms2[0],
+      categoryForm = _useForms2[0],
       setCategoryForm = _useForms2[1],
       handleChange = _useForms2[2];
 
@@ -60291,9 +60293,9 @@ var Category = function Category(props) {
     category_icon: ""
   }),
       _useForms4 = _slicedToArray(_useForms3, 3),
-      EditForm = _useForms4[0],
+      editForm = _useForms4[0],
       setEditForm = _useForms4[1],
-      EditHandleChange = _useForms4[2];
+      editHandleChange = _useForms4[2];
 
   Object(react__WEBPACK_IMPORTED_MODULE_2__["useEffect"])(function () {
     getAllMenu();
@@ -60303,7 +60305,7 @@ var Category = function Category(props) {
     return function () {
       return setCategoryList([]);
     };
-  }, [current_row, search]);
+  }, [currentRow, search]);
   /**
    * Get all active menu.
    */
@@ -60322,7 +60324,7 @@ var Category = function Category(props) {
 
   var getCategories = function getCategories() {
     var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-    var main_url = "category?q=".concat(search, "&row=").concat(current_row, "&page=").concat(page);
+    var main_url = "category?q=".concat(search, "&row=").concat(currentRow, "&page=").concat(page);
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(main_url).then(function (response) {
       setCategoryList(response.data.data.data);
       setActivePage(response.data.data.current_page);
@@ -60339,8 +60341,8 @@ var Category = function Category(props) {
 
   var clearFrom = function clearFrom() {
     setErrors([]);
-    var form = Object(_helpers_clearForm_ClearForm__WEBPACK_IMPORTED_MODULE_4__["default"])(category_form);
-    setCategoryForm(_objectSpread(_objectSpread({}, category_form), form));
+    var form = Object(_helpers_clearForm_ClearForm__WEBPACK_IMPORTED_MODULE_4__["default"])(categoryForm);
+    setCategoryForm(_objectSpread(_objectSpread({}, categoryForm), form));
   };
   /**
    * This function store category data.
@@ -60351,7 +60353,7 @@ var Category = function Category(props) {
 
   var submitHandler = function submitHandler(e) {
     e.preventDefault();
-    axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/category", category_form).then(function (response) {
+    axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/category", categoryForm).then(function (response) {
       if (response.data.code === 201) {
         $(".close").click();
         getCategories();
@@ -60412,7 +60414,7 @@ var Category = function Category(props) {
   var editHandler = function editHandler(id, data) {
     categoryList.category_id = id;
     var value = JSON.parse(JSON.stringify(data));
-    setEditForm(_objectSpread(_objectSpread({}, EditForm), value));
+    setEditForm(_objectSpread(_objectSpread({}, editForm), value));
   };
   /**
    * This function update category data.
@@ -60423,7 +60425,7 @@ var Category = function Category(props) {
 
   var updateHandler = function updateHandler(e) {
     e.preventDefault();
-    axios__WEBPACK_IMPORTED_MODULE_3___default.a.put("/category/" + EditForm.category_id, EditForm).then(function (response) {
+    axios__WEBPACK_IMPORTED_MODULE_3___default.a.put("/category/" + editForm.category_id, editForm).then(function (response) {
       if (response.data.code === 201) {
         $(".close").click();
         getCategories();
@@ -60498,7 +60500,7 @@ var Category = function Category(props) {
     className: "col-md-3 col-sm-12 mt-3 text-center"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("img", {
     className: "custom-icon rounded-circle",
-    src: !category_form.category_icon ? "backend_assets/img/menu-icon.png" : category_form.category_icon
+    src: !categoryForm.category_icon ? "backend_assets/img/menu-icon.png" : categoryForm.category_icon
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
@@ -60528,7 +60530,7 @@ var Category = function Category(props) {
     name: "menu_id",
     className: "form-control",
     onChange: handleChange,
-    value: category_form.menu_id
+    value: categoryForm.menu_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     value: true,
     defaultValue: true,
@@ -60551,7 +60553,7 @@ var Category = function Category(props) {
     name: "category_name",
     className: "form-control",
     onChange: handleChange,
-    value: category_form.category_name,
+    value: categoryForm.category_name,
     placeholder: "Enter Menu Name"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
@@ -60601,7 +60603,7 @@ var Category = function Category(props) {
     className: "col-md-3 col-sm-12 mt-3 text-center"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("img", {
     className: "custom-icon rounded-circle",
-    src: !EditForm.category_icon ? "backend_assets/img/menu-icon.png" : EditForm.category_icon
+    src: !editForm.category_icon ? "backend_assets/img/menu-icon.png" : editForm.category_icon
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
@@ -60616,7 +60618,7 @@ var Category = function Category(props) {
     type: "file",
     name: "category_icon",
     className: "form-control",
-    onChange: EditHandleChange,
+    onChange: editHandleChange,
     placeholder: "Enter Menu Icon"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
@@ -60629,8 +60631,8 @@ var Category = function Category(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("select", {
     className: "form-control",
     name: "menu_id",
-    onChange: EditHandleChange,
-    value: EditForm.menu_id
+    onChange: editHandleChange,
+    value: editForm.menu_id
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     value: true,
     hidden: true
@@ -60651,8 +60653,8 @@ var Category = function Category(props) {
     type: "text",
     name: "category_name",
     className: "form-control",
-    onChange: EditHandleChange,
-    value: EditForm.category_name,
+    onChange: editHandleChange,
+    value: editForm.category_name,
     placeholder: "Enter Menu Name"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
@@ -60788,6 +60790,7 @@ var Category = function Category(props) {
     className: "col-sm-12 col-md-7"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_helpers_pagination_CustomPagination__WEBPACK_IMPORTED_MODULE_5__["default"], {
     activePage: activePage,
+    currentRow: currentRow,
     totalItems: totalItemsCount,
     getFunction: getCategories
   }))))))));
@@ -64756,11 +64759,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var CustomPagination = function CustomPagination(_ref) {
-  var activePage = _ref.activePage,
-      totalItems = _ref.totalItems,
-      getFunction = _ref.getFunction;
-  return totalItems > 10 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_1___default.a, {
+var CustomPagination = function CustomPagination(props) {
+  var activePage = props.activePage,
+      currentRow = props.currentRow,
+      totalItems = props.totalItems,
+      getFunction = props.getFunction;
+  return totalItems > currentRow && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_1___default.a, {
     innerClass: "btn-group",
     linkClass: "btn btn-outline-secondary",
     activePage: activePage,
@@ -64774,6 +64778,7 @@ var CustomPagination = function CustomPagination(_ref) {
 
 CustomPagination.prototype = {
   activePage: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.integer,
+  currentRow: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.integer,
   totalItems: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.integer,
   getFunction: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.func
 };
@@ -64932,8 +64937,8 @@ var router = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/tanvir/Work/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
-module.exports = __webpack_require__(/*! /home/tanvir/Work/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
+__webpack_require__(/*! /home/professor/Documents/Laravel/Laravel + React_js/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /home/professor/Documents/Laravel/Laravel + React_js/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
 
 
 /***/ })

@@ -2,9 +2,10 @@ import React from "react";
 import Pagination from "react-js-pagination";
 import PropTypes from "prop-types";
 
-const CustomPagination = ({ activePage, totalItems, getFunction }) => {
+const CustomPagination = props => {
+    const { activePage, currentRow, totalItems, getFunction } = props;
     return (
-        totalItems > 10 && (
+        totalItems > currentRow && (
             <Pagination
                 innerClass="btn-group"
                 linkClass="btn btn-outline-secondary"
@@ -21,6 +22,7 @@ const CustomPagination = ({ activePage, totalItems, getFunction }) => {
 
 CustomPagination.prototype = {
     activePage: PropTypes.integer,
+    currentRow: PropTypes.integer,
     totalItems: PropTypes.integer,
     getFunction: PropTypes.func
 };
