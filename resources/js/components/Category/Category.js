@@ -1,6 +1,6 @@
 import "./Category.css";
 import "react-toastify/dist/ReactToastify.css";
-import React, { Fragment, Suspense, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Axios from "axios";
 import PageHeader from "./../Layouts/PageHeader/PageHeader";
 import swal from "sweetalert";
@@ -10,12 +10,12 @@ import CustomPagination from "../helpers/pagination/CustomPagination";
 import ClearForm from "../helpers/clearForm/ClearForm";
 
 const Category = props => {
-    const select_row = [8, 10, 20, 30, 40, 50];
+    const select_row = [10, 20, 30, 40, 50];
     const [categoryList, setCategoryList] = useState([]);
     const [Menu, setMenu] = useState([]);
     const [Errors, setErrors] = useState([]);
     const [search, setSearch] = useState("");
-    const [current_row, setCurrentRaw] = useState(8);
+    const [current_row, setCurrentRaw] = useState(10);
     const [activePage, setActivePage] = useState(1);
     const [totalItemsCount, setTotalItemsCount] = useState(0);
     const [category_form, setCategoryForm, handleChange] = useForms({

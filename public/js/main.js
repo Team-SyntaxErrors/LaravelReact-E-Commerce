@@ -60240,7 +60240,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var Category = function Category(props) {
-  var select_row = [8, 10, 20, 30, 40, 50];
+  var select_row = [10, 20, 30, 40, 50];
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
@@ -60262,7 +60262,7 @@ var Category = function Category(props) {
       search = _useState8[0],
       setSearch = _useState8[1];
 
-  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(8),
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(10),
       _useState10 = _slicedToArray(_useState9, 2),
       current_row = _useState10[0],
       setCurrentRaw = _useState10[1];
@@ -64752,14 +64752,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-js-pagination */ "./node_modules/react-js-pagination/dist/Pagination.js");
 /* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_js_pagination__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
 
- // import PropTypes from "prop-types";
+
+
 
 var CustomPagination = function CustomPagination(_ref) {
   var activePage = _ref.activePage,
       totalItems = _ref.totalItems,
       getFunction = _ref.getFunction;
-  return totalItems > 8 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_1___default.a, {
+  return totalItems > 10 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_1___default.a, {
     innerClass: "btn-group",
     linkClass: "btn btn-outline-secondary",
     activePage: activePage,
@@ -64769,13 +64772,13 @@ var CustomPagination = function CustomPagination(_ref) {
     hideFirstLastPages: true,
     hideDisabled: true
   });
-}; // CustomPagination.prototype = {
-//     activePage: PropTypes.integer.isRequired,
-//     totalItems: PropTypes.integer.isRequired,
-//     getFunction: PropTypes.func.isRequired
-// };
+};
 
-
+CustomPagination.prototype = {
+  activePage: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.integer,
+  totalItems: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.integer,
+  getFunction: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.func
+};
 /* harmony default export */ __webpack_exports__["default"] = (CustomPagination);
 
 /***/ }),
