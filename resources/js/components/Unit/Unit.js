@@ -11,26 +11,26 @@ import { toast } from "react-toastify";
 import useForms from "../customHooks/useForms";
 
 const Unit = props => {
+    const select_row = [10, 20, 30, 40, 50];
     const [search, setSearch] = useState("");
-    const [select_row, setSelectRow] = useState([8, 10, 20, 30, 40, 50]);
     const [error, setError] = useState([]);
-    const [unit_list, setUnitList] = useState([]);
-    const [current_row, setCurrentRow] = useState(10);
+    const [unitList, setUnitList] = useState([]);
+    const [currentRow, setCurrentRow] = useState(10);
     const [activePage, setActivePage] = useState(1);
     const [totalItemsCount, setTotalItemsCount] = useState(0);
-    const [unit_form, setUnitForm, handleChange] = useForms({
+    const [unitForm, setUnitForm, handleChange] = useForms({
         unit_name: "",
         short_name: "",
         status: ""
     });
-    const [EditForm, setEditForm, EditHandleChange] = useForms({
+    const [editForm, setEditForm, EditHandleChange] = useForms({
         unit_name: "",
         short_name: "",
         status: ""
     });
 
     const getUnitList = (page = 1) => {
-        const main_url = `units?q=${search}&row=${current_row}&page=${page}`;
+        const main_url = `units?q=${search}&row=${currentRow}&page=${page}`;
         Axios.get(main_url)
             .then(response => {
                 setUnitList(response.data.data.data);
@@ -45,11 +45,11 @@ const Unit = props => {
     useEffect(() => {
         getUnitList();
         return () => setUnitList([]);
-    }, [current_row, search]);
+    }, [currentRow, search]);
 
     const submitHandler = e => {
         e.preventDefault();
-        Axios.post("/units", unit_form)
+        Axios.post("/units", unitForm)
             .then(response => {
                 setError([]);
                 getUnitList();
@@ -82,7 +82,7 @@ const Unit = props => {
                             );
                             getUnitList();
                         } else {
-                            swal("Opps", "Something Went Wrong", "warning");
+                            swal("Oops", "Something Went Wrong", "warning");
                         }
                     })
                     .catch(error => {
@@ -95,14 +95,14 @@ const Unit = props => {
     };
 
     const editHandler = (id, data) => {
-        unit_list.unit_id = id;
+        unitList.unit_id = id;
         let value = JSON.parse(JSON.stringify(data));
-        setEditForm({ ...EditForm, ...value });
+        setEditForm({ ...editForm, ...value });
     };
 
     const updateHandler = e => {
         e.preventDefault();
-        Axios.put("/units/" + EditForm.unit_id, EditForm)
+        Axios.put("/units/" + editForm.unit_id, editForm)
             .then(response => {
                 getUnitList();
                 $("#edit_close").click();
@@ -303,7 +303,7 @@ const Unit = props => {
                                                             EditHandleChange
                                                         }
                                                         value={
-                                                            EditForm.unit_name
+                                                            editForm.unit_name
                                                         }
                                                         placeholder="Enter Unit Name"
                                                     />
@@ -315,7 +315,7 @@ const Unit = props => {
                                             <input
                                                 name="unit_id"
                                                 type="hidden"
-                                                value={EditForm.unit_id}
+                                                value={editForm.unit_id}
                                             />
                                             <div className="form-group ">
                                                 <label className="col-lg-6 control-label">
@@ -330,7 +330,7 @@ const Unit = props => {
                                                             EditHandleChange
                                                         }
                                                         value={
-                                                            EditForm.short_name
+                                                            editForm.short_name
                                                         }
                                                         placeholder="Enter Unit Short Name"
                                                     />
@@ -350,7 +350,7 @@ const Unit = props => {
                                                         onChange={
                                                             EditHandleChange
                                                         }
-                                                        value={EditForm.status}
+                                                        value={editForm.status}
                                                     >
                                                         <option
                                                             value=""
@@ -491,7 +491,7 @@ const Unit = props => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {unit_list.map((unit, i) => (
+                                            {unitList.map((unit, i) => (
                                                 <tr key={i}>
                                                     <td className="text-center">
                                                         {unit.unit_name}
@@ -558,22 +558,6 @@ const Unit = props => {
                                                 </tr>
                                             )}
                                         </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th className="text-center">
-                                                    Unit Name
-                                                </th>
-                                                <th className="text-center">
-                                                    Unit Short Name
-                                                </th>
-                                                <th className="text-center">
-                                                    Status
-                                                </th>
-                                                <th className="text-center">
-                                                    Action
-                                                </th>
-                                            </tr>
-                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -582,6 +566,7 @@ const Unit = props => {
                                 <div className="col-sm-12 col-md-7">
                                     <CustomPagination
                                         activePage={activePage}
+                                        currentRow={currentRow}
                                         totalItems={totalItemsCount}
                                         getFunction={getUnitList}
                                     />

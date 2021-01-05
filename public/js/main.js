@@ -62235,40 +62235,37 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var Unit = function Unit(props) {
+  var select_row = [10, 20, 30, 40, 50];
+
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(""),
       _useState2 = _slicedToArray(_useState, 2),
       search = _useState2[0],
       setSearch = _useState2[1];
 
-  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([8, 10, 20, 30, 40, 50]),
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState4 = _slicedToArray(_useState3, 2),
-      select_row = _useState4[0],
-      setSelectRow = _useState4[1];
+      error = _useState4[0],
+      setError = _useState4[1];
 
   var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState6 = _slicedToArray(_useState5, 2),
-      error = _useState6[0],
-      setError = _useState6[1];
+      unitList = _useState6[0],
+      setUnitList = _useState6[1];
 
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(10),
       _useState8 = _slicedToArray(_useState7, 2),
-      unit_list = _useState8[0],
-      setUnitList = _useState8[1];
+      currentRow = _useState8[0],
+      setCurrentRow = _useState8[1];
 
-  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(10),
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(1),
       _useState10 = _slicedToArray(_useState9, 2),
-      current_row = _useState10[0],
-      setCurrentRow = _useState10[1];
+      activePage = _useState10[0],
+      setActivePage = _useState10[1];
 
-  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(1),
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(0),
       _useState12 = _slicedToArray(_useState11, 2),
-      activePage = _useState12[0],
-      setActivePage = _useState12[1];
-
-  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(0),
-      _useState14 = _slicedToArray(_useState13, 2),
-      totalItemsCount = _useState14[0],
-      setTotalItemsCount = _useState14[1];
+      totalItemsCount = _useState12[0],
+      setTotalItemsCount = _useState12[1];
 
   var _useForms = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_8__["default"])({
     unit_name: "",
@@ -62276,7 +62273,7 @@ var Unit = function Unit(props) {
     status: ""
   }),
       _useForms2 = _slicedToArray(_useForms, 3),
-      unit_form = _useForms2[0],
+      unitForm = _useForms2[0],
       setUnitForm = _useForms2[1],
       handleChange = _useForms2[2];
 
@@ -62286,13 +62283,13 @@ var Unit = function Unit(props) {
     status: ""
   }),
       _useForms4 = _slicedToArray(_useForms3, 3),
-      EditForm = _useForms4[0],
+      editForm = _useForms4[0],
       setEditForm = _useForms4[1],
       EditHandleChange = _useForms4[2];
 
   var getUnitList = function getUnitList() {
     var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-    var main_url = "units?q=".concat(search, "&row=").concat(current_row, "&page=").concat(page);
+    var main_url = "units?q=".concat(search, "&row=").concat(currentRow, "&page=").concat(page);
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(main_url).then(function (response) {
       setUnitList(response.data.data.data);
       setActivePage(response.data.data.current_page);
@@ -62307,11 +62304,11 @@ var Unit = function Unit(props) {
     return function () {
       return setUnitList([]);
     };
-  }, [current_row, search]);
+  }, [currentRow, search]);
 
   var submitHandler = function submitHandler(e) {
     e.preventDefault();
-    axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/units", unit_form).then(function (response) {
+    axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/units", unitForm).then(function (response) {
       setError([]);
       getUnitList();
       $("#close").click();
@@ -62337,7 +62334,7 @@ var Unit = function Unit(props) {
             sweetalert__WEBPACK_IMPORTED_MODULE_6___default()("Deleted!", "Unit Has been Deleted", "success");
             getUnitList();
           } else {
-            sweetalert__WEBPACK_IMPORTED_MODULE_6___default()("Opps", "Something Went Wrong", "warning");
+            sweetalert__WEBPACK_IMPORTED_MODULE_6___default()("Oops", "Something Went Wrong", "warning");
           }
         })["catch"](function (error) {
           console.log(error);
@@ -62349,14 +62346,14 @@ var Unit = function Unit(props) {
   };
 
   var editHandler = function editHandler(id, data) {
-    unit_list.unit_id = id;
+    unitList.unit_id = id;
     var value = JSON.parse(JSON.stringify(data));
-    setEditForm(_objectSpread(_objectSpread({}, EditForm), value));
+    setEditForm(_objectSpread(_objectSpread({}, editForm), value));
   };
 
   var updateHandler = function updateHandler(e) {
     e.preventDefault();
-    axios__WEBPACK_IMPORTED_MODULE_3___default.a.put("/units/" + EditForm.unit_id, EditForm).then(function (response) {
+    axios__WEBPACK_IMPORTED_MODULE_3___default.a.put("/units/" + editForm.unit_id, editForm).then(function (response) {
       getUnitList();
       $("#edit_close").click();
       setError([]);
@@ -62530,14 +62527,14 @@ var Unit = function Unit(props) {
     className: "form-control",
     name: "unit_name",
     onChange: EditHandleChange,
-    value: EditForm.unit_name,
+    value: editForm.unit_name,
     placeholder: "Enter Unit Name"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
   }, error.unit_name))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("input", {
     name: "unit_id",
     type: "hidden",
-    value: EditForm.unit_id
+    value: editForm.unit_id
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("label", {
@@ -62549,7 +62546,7 @@ var Unit = function Unit(props) {
     className: "form-control",
     name: "short_name",
     onChange: EditHandleChange,
-    value: EditForm.short_name,
+    value: editForm.short_name,
     placeholder: "Enter Unit Short Name"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
@@ -62563,7 +62560,7 @@ var Unit = function Unit(props) {
     className: "form-control",
     name: "status",
     onChange: EditHandleChange,
-    value: EditForm.status
+    value: editForm.status
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     value: "",
     defaultValue: true,
@@ -62653,7 +62650,7 @@ var Unit = function Unit(props) {
     className: "text-center"
   }, "Status"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
     className: "text-center"
-  }, "Action"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("tbody", null, unit_list.map(function (unit, i) {
+  }, "Action"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("tbody", null, unitList.map(function (unit, i) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("tr", {
       key: i
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("td", {
@@ -62685,15 +62682,7 @@ var Unit = function Unit(props) {
   }), totalItemsCount === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("td", {
     colSpan: "4",
     className: "text-center"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("b", null, "No Data Found")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("tfoot", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
-    className: "text-center"
-  }, "Unit Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
-    className: "text-center"
-  }, "Unit Short Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
-    className: "text-center"
-  }, "Status"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
-    className: "text-center"
-  }, "Action")))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("b", null, "No Data Found"))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-sm-12 col-md-5"
@@ -62701,6 +62690,7 @@ var Unit = function Unit(props) {
     className: "col-sm-12 col-md-7"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_helpers_pagination_CustomPagination__WEBPACK_IMPORTED_MODULE_4__["default"], {
     activePage: activePage,
+    currentRow: currentRow,
     totalItems: totalItemsCount,
     getFunction: getUnitList
   }))))))));
