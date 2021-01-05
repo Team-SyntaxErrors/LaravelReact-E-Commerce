@@ -1,17 +1,29 @@
 import "./Brand.css";
 import "react-toastify/dist/ReactToastify.css";
 
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useRef } from "react";
 
 import Axios from "axios";
+import SimpleReactValidator from "simple-react-validator";
 import PageHeader from "./../Layouts/PageHeader/PageHeader";
 import Pagination from "react-js-pagination";
 import swal from "sweetalert";
 import { toast } from "react-toastify";
 import useForms from "../customHooks/useForms";
+import ClearForm from "../helpers/clearForm/ClearForm";
+import CustomPagination from "../helpers/pagination/CustomPagination";
 
 const Brand = props => {
     const [Brand, setBrand] = useState([]);
+    const [BrandList, setBrandList] = useState([]);
+    const [search, setSearch] = useState("");
+    const select_row = [10, 20, 30, 40, 50, 100];
+    const [current_raw, setCurrentRaw] = useState(10);
+    const [page, setPage] = useState(1);
+    const [error, setErrors] = useState([]);
+    const simpleValidator = useRef(new SimpleReactValidator());
+    const [activePage, setActivePage] = useState(1);
+    const [totalItemsCount, setTotalItemsCount] = useState(0);
 
     const [brand_form, setBrandFrom, handleChange] = useForms({
         brand_name: "",
@@ -21,15 +33,6 @@ const Brand = props => {
         brand_logo: "",
         status: 1
     });
-    const [Errors, setErrors] = useState([]);
-    const [BrandList, setBrandList] = useState([]);
-    const [search, setSearch] = useState("");
-    const [select_row, setSelectRow] = useState([8, 10, 20, 30, 40, 50]);
-    const [current_row, setCurrentRaw] = useState(8);
-    const [page, setPage] = useState(1);
-    const [activePage, setActivePage] = useState(1);
-    const [itemsCountPerPage, setItemsCountPerPage] = useState(8);
-    const [totalItemsCount, setTotalItemsCount] = useState(450);
     const [EditForm, setEditForm, EditHandleChange] = useForms({
         brand_name: "",
         contact_person: "",
@@ -43,14 +46,23 @@ const Brand = props => {
         setPage(pageNumber);
     };
 
+    /**
+     * Clear form function.
+     * Clear state value.
+     */
+    const clearFrom = () => {
+        setErrors([]);
+        let form = ClearForm(brand_form);
+        setBrandFrom({ ...brand_form, ...form });
+    };
+
     // Brand List Get
-    const GetBrandList = () => {
-        const main_url = `brands?q=${search}&row=${current_row}&page=${page}`;
+    const GetBrandList = (page = 1) => {
+        const main_url = `brands?q=${search}&row=${current_raw}&page=${page}`;
         Axios.get(main_url)
             .then(response => {
                 setBrandList(response.data.data.data);
                 setActivePage(response.data.data.current_page);
-                setItemsCountPerPage(parseInt(response.data.data.per_page));
                 setTotalItemsCount(response.data.data.total);
             })
             .catch(error => {
@@ -62,7 +74,7 @@ const Brand = props => {
         return () => {
             setBrandList([]);
         };
-    }, [current_row, search, page]);
+    }, [current_raw, search, page]);
 
     // Data Submit
     const onAddSubmit = e => {
@@ -71,14 +83,30 @@ const Brand = props => {
             .then(response => {
                 $(".close").click();
                 GetBrandList();
-                ClearFrom();
+                clearFrom();
                 toast.success("Brand Data Inserted Successfully!");
             })
             .catch(error => {
-                if (error.response.status == 422) {
+                if (error.response) {
                     setErrors(error.response.data.errors);
                 }
             });
+        // if (simpleValidator.current.allValid()) {
+        //     Axios.post("/brands", brand_form)
+        //         .then(response => {
+        //             $(".close").click();
+        //             GetBrandList();
+        //             clearFrom();
+        //             toast.success("Brand Data Inserted Successfully!");
+        //         })
+        //         .catch(error => {
+        //             if (error.response) {
+        //                 setErrors(error.response.data.errors);
+        //             }
+        //         });
+        // } else {
+        //     setErrors(simpleValidator.current.errorMessages);
+        // }
     };
 
     // Brand Delete
@@ -112,16 +140,6 @@ const Brand = props => {
             }
         });
     };
-
-    // Clear From
-    const ClearFrom = () => {
-        setErrors([]);
-        let FORM = brand_form;
-        Object.keys(FORM).forEach(function(key, index) {
-            FORM[key] = "";
-        });
-    };
-
     // Brand Status Change
     const ChangeStatus = id => {
         Axios.get("/brands/status/" + id)
@@ -153,14 +171,29 @@ const Brand = props => {
             .then(response => {
                 $(".close").click();
                 GetBrandList();
-                ClearFrom();
                 toast.success("Brand Data Update Successfully!");
             })
             .catch(error => {
-                if (error.response.status == 422) {
-                    setError(error.response.data.errors);
+                if (error.response) {
+                    setErrors(error.response.data.errors);
                 }
             });
+        // if (simpleValidator.current.allValid()) {
+        //     Axios.put("/brands/" + EditForm.brand_id, EditForm)
+        //         .then(response => {
+        //             $(".close").click();
+        //             GetBrandList();
+        //             ClearFrom();
+        //             toast.success("Brand Data Update Successfully!");
+        //         })
+        //         .catch(error => {
+        //             if (error.response) {
+        //                 setErrors(error.response.data.errors);
+        //             }
+        //         });
+        // } else {
+        //     setErrors(simpleValidator.current.errorMessages);
+        // }
     };
 
     return (
@@ -213,13 +246,14 @@ const Brand = props => {
                                                             brand_form.brand_name
                                                         }
                                                     />
-                                                    {/* <span className="text-danger">
-                                                        {errors.brand_name &&
-                                                            "Brand name is required"}
-                                                    </span>
+                                                    {simpleValidator.current.message(
+                                                        "brand_name",
+                                                        brand_form.brand_name,
+                                                        "required"
+                                                    )}
                                                     <span className="text-danger">
                                                         {error.brand_name}
-                                                    </span> */}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="form-group ">
@@ -237,13 +271,14 @@ const Brand = props => {
                                                             brand_form.contact_person
                                                         }
                                                     />
-                                                    {/* <span className="text-danger">
-                                                        {errors.contact_person &&
-                                                            "Brand Contact Person is required"}
-                                                    </span>
+                                                    {simpleValidator.current.message(
+                                                        "contact_person",
+                                                        brand_form.contact_person,
+                                                        "required"
+                                                    )}
                                                     <span className="text-danger">
                                                         {error.contact_person}
-                                                    </span> */}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="form-group ">
@@ -252,7 +287,7 @@ const Brand = props => {
                                                 </label>
                                                 <div className="col-lg-12">
                                                     <input
-                                                        type="text"
+                                                        type="number"
                                                         className="form-control"
                                                         name="phone_number"
                                                         placeholder="Enter Brand Phone Number"
@@ -261,13 +296,14 @@ const Brand = props => {
                                                             brand_form.phone_number
                                                         }
                                                     />
-                                                    {/* <span className="text-danger">
-                                                        {errors.phone_number &&
-                                                            "Brand phone number is required"}
-                                                    </span>
+                                                    {simpleValidator.current.message(
+                                                        "phone_number",
+                                                        brand_form.phone_number,
+                                                        "required"
+                                                    )}
                                                     <span className="text-danger">
                                                         {error.phone_number}
-                                                    </span> */}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="form-group ">
@@ -423,13 +459,14 @@ const Brand = props => {
                                                             EditForm.brand_name
                                                         }
                                                     />
-                                                    {/* <span className="text-danger">
-                                                        {errors.brand_name &&
-                                                            "Brand name is required"}
-                                                    </span>
+                                                    {simpleValidator.current.message(
+                                                        "brand_name",
+                                                        EditForm.brand_name,
+                                                        "required"
+                                                    )}
                                                     <span className="text-danger">
                                                         {error.brand_name}
-                                                    </span> */}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="form-group ">
@@ -449,13 +486,14 @@ const Brand = props => {
                                                             EditForm.contact_person
                                                         }
                                                     />
-                                                    {/* <span className="text-danger">
-                                                        {errors.contact_person &&
-                                                            "Brand Contact Person is required"}
-                                                    </span>
+                                                    {simpleValidator.current.message(
+                                                        "contact_person",
+                                                        EditForm.contact_person,
+                                                        "required"
+                                                    )}
                                                     <span className="text-danger">
                                                         {error.contact_person}
-                                                    </span> */}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="form-group ">
@@ -464,7 +502,7 @@ const Brand = props => {
                                                 </label>
                                                 <div className="col-lg-12">
                                                     <input
-                                                        type="text"
+                                                        type="number"
                                                         className="form-control"
                                                         name="phone_number"
                                                         placeholder="Enter Brand Phone Number"
@@ -475,13 +513,14 @@ const Brand = props => {
                                                             EditForm.phone_number
                                                         }
                                                     />
-                                                    {/* <span className="text-danger">
-                                                        {errors.phone_number &&
-                                                            "Brand phone number is required"}
-                                                    </span>
+                                                    {simpleValidator.current.message(
+                                                        "phone_number",
+                                                        EditForm.phone_number,
+                                                        "required"
+                                                    )}
                                                     <span className="text-danger">
                                                         {error.phone_number}
-                                                    </span> */}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="form-group ">
@@ -782,52 +821,17 @@ const Brand = props => {
                                                 </tr>
                                             )}
                                         </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th className="text-center">
-                                                    Brand Name
-                                                </th>
-                                                <th className="text-center">
-                                                    Brand Logo
-                                                </th>
-                                                <th className="text-center">
-                                                    Contact Person
-                                                </th>
-                                                <th className="text-center">
-                                                    Phone Number
-                                                </th>
-                                                <th className="text-center">
-                                                    Brand Address
-                                                </th>
-                                                <th className="text-center">
-                                                    Status
-                                                </th>
-                                                <th className="text-center">
-                                                    Action
-                                                </th>
-                                            </tr>
-                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-sm-12 col-md-5"></div>
                                 <div className="col-sm-12 col-md-7">
-                                    {current_row >= totalItemsCount ? (
-                                        ""
-                                    ) : (
-                                        <Pagination
-                                            innerClass="btn-group"
-                                            linkClass="btn btn-outline-secondary"
-                                            activePage={activePage}
-                                            itemsCountPerPage={
-                                                itemsCountPerPage
-                                            }
-                                            totalItemsCount={totalItemsCount}
-                                            pageRangeDisplayed={3}
-                                            onChange={handlePageChange}
-                                        />
-                                    )}
+                                    <CustomPagination
+                                        activePage={activePage}
+                                        totalItems={totalItemsCount}
+                                        getFunction={GetBrandList}
+                                    />
                                 </div>
                             </div>
                         </div>

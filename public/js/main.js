@@ -59502,13 +59502,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _Layouts_PageHeader_PageHeader__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../Layouts/PageHeader/PageHeader */ "./resources/js/components/Layouts/PageHeader/PageHeader.js");
-/* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-js-pagination */ "./node_modules/react-js-pagination/dist/Pagination.js");
-/* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_js_pagination__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var sweetalert__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! sweetalert */ "./node_modules/sweetalert/dist/sweetalert.min.js");
-/* harmony import */ var sweetalert__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(sweetalert__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
-/* harmony import */ var _customHooks_useForms__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../customHooks/useForms */ "./resources/js/components/customHooks/useForms.js");
+/* harmony import */ var simple_react_validator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! simple-react-validator */ "./node_modules/simple-react-validator/dist/simple-react-validator.min.js");
+/* harmony import */ var simple_react_validator__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(simple_react_validator__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _Layouts_PageHeader_PageHeader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../Layouts/PageHeader/PageHeader */ "./resources/js/components/Layouts/PageHeader/PageHeader.js");
+/* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-js-pagination */ "./node_modules/react-js-pagination/dist/Pagination.js");
+/* harmony import */ var react_js_pagination__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_js_pagination__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var sweetalert__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! sweetalert */ "./node_modules/sweetalert/dist/sweetalert.min.js");
+/* harmony import */ var sweetalert__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(sweetalert__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
+/* harmony import */ var _customHooks_useForms__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../customHooks/useForms */ "./resources/js/components/customHooks/useForms.js");
+/* harmony import */ var _helpers_clearForm_ClearForm__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../helpers/clearForm/ClearForm */ "./resources/js/components/helpers/clearForm/ClearForm.js");
+/* harmony import */ var _helpers_pagination_CustomPagination__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../helpers/pagination/CustomPagination */ "./resources/js/components/helpers/pagination/CustomPagination.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -59531,13 +59541,55 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
+
 var Brand = function Brand(props) {
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
       Brand = _useState2[0],
       setBrand = _useState2[1];
 
-  var _useForms = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_8__["default"])({
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      BrandList = _useState4[0],
+      setBrandList = _useState4[1];
+
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(""),
+      _useState6 = _slicedToArray(_useState5, 2),
+      search = _useState6[0],
+      setSearch = _useState6[1];
+
+  var select_row = [10, 20, 30, 40, 50, 100];
+
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(10),
+      _useState8 = _slicedToArray(_useState7, 2),
+      current_raw = _useState8[0],
+      setCurrentRaw = _useState8[1];
+
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(1),
+      _useState10 = _slicedToArray(_useState9, 2),
+      page = _useState10[0],
+      setPage = _useState10[1];
+
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
+      _useState12 = _slicedToArray(_useState11, 2),
+      error = _useState12[0],
+      setErrors = _useState12[1];
+
+  var simpleValidator = Object(react__WEBPACK_IMPORTED_MODULE_2__["useRef"])(new simple_react_validator__WEBPACK_IMPORTED_MODULE_4___default.a());
+
+  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(1),
+      _useState14 = _slicedToArray(_useState13, 2),
+      activePage = _useState14[0],
+      setActivePage = _useState14[1];
+
+  var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(0),
+      _useState16 = _slicedToArray(_useState15, 2),
+      totalItemsCount = _useState16[0],
+      setTotalItemsCount = _useState16[1];
+
+  var _useForms = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_9__["default"])({
     brand_name: "",
     contact_person: "",
     phone_number: "",
@@ -59550,52 +59602,7 @@ var Brand = function Brand(props) {
       setBrandFrom = _useForms2[1],
       handleChange = _useForms2[2];
 
-  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
-      _useState4 = _slicedToArray(_useState3, 2),
-      Errors = _useState4[0],
-      setErrors = _useState4[1];
-
-  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
-      _useState6 = _slicedToArray(_useState5, 2),
-      BrandList = _useState6[0],
-      setBrandList = _useState6[1];
-
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(""),
-      _useState8 = _slicedToArray(_useState7, 2),
-      search = _useState8[0],
-      setSearch = _useState8[1];
-
-  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([8, 10, 20, 30, 40, 50]),
-      _useState10 = _slicedToArray(_useState9, 2),
-      select_row = _useState10[0],
-      setSelectRow = _useState10[1];
-
-  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(8),
-      _useState12 = _slicedToArray(_useState11, 2),
-      current_row = _useState12[0],
-      setCurrentRaw = _useState12[1];
-
-  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(1),
-      _useState14 = _slicedToArray(_useState13, 2),
-      page = _useState14[0],
-      setPage = _useState14[1];
-
-  var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(1),
-      _useState16 = _slicedToArray(_useState15, 2),
-      activePage = _useState16[0],
-      setActivePage = _useState16[1];
-
-  var _useState17 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(8),
-      _useState18 = _slicedToArray(_useState17, 2),
-      itemsCountPerPage = _useState18[0],
-      setItemsCountPerPage = _useState18[1];
-
-  var _useState19 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(450),
-      _useState20 = _slicedToArray(_useState19, 2),
-      totalItemsCount = _useState20[0],
-      setTotalItemsCount = _useState20[1];
-
-  var _useForms3 = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_8__["default"])({
+  var _useForms3 = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_9__["default"])({
     brand_name: "",
     contact_person: "",
     phone_number: "",
@@ -59610,15 +59617,26 @@ var Brand = function Brand(props) {
 
   var handlePageChange = function handlePageChange(pageNumber) {
     setPage(pageNumber);
+  };
+  /**
+   * Clear form function.
+   * Clear state value.
+   */
+
+
+  var clearFrom = function clearFrom() {
+    setErrors([]);
+    var form = Object(_helpers_clearForm_ClearForm__WEBPACK_IMPORTED_MODULE_10__["default"])(brand_form);
+    setBrandFrom(_objectSpread(_objectSpread({}, brand_form), form));
   }; // Brand List Get
 
 
   var GetBrandList = function GetBrandList() {
-    var main_url = "brands?q=".concat(search, "&row=").concat(current_row, "&page=").concat(page);
+    var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+    var main_url = "brands?q=".concat(search, "&row=").concat(current_raw, "&page=").concat(page);
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(main_url).then(function (response) {
       setBrandList(response.data.data.data);
       setActivePage(response.data.data.current_page);
-      setItemsCountPerPage(parseInt(response.data.data.per_page));
       setTotalItemsCount(response.data.data.total);
     })["catch"](function (error) {
       console.log(error);
@@ -59630,25 +59648,40 @@ var Brand = function Brand(props) {
     return function () {
       setBrandList([]);
     };
-  }, [current_row, search, page]); // Data Submit
+  }, [current_raw, search, page]); // Data Submit
 
   var onAddSubmit = function onAddSubmit(e) {
     e.preventDefault();
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/brands", brand_form).then(function (response) {
       $(".close").click();
       GetBrandList();
-      ClearFrom();
-      react_toastify__WEBPACK_IMPORTED_MODULE_7__["toast"].success("Brand Data Inserted Successfully!");
+      clearFrom();
+      react_toastify__WEBPACK_IMPORTED_MODULE_8__["toast"].success("Brand Data Inserted Successfully!");
     })["catch"](function (error) {
-      if (error.response.status == 422) {
+      if (error.response) {
         setErrors(error.response.data.errors);
       }
-    });
+    }); // if (simpleValidator.current.allValid()) {
+    //     Axios.post("/brands", brand_form)
+    //         .then(response => {
+    //             $(".close").click();
+    //             GetBrandList();
+    //             clearFrom();
+    //             toast.success("Brand Data Inserted Successfully!");
+    //         })
+    //         .catch(error => {
+    //             if (error.response) {
+    //                 setErrors(error.response.data.errors);
+    //             }
+    //         });
+    // } else {
+    //     setErrors(simpleValidator.current.errorMessages);
+    // }
   }; // Brand Delete
 
 
   var DeleteHandler = function DeleteHandler(id, index) {
-    sweetalert__WEBPACK_IMPORTED_MODULE_6___default()({
+    sweetalert__WEBPACK_IMPORTED_MODULE_7___default()({
       title: "Are you sure?",
       text: "Once deleted, you will not be able to recover this imaginary file!",
       icon: "warning",
@@ -59659,25 +59692,16 @@ var Brand = function Brand(props) {
         axios__WEBPACK_IMPORTED_MODULE_3___default.a["delete"]("/brands/" + id).then(function (response) {
           if (response.status === 204) {
             GetBrandList();
-            sweetalert__WEBPACK_IMPORTED_MODULE_6___default()("Deleted!", "Brand Has been Deleted", "success");
+            sweetalert__WEBPACK_IMPORTED_MODULE_7___default()("Deleted!", "Brand Has been Deleted", "success");
           } else {
-            sweetalert__WEBPACK_IMPORTED_MODULE_6___default()("Opps", "Something Went Wrong", "warning");
+            sweetalert__WEBPACK_IMPORTED_MODULE_7___default()("Opps", "Something Went Wrong", "warning");
           }
         })["catch"](function (error) {
           console.log(error);
         });
       } else {
-        sweetalert__WEBPACK_IMPORTED_MODULE_6___default()("Your imaginary file is safe!");
+        sweetalert__WEBPACK_IMPORTED_MODULE_7___default()("Your imaginary file is safe!");
       }
-    });
-  }; // Clear From
-
-
-  var ClearFrom = function ClearFrom() {
-    setErrors([]);
-    var FORM = brand_form;
-    Object.keys(FORM).forEach(function (key, index) {
-      FORM[key] = "";
     });
   }; // Brand Status Change
 
@@ -59687,11 +59711,11 @@ var Brand = function Brand(props) {
       console.log(response);
 
       if (response.data.code === 200) {
-        react_toastify__WEBPACK_IMPORTED_MODULE_7__["toast"].success("This brand is active successfully!");
+        react_toastify__WEBPACK_IMPORTED_MODULE_8__["toast"].success("This brand is active successfully!");
       }
 
       if (response.data.code === 201) {
-        react_toastify__WEBPACK_IMPORTED_MODULE_7__["toast"].warning("This Brand is inactive successfully!");
+        react_toastify__WEBPACK_IMPORTED_MODULE_8__["toast"].warning("This Brand is inactive successfully!");
       }
 
       GetBrandList();
@@ -59713,16 +59737,30 @@ var Brand = function Brand(props) {
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.put("/brands/" + EditForm.brand_id, EditForm).then(function (response) {
       $(".close").click();
       GetBrandList();
-      ClearFrom();
-      react_toastify__WEBPACK_IMPORTED_MODULE_7__["toast"].success("Brand Data Update Successfully!");
+      react_toastify__WEBPACK_IMPORTED_MODULE_8__["toast"].success("Brand Data Update Successfully!");
     })["catch"](function (error) {
-      if (error.response.status == 422) {
-        setError(error.response.data.errors);
+      if (error.response) {
+        setErrors(error.response.data.errors);
       }
-    });
+    }); // if (simpleValidator.current.allValid()) {
+    //     Axios.put("/brands/" + EditForm.brand_id, EditForm)
+    //         .then(response => {
+    //             $(".close").click();
+    //             GetBrandList();
+    //             ClearFrom();
+    //             toast.success("Brand Data Update Successfully!");
+    //         })
+    //         .catch(error => {
+    //             if (error.response) {
+    //                 setErrors(error.response.data.errors);
+    //             }
+    //         });
+    // } else {
+    //     setErrors(simpleValidator.current.errorMessages);
+    // }
   };
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_2__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_Layouts_PageHeader_PageHeader__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_2__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_Layouts_PageHeader_PageHeader__WEBPACK_IMPORTED_MODULE_5__["default"], {
     breadCrumbs: props.breadCrumbs,
     Module: props.Module
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("form", {
@@ -59773,7 +59811,9 @@ var Brand = function Brand(props) {
     placeholder: "Enter Brand Name",
     onChange: handleChange,
     value: brand_form.brand_name
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }), simpleValidator.current.message("brand_name", brand_form.brand_name, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
+    className: "text-danger"
+  }, error.brand_name))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("label", {
     className: "col-lg-6 control-label"
@@ -59786,20 +59826,24 @@ var Brand = function Brand(props) {
     placeholder: "Enter Brand Contact Person",
     onChange: handleChange,
     value: brand_form.contact_person
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }), simpleValidator.current.message("contact_person", brand_form.contact_person, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
+    className: "text-danger"
+  }, error.contact_person))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("label", {
     className: "col-lg-6 control-label"
   }, "Contact Number:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-lg-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("input", {
-    type: "text",
+    type: "number",
     className: "form-control",
     name: "phone_number",
     placeholder: "Enter Brand Phone Number",
     onChange: handleChange,
     value: brand_form.phone_number
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }), simpleValidator.current.message("phone_number", brand_form.phone_number, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
+    className: "text-danger"
+  }, error.phone_number))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("label", {
     className: "col-lg-6 control-label"
@@ -59908,7 +59952,9 @@ var Brand = function Brand(props) {
     placeholder: "Enter Brand Name",
     onChange: EditHandleChange,
     value: EditForm.brand_name
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }), simpleValidator.current.message("brand_name", EditForm.brand_name, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
+    className: "text-danger"
+  }, error.brand_name))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("label", {
     className: "col-lg-6 control-label"
@@ -59921,20 +59967,24 @@ var Brand = function Brand(props) {
     placeholder: "Enter Brand Contact Person",
     onChange: EditHandleChange,
     value: EditForm.contact_person
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }), simpleValidator.current.message("contact_person", EditForm.contact_person, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
+    className: "text-danger"
+  }, error.contact_person))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("label", {
     className: "col-lg-6 control-label"
   }, "Contact Number:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-lg-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("input", {
-    type: "text",
+    type: "number",
     className: "form-control",
     name: "phone_number",
     placeholder: "Enter Brand Phone Number",
     onChange: EditHandleChange,
     value: EditForm.phone_number
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }), simpleValidator.current.message("phone_number", EditForm.phone_number, "required"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
+    className: "text-danger"
+  }, error.phone_number))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "form-group "
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("label", {
     className: "col-lg-6 control-label"
@@ -60113,34 +60163,16 @@ var Brand = function Brand(props) {
   }), totalItemsCount === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("td", {
     colSpan: "7",
     className: "text-center"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("b", null, "No Data Found")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("tfoot", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
-    className: "text-center"
-  }, "Brand Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
-    className: "text-center"
-  }, "Brand Logo"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
-    className: "text-center"
-  }, "Contact Person"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
-    className: "text-center"
-  }, "Phone Number"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
-    className: "text-center"
-  }, "Brand Address"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
-    className: "text-center"
-  }, "Status"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("th", {
-    className: "text-center"
-  }, "Action")))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("b", null, "No Data Found"))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-sm-12 col-md-5"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-sm-12 col-md-7"
-  }, current_row >= totalItemsCount ? "" : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_5___default.a, {
-    innerClass: "btn-group",
-    linkClass: "btn btn-outline-secondary",
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_helpers_pagination_CustomPagination__WEBPACK_IMPORTED_MODULE_11__["default"], {
     activePage: activePage,
-    itemsCountPerPage: itemsCountPerPage,
-    totalItemsCount: totalItemsCount,
-    pageRangeDisplayed: 3,
-    onChange: handlePageChange
+    totalItems: totalItemsCount,
+    getFunction: GetBrandList
   }))))))));
 };
 
@@ -64931,8 +64963,8 @@ var router = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/professor/Documents/Laravel/Laravel + React_js/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
-module.exports = __webpack_require__(/*! /home/professor/Documents/Laravel/Laravel + React_js/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
+__webpack_require__(/*! /home/ridoy/Documents/My Project/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /home/ridoy/Documents/My Project/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
 
 
 /***/ })
