@@ -58228,6 +58228,7 @@ var Brand = function Brand(props) {
     className: "col-sm-12 col-md-7"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_helpers_pagination_CustomPagination__WEBPACK_IMPORTED_MODULE_11__["default"], {
     activePage: activePage,
+    currentRow: current_raw,
     totalItems: totalItemsCount,
     getFunction: GetBrandList
   }))))))));
@@ -61464,6 +61465,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _customHooks_useForms__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../customHooks/useForms */ "./resources/js/components/customHooks/useForms.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _helpers_clearForm_ClearForm__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../helpers/clearForm/ClearForm */ "./resources/js/components/helpers/clearForm/ClearForm.js");
+/* harmony import */ var _helpers_pagination_CustomPagination__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../helpers/pagination/CustomPagination */ "./resources/js/components/helpers/pagination/CustomPagination.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -61500,6 +61503,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
 var SubCategory = function SubCategory(props) {
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
@@ -61511,50 +61516,42 @@ var SubCategory = function SubCategory(props) {
       Search = _useState4[0],
       setSearch = _useState4[1];
 
-  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(8),
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(10),
       _useState6 = _slicedToArray(_useState5, 2),
       Current_row = _useState6[0],
       setCurrent_row = _useState6[1];
 
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(""),
+  var select_row = [10, 20, 30, 40, 50, 100];
+
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(10),
       _useState8 = _slicedToArray(_useState7, 2),
-      page = _useState8[0],
-      setPage = _useState8[1];
+      currentRow = _useState8[0],
+      setCurrentRow = _useState8[1];
 
-  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([8, 10, 20, 30, 40, 50]),
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(1),
       _useState10 = _slicedToArray(_useState9, 2),
-      select_row = _useState10[0],
-      setSelectRow = _useState10[1];
+      activePage = _useState10[0],
+      setActivePage = _useState10[1];
 
-  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(1),
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(0),
       _useState12 = _slicedToArray(_useState11, 2),
-      activePage = _useState12[0],
-      setActivePage = _useState12[1];
+      totalItemsCount = _useState12[0],
+      setTotalItemsCount = _useState12[1];
 
-  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(8),
+  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState14 = _slicedToArray(_useState13, 2),
-      itemsCountPerPage = _useState14[0],
-      setItemsCountPerPage = _useState14[1];
+      Errors = _useState14[0],
+      setErrors = _useState14[1];
 
-  var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])(450),
+  var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState16 = _slicedToArray(_useState15, 2),
-      totalItemsCount = _useState16[0],
-      setTotalItemsCount = _useState16[1];
+      Menu = _useState16[0],
+      setMenu = _useState16[1];
 
   var _useState17 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
       _useState18 = _slicedToArray(_useState17, 2),
-      Errors = _useState18[0],
-      setErrors = _useState18[1];
-
-  var _useState19 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
-      _useState20 = _slicedToArray(_useState19, 2),
-      Menu = _useState20[0],
-      setMenu = _useState20[1];
-
-  var _useState21 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])([]),
-      _useState22 = _slicedToArray(_useState21, 2),
-      Category = _useState22[0],
-      setCategory = _useState22[1];
+      Category = _useState18[0],
+      setCategory = _useState18[1];
 
   var _useForms = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_7__["default"])({
     menu_id: "",
@@ -61563,7 +61560,7 @@ var SubCategory = function SubCategory(props) {
     sub_category_icon: ""
   }),
       _useForms2 = _slicedToArray(_useForms, 3),
-      SubCategoryForm = _useForms2[0],
+      subCategoryForm = _useForms2[0],
       setSubCategoryForm = _useForms2[1],
       handleChange = _useForms2[2];
 
@@ -61589,11 +61586,11 @@ var SubCategory = function SubCategory(props) {
 
 
   var GetSubCategoryList = function GetSubCategoryList() {
+    var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
     var main_url = "sub_category?q=".concat(Search, "&row=").concat(Current_row, "&page=").concat(page);
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(main_url).then(function (response) {
       setSubCategoryList(response.data.data.data);
       setActivePage(response.data.data.current_page);
-      setItemsCountPerPage(parseInt(response.data.data.per_page));
       setTotalItemsCount(response.data.data.total);
     })["catch"](function (error) {
       return console.log(error);
@@ -61605,7 +61602,7 @@ var SubCategory = function SubCategory(props) {
     return function () {
       setSubCategoryList([]);
     };
-  }, [Search, Current_row, page]); // Sub Category List
+  }, [Search, Current_row]); // Sub Category List
   // Menu Data Get
 
   var GetMenu = function GetMenu() {
@@ -61636,7 +61633,7 @@ var SubCategory = function SubCategory(props) {
     var reader = new FileReader();
 
     reader.onload = function (e) {
-      setSubCategoryForm(_objectSpread(_objectSpread({}, SubCategoryForm), {}, {
+      setSubCategoryForm(_objectSpread(_objectSpread({}, subCategoryForm), {}, {
         sub_category_icon: e.target.result
       }));
     };
@@ -61658,16 +61655,23 @@ var SubCategory = function SubCategory(props) {
 
     reader.readAsDataURL(files);
   }; // Edit Image render
-  // Form Submit Handler
+  // Clear From
+
+
+  var clearFrom = function clearFrom() {
+    setErrors([]);
+    var form = Object(_helpers_clearForm_ClearForm__WEBPACK_IMPORTED_MODULE_9__["default"])(subCategoryForm);
+    setSubCategoryForm(_objectSpread(_objectSpread({}, subCategoryForm), form));
+  }; // Form Submit Handler
 
 
   var submitHandler = function submitHandler(e) {
     e.preventDefault();
-    axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/sub_category", SubCategoryForm).then(function (response) {
+    axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/sub_category", subCategoryForm).then(function (response) {
       console.log(response);
       $(".close").click();
       GetSubCategoryList();
-      ClearFrom();
+      clearFrom();
       react_toastify__WEBPACK_IMPORTED_MODULE_6__["toast"].success("Sub Category Data Inserted Successfully!");
     })["catch"](function (error) {
       if (error.response.status == 422) {
@@ -61724,7 +61728,6 @@ var SubCategory = function SubCategory(props) {
     axios__WEBPACK_IMPORTED_MODULE_3___default.a.put("/sub_category/" + EditForm.sub_category_id, EditForm).then(function (response) {
       $(".close").click();
       GetSubCategoryList();
-      ClearFrom();
       react_toastify__WEBPACK_IMPORTED_MODULE_6__["toast"].success("Sub Category Data Update Successfully!");
     })["catch"](function (error) {
       if (error.response.status == 422) {
@@ -61750,16 +61753,6 @@ var SubCategory = function SubCategory(props) {
       console.log(error);
     });
   }; // Change Status Handler
-  // Clear From
-
-
-  var ClearFrom = function ClearFrom() {
-    setErrors([]);
-    var FORM = SubCategoryForm;
-    Object.keys(FORM).forEach(function (key, index) {
-      FORM[key] = "";
-    });
-  }; // Clear From
 
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_2__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_Layouts_PageHeader_PageHeader__WEBPACK_IMPORTED_MODULE_4__["default"], {
@@ -61800,7 +61793,7 @@ var SubCategory = function SubCategory(props) {
     className: "col-md-3 col-sm-12 mt-3 text-center"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("img", {
     className: "custom-icon rounded-circle",
-    src: !SubCategoryForm.sub_category_icon ? "backend_assets/img/menu-icon.png" : SubCategoryForm.sub_category_icon
+    src: !subCategoryForm.sub_category_icon ? "backend_assets/img/menu-icon.png" : subCategoryForm.sub_category_icon
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
@@ -61828,6 +61821,7 @@ var SubCategory = function SubCategory(props) {
     className: "col-lg-12"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("select", {
     name: "menu_id",
+    value: subCategoryForm.menu_id,
     className: "form-control",
     onChange: function onChange(e) {
       return MenuChangeFunctions(e);
@@ -61852,6 +61846,7 @@ var SubCategory = function SubCategory(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("select", {
     name: "category_id",
     className: "form-control",
+    value: subCategoryForm.category_id,
     onChange: handleChange
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     value: true,
@@ -61875,7 +61870,8 @@ var SubCategory = function SubCategory(props) {
     className: "form-control",
     name: "sub_category_name",
     placeholder: "Enter Sub Category Name",
-    onChange: handleChange
+    onChange: handleChange,
+    value: subCategoryForm.sub_category_name
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
     className: "text-danger"
   }, Errors.sub_category_name))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
@@ -61884,7 +61880,7 @@ var SubCategory = function SubCategory(props) {
     type: "button",
     className: "btn btn-secondary",
     "data-dismiss": "modal",
-    onClick: ClearFrom
+    onClick: clearFrom
   }, "Close"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("button", {
     type: "submit",
     className: "btn btn-primary"
@@ -62007,7 +62003,7 @@ var SubCategory = function SubCategory(props) {
     type: "button",
     className: "btn btn-secondary",
     "data-dismiss": "modal",
-    onClick: ClearFrom
+    onClick: clearFrom
   }, "Close"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("button", {
     type: "submit",
     className: "btn btn-primary"
@@ -62019,7 +62015,7 @@ var SubCategory = function SubCategory(props) {
     className: "btn btn-info table-button",
     "data-toggle": "modal",
     "data-target": "#add_modal",
-    onClick: ClearFrom
+    onClick: clearFrom
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("i", {
     className: "ik ik-clipboard"
   }), "Add new")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
@@ -62138,14 +62134,11 @@ var SubCategory = function SubCategory(props) {
     className: "col-sm-12 col-md-5"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
     className: "col-sm-12 col-md-7"
-  }, Current_row >= totalItemsCount ? "" : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react_js_pagination__WEBPACK_IMPORTED_MODULE_5___default.a, {
-    innerClass: "btn-group",
-    linkClass: "btn btn-outline-secondary",
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_helpers_pagination_CustomPagination__WEBPACK_IMPORTED_MODULE_10__["default"], {
     activePage: activePage,
-    itemsCountPerPage: itemsCountPerPage,
-    totalItemsCount: totalItemsCount,
-    pageRangeDisplayed: 3,
-    onChange: handlePageChange
+    currentRow: currentRow,
+    totalItems: totalItemsCount,
+    getFunction: GetSubCategoryList
   }))))))));
 };
 
@@ -62995,8 +62988,8 @@ var router = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/professor/Documents/Laravel/Laravel + React_js/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
-module.exports = __webpack_require__(/*! /home/professor/Documents/Laravel/Laravel + React_js/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
+__webpack_require__(/*! /home/ridoy/Documents/My Project/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /home/ridoy/Documents/My Project/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
 
 
 /***/ })

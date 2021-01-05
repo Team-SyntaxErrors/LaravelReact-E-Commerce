@@ -9,56 +9,55 @@ import Pagination from "react-js-pagination";
 import { toast } from "react-toastify";
 import useForms from "../customHooks/useForms";
 import { slice } from "lodash";
+import ClearForm from "../helpers/clearForm/ClearForm";
+import CustomPagination from "../helpers/pagination/CustomPagination";
 
-const SubCategory = (props) => {
+const SubCategory = props => {
     const [subCategoryList, setSubCategoryList] = useState([]);
     const [Search, setSearch] = useState("");
-    const [Current_row, setCurrent_row] = useState(8);
-    const [page, setPage] = useState("");
-    const [select_row, setSelectRow] = useState([8, 10, 20, 30, 40, 50]);
+    const [Current_row, setCurrent_row] = useState(10);
+    const select_row = [10, 20, 30, 40, 50, 100];
+    const [currentRow, setCurrentRow] = useState(10);
     const [activePage, setActivePage] = useState(1);
-    const [itemsCountPerPage, setItemsCountPerPage] = useState(8);
-    const [totalItemsCount, setTotalItemsCount] = useState(450);
-
+    const [totalItemsCount, setTotalItemsCount] = useState(0);
     const [Errors, setErrors] = useState([]);
 
     const [Menu, setMenu] = useState([]);
     const [Category, setCategory] = useState([]);
-    const [SubCategoryForm, setSubCategoryForm, handleChange] = useForms({
+    const [subCategoryForm, setSubCategoryForm, handleChange] = useForms({
         menu_id: "",
         category_id: "",
         sub_category_name: "",
-        sub_category_icon: "",
+        sub_category_icon: ""
     });
 
     const [EditForm, setEditForm, EditHandleChange] = useForms({
         menu_id: "",
         category_id: "",
         sub_category_name: "",
-        sub_category_icon: "",
+        sub_category_icon: ""
     });
 
-    const handlePageChange = (pageNumber) => {
+    const handlePageChange = pageNumber => {
         setPage(pageNumber);
     };
 
-    const MenuChangeFunctions = (e) => {
+    const MenuChangeFunctions = e => {
         handleChange(e);
         GetCategory(e.target.value);
     };
 
     // Sub Category List
-    const GetSubCategoryList = () => {
+    const GetSubCategoryList = (page = 1) => {
         const main_url = `sub_category?q=${Search}&row=${Current_row}&page=${page}`;
 
         Axios.get(main_url)
-            .then((response) => {
+            .then(response => {
                 setSubCategoryList(response.data.data.data);
                 setActivePage(response.data.data.current_page);
-                setItemsCountPerPage(parseInt(response.data.data.per_page));
                 setTotalItemsCount(response.data.data.total);
             })
-            .catch((error) => console.log(error));
+            .catch(error => console.log(error));
     };
 
     useEffect(() => {
@@ -66,16 +65,16 @@ const SubCategory = (props) => {
         return () => {
             setSubCategoryList([]);
         };
-    }, [Search, Current_row, page]);
+    }, [Search, Current_row]);
     // Sub Category List
 
     // Menu Data Get
     const GetMenu = () => {
         Axios.get("/all_menu_get")
-            .then((response) => {
+            .then(response => {
                 setMenu(response.data.data);
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log(error);
             });
     };
@@ -86,25 +85,25 @@ const SubCategory = (props) => {
     // Menu Data Get
 
     // Category Data Get
-    const GetCategory = (menu_id) => {
+    const GetCategory = menu_id => {
         Axios.get("/category_get/" + menu_id)
-            .then((response) => {
+            .then(response => {
                 setCategory(response.data.data);
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log(error);
             });
     };
     // Category Data Get
 
     // Image Render
-    const onImageChangeHandler = (e) => {
+    const onImageChangeHandler = e => {
         let files = e.target.files[0];
         let reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = e => {
             setSubCategoryForm({
-                ...SubCategoryForm,
-                sub_category_icon: e.target.result,
+                ...subCategoryForm,
+                sub_category_icon: e.target.result
             });
         };
         reader.readAsDataURL(files);
@@ -112,31 +111,38 @@ const SubCategory = (props) => {
     // Image Render
 
     // Edit Image render
-    const onEditImageChangeHandler = (e) => {
+    const onEditImageChangeHandler = e => {
         let files = e.target.files[0];
         let reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = e => {
             setEditForm({
                 ...EditForm,
-                sub_category_icon: e.target.result,
+                sub_category_icon: e.target.result
             });
         };
         reader.readAsDataURL(files);
     };
     // Edit Image render
 
+    // Clear From
+    const clearFrom = () => {
+        setErrors([]);
+        let form = ClearForm(subCategoryForm);
+        setSubCategoryForm({ ...subCategoryForm, ...form });
+    };
+
     // Form Submit Handler
-    const submitHandler = (e) => {
+    const submitHandler = e => {
         e.preventDefault();
-        Axios.post("/sub_category", SubCategoryForm)
-            .then((response) => {
+        Axios.post("/sub_category", subCategoryForm)
+            .then(response => {
                 console.log(response);
                 $(".close").click();
                 GetSubCategoryList();
-                ClearFrom();
+                clearFrom();
                 toast.success("Sub Category Data Inserted Successfully!");
             })
-            .catch((error) => {
+            .catch(error => {
                 if (error.response.status == 422) {
                     setErrors(error.response.data.errors);
                 }
@@ -151,11 +157,11 @@ const SubCategory = (props) => {
             text: `Once deleted, you will not be able to recover this imaginary file!`,
             icon: "warning",
             buttons: true,
-            dangerMode: true,
-        }).then((willDelete) => {
+            dangerMode: true
+        }).then(willDelete => {
             if (willDelete) {
                 Axios.delete("/sub_category/" + id)
-                    .then((response) => {
+                    .then(response => {
                         if (response.status === 204) {
                             swal(
                                 "Deleted!",
@@ -170,7 +176,7 @@ const SubCategory = (props) => {
                             swal("Opps", "Something Went Wrong", "warning");
                         }
                     })
-                    .catch((error) => {
+                    .catch(error => {
                         console.log(error);
                     });
             } else {
@@ -190,16 +196,15 @@ const SubCategory = (props) => {
     // Edit Data Get Handler
 
     // Update Form Submit Handler
-    const updateHandler = (e) => {
+    const updateHandler = e => {
         e.preventDefault();
         Axios.put("/sub_category/" + EditForm.sub_category_id, EditForm)
-            .then((response) => {
+            .then(response => {
                 $(".close").click();
                 GetSubCategoryList();
-                ClearFrom();
                 toast.success("Sub Category Data Update Successfully!");
             })
-            .catch((error) => {
+            .catch(error => {
                 if (error.response.status == 422) {
                     setError(error.response.data.errors);
                 }
@@ -208,9 +213,9 @@ const SubCategory = (props) => {
     // Update Form Submit Handler
 
     // Change Status Handler
-    const ChangeStatus = (id) => {
+    const ChangeStatus = id => {
         Axios.get("/sub_category/status/" + id)
-            .then((response) => {
+            .then(response => {
                 if (response.data.code === 200) {
                     toast.success("This sub category is active successfully!");
                 }
@@ -221,21 +226,11 @@ const SubCategory = (props) => {
                 }
                 GetSubCategoryList();
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log(error);
             });
     };
     // Change Status Handler
-
-    // Clear From
-    const ClearFrom = () => {
-        setErrors([]);
-        let FORM = SubCategoryForm;
-        Object.keys(FORM).forEach(function (key, index) {
-            FORM[key] = "";
-        });
-    };
-    // Clear From
 
     return (
         <Fragment>
@@ -273,9 +268,9 @@ const SubCategory = (props) => {
                                             <img
                                                 className="custom-icon rounded-circle"
                                                 src={
-                                                    !SubCategoryForm.sub_category_icon
+                                                    !subCategoryForm.sub_category_icon
                                                         ? "backend_assets/img/menu-icon.png"
-                                                        : SubCategoryForm.sub_category_icon
+                                                        : subCategoryForm.sub_category_icon
                                                 }
                                             />
                                             <span className="text-danger" />
@@ -308,8 +303,11 @@ const SubCategory = (props) => {
                                                 <div className="col-lg-12">
                                                     <select
                                                         name="menu_id"
+                                                        value={
+                                                            subCategoryForm.menu_id
+                                                        }
                                                         className="form-control"
-                                                        onChange={(e) =>
+                                                        onChange={e =>
                                                             MenuChangeFunctions(
                                                                 e
                                                             )
@@ -346,6 +344,9 @@ const SubCategory = (props) => {
                                                     <select
                                                         name="category_id"
                                                         className="form-control"
+                                                        value={
+                                                            subCategoryForm.category_id
+                                                        }
                                                         onChange={handleChange}
                                                     >
                                                         <option
@@ -386,6 +387,9 @@ const SubCategory = (props) => {
                                                         name="sub_category_name"
                                                         placeholder="Enter Sub Category Name"
                                                         onChange={handleChange}
+                                                        value={
+                                                            subCategoryForm.sub_category_name
+                                                        }
                                                     />
                                                     <span className="text-danger">
                                                         {
@@ -403,7 +407,7 @@ const SubCategory = (props) => {
                                     type="button"
                                     className="btn btn-secondary"
                                     data-dismiss="modal"
-                                    onClick={ClearFrom}
+                                    onClick={clearFrom}
                                 >
                                     Close
                                 </button>
@@ -592,7 +596,7 @@ const SubCategory = (props) => {
                                     type="button"
                                     className="btn btn-secondary"
                                     data-dismiss="modal"
-                                    onClick={ClearFrom}
+                                    onClick={clearFrom}
                                 >
                                     Close
                                 </button>
@@ -615,7 +619,7 @@ const SubCategory = (props) => {
                         className="btn btn-info table-button"
                         data-toggle="modal"
                         data-target="#add_modal"
-                        onClick={ClearFrom}
+                        onClick={clearFrom}
                     >
                         <i className="ik ik-clipboard"></i>
                         Add new
@@ -639,7 +643,7 @@ const SubCategory = (props) => {
                                                 name="simpletable_length"
                                                 aria-controls="simpletable"
                                                 className="custom-select custom-select-sm form-control form-control-sm"
-                                                onChange={(e) =>
+                                                onChange={e =>
                                                     setCurrent_row(
                                                         e.target.value
                                                     )
@@ -670,7 +674,7 @@ const SubCategory = (props) => {
                                                 className="form-control form-control-sm"
                                                 placeholder="Type to filter..."
                                                 aria-controls="simpletable"
-                                                onChange={(e) =>
+                                                onChange={e =>
                                                     setSearch(e.target.value)
                                                 }
                                                 value={Search}
@@ -818,21 +822,12 @@ const SubCategory = (props) => {
                             <div className="row">
                                 <div className="col-sm-12 col-md-5"></div>
                                 <div className="col-sm-12 col-md-7">
-                                    {Current_row >= totalItemsCount ? (
-                                        ""
-                                    ) : (
-                                        <Pagination
-                                            innerClass="btn-group"
-                                            linkClass="btn btn-outline-secondary"
-                                            activePage={activePage}
-                                            itemsCountPerPage={
-                                                itemsCountPerPage
-                                            }
-                                            totalItemsCount={totalItemsCount}
-                                            pageRangeDisplayed={3}
-                                            onChange={handlePageChange}
-                                        />
-                                    )}
+                                    <CustomPagination
+                                        activePage={activePage}
+                                        currentRow={currentRow}
+                                        totalItems={totalItemsCount}
+                                        getFunction={GetSubCategoryList}
+                                    />
                                 </div>
                             </div>
                         </div>
