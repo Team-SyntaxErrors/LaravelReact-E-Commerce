@@ -945,4 +945,4 @@ function DashBoard(props) {
     );
 }
 
-export default DashBoard;
+export default React.memo(DashBoard);

@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 function Footer() {
     return (
         <Fragment>
@@ -10,13 +10,9 @@ function Footer() {
                     </span>
                     <span className="float-none float-sm-right mt-1 mt-sm-0 text-center">
                         <i className="fa fa-heart text-danger" />{" "}
-                    
-                                <Link
-                                    to={{ pathname: "/", state: "Dashboard" }}
-                                >
-                                    <span>SyntaxErrors</span>
-                                </Link>
-                            
+                        <Link to={{ pathname: "/", state: "Dashboard" }}>
+                            <span>SyntaxErrors</span>
+                        </Link>
                     </span>
                 </div>
             </footer>
@@ -24,4 +20,4 @@ function Footer() {
     );
 }
 
-export default Footer;
+export default React.memo(Footer);
