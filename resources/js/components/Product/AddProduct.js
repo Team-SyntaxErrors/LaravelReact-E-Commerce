@@ -11,6 +11,7 @@ import PageHeader from "./../Layouts/PageHeader/PageHeader";
 import ReactTagInput from "@pathofdev/react-tag-input";
 import SimpleReactValidator from "simple-react-validator";
 import Slugger from "./../helpers/slugger/Slugger";
+import useForms from "../customHooks/useForms";
 import { toast } from "react-toastify";
 
 const AddProduct = props => {
@@ -21,7 +22,7 @@ const AddProduct = props => {
     const [slugWarning, setSlugWarning] = useState("");
     const [error, setError] = useState([]);
     const simpleValidator = useRef(new SimpleReactValidator());
-    const [product, setProduct] = useState({
+    const [product, setProduct, handleChange] = useForms({
         product_name: "",
         product_slug: "",
         product_sku: "",
@@ -42,17 +43,6 @@ const AddProduct = props => {
         getBrand();
         getUnit();
     }, []);
-
-    /**
-     * Handles the change of fields
-     * to assign field value inside object
-     *
-     * @param  {object} event
-     * @return {void}
-     */
-    const handleChange = event => {
-        setProduct({ ...product, [event.target.name]: event.target.value });
-    };
 
     /**
      * It's slugify the product name using regex
@@ -102,7 +92,6 @@ const AddProduct = props => {
      */
     const setDescription = description => {
         setProduct({ ...product, ["description"]: description });
-        // simpleValidator.current.showMessageFor("description");
     };
 
     /**
@@ -320,7 +309,7 @@ const AddProduct = props => {
                                             <option defaultValue hidden>
                                                 --Select Category--
                                             </option>
-                                            {category.map((category, i) => (
+                                            {category.map(category => (
                                                 <option
                                                     key={category.category_id}
                                                     value={category.category_id}

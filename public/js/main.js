@@ -40227,7 +40227,7 @@ var Menu = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(funct
   return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../components/Menu/Menu */ "./resources/js/components/Menu/Menu.js"));
 });
 var SubCategory = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.resolve(/*! import() */).then(__webpack_require__.t.bind(null, /*! ../components/SubCategory/SubCategory */ "./resources/js/components/SubCategory/SubCategory.js", 7));
+  return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../components/SubCategory/SubCategory */ "./resources/js/components/SubCategory/SubCategory.js"));
 });
 var Unit = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
   return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ../components/Unit/Unit */ "./resources/js/components/Unit/Unit.js"));
@@ -43618,7 +43618,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var simple_react_validator__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! simple-react-validator */ "./node_modules/simple-react-validator/dist/simple-react-validator.min.js");
 /* harmony import */ var simple_react_validator__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(simple_react_validator__WEBPACK_IMPORTED_MODULE_9__);
 /* harmony import */ var _helpers_slugger_Slugger__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./../helpers/slugger/Slugger */ "./resources/js/components/helpers/slugger/Slugger.js");
-/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
+/* harmony import */ var _customHooks_useForms__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../customHooks/useForms */ "./resources/js/components/customHooks/useForms.js");
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -43636,6 +43637,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -43683,7 +43685,7 @@ var AddProduct = function AddProduct(props) {
 
   var simpleValidator = Object(react__WEBPACK_IMPORTED_MODULE_2__["useRef"])(new simple_react_validator__WEBPACK_IMPORTED_MODULE_9___default.a());
 
-  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])({
+  var _useForms = Object(_customHooks_useForms__WEBPACK_IMPORTED_MODULE_11__["default"])({
     product_name: "",
     product_slug: "",
     product_sku: "",
@@ -43698,9 +43700,10 @@ var AddProduct = function AddProduct(props) {
     status: "",
     description: ""
   }),
-      _useState14 = _slicedToArray(_useState13, 2),
-      product = _useState14[0],
-      setProduct = _useState14[1];
+      _useForms2 = _slicedToArray(_useForms, 3),
+      product = _useForms2[0],
+      setProduct = _useForms2[1],
+      handleChange = _useForms2[2];
 
   Object(react__WEBPACK_IMPORTED_MODULE_2__["useEffect"])(function () {
     getCategory();
@@ -43708,24 +43711,12 @@ var AddProduct = function AddProduct(props) {
     getUnit();
   }, []);
   /**
-   * Handles the change of fields
-   * to assign field value inside object
-   *
-   * @param  {object} event
-   * @return {void}
-   */
-
-  var handleChange = function handleChange(event) {
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, event.target.name, event.target.value)));
-  };
-  /**
    * It's slugify the product name using regex
    * And check if the slug already recorded
    *
    * @param  {object} event
    * @return {void}
    */
-
 
   var slugger = function slugger(event) {
     var name = event.target.value;
@@ -43768,7 +43759,7 @@ var AddProduct = function AddProduct(props) {
 
 
   var setDescription = function setDescription(description) {
-    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "description", description))); // simpleValidator.current.showMessageFor("description");
+    setProduct(_objectSpread(_objectSpread({}, product), {}, _defineProperty({}, "description", description)));
   };
   /**
    * Getting the active category list
@@ -43857,7 +43848,7 @@ var AddProduct = function AddProduct(props) {
     if (simpleValidator.current.allValid()) {
       axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/products", product).then(function (response) {
         if (response.data.code === 201) {
-          react_toastify__WEBPACK_IMPORTED_MODULE_11__["toast"].success("Product Data Inserted Successfully!");
+          react_toastify__WEBPACK_IMPORTED_MODULE_12__["toast"].success("Product Data Inserted Successfully!");
           clearFrom();
         }
       })["catch"](function (error) {
@@ -43967,7 +43958,7 @@ var AddProduct = function AddProduct(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
     defaultValue: true,
     hidden: true
-  }, "--Select Category--"), category.map(function (category, i) {
+  }, "--Select Category--"), category.map(function (category) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("option", {
       key: category.category_id,
       value: category.category_id
