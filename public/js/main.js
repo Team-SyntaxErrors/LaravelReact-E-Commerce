@@ -40310,7 +40310,7 @@ function AppRoute() {
   }))));
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (AppRoute);
+/* harmony default export */ __webpack_exports__["default"] = (/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.memo(AppRoute));
 
 /***/ }),
 
@@ -41688,7 +41688,7 @@ var Category = function Category(props) {
   }))))))));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Category);
+/* harmony default export */ __webpack_exports__["default"] = (/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.memo(Category));
 
 /***/ }),
 
@@ -42503,7 +42503,7 @@ function DashBoard(props) {
   }))))))));
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (DashBoard);
+/* harmony default export */ __webpack_exports__["default"] = (/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.memo(DashBoard));
 
 /***/ }),
 
@@ -42541,7 +42541,7 @@ function Footer() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "SyntaxErrors"))))));
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Footer);
+/* harmony default export */ __webpack_exports__["default"] = (/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.memo(Footer));
 
 /***/ }),
 
@@ -42840,7 +42840,7 @@ var NavBar = function NavBar() {
   }), " ", "Logout"))))))));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (NavBar);
+/* harmony default export */ __webpack_exports__["default"] = (/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.memo(NavBar));
 
 /***/ }),
 
@@ -43587,7 +43587,7 @@ var Menu = function Menu(props) {
   }))))))));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Menu);
+/* harmony default export */ __webpack_exports__["default"] = (/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.memo(Menu));
 
 /***/ }),
 
@@ -44170,7 +44170,7 @@ var AddProduct = function AddProduct(props) {
   }, "Save")))));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (AddProduct);
+/* harmony default export */ __webpack_exports__["default"] = (/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.memo(AddProduct));
 
 /***/ }),
 
@@ -44888,7 +44888,7 @@ var SubCategory = function SubCategory(props) {
   }))))))));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (SubCategory);
+/* harmony default export */ __webpack_exports__["default"] = (/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.memo(SubCategory));
 
 /***/ }),
 
@@ -45435,7 +45435,7 @@ var Unit = function Unit(props) {
   }))))))));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Unit);
+/* harmony default export */ __webpack_exports__["default"] = (/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.memo(Unit));
 
 /***/ }),
 

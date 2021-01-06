@@ -795,4 +795,4 @@ const SubCategory = props => {
     );
 };
 
-export default SubCategory;
+export default React.memo(SubCategory);

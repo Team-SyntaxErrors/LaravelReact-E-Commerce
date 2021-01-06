@@ -102,4 +102,4 @@ function AppRoute() {
     );
 }
 
-export default AppRoute;
+export default React.memo(AppRoute);
