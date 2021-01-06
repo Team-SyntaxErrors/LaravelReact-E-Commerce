@@ -829,6 +829,7 @@ const Brand = props => {
                                 <div className="col-sm-12 col-md-7">
                                     <CustomPagination
                                         activePage={activePage}
+                                        currentRow={current_raw}
                                         totalItems={totalItemsCount}
                                         getFunction={GetBrandList}
                                     />
