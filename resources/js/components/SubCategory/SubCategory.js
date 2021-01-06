@@ -5,9 +5,8 @@ import Axios from "axios";
 import PageHeader from "./../Layouts/PageHeader/PageHeader";
 import { toast } from "react-toastify";
 import useForms from "../customHooks/useForms";
-import { slice } from "lodash";
-import CustomPagination from "../helpers/pagination/CustomPagination";
 import ClearForm from "../helpers/clearForm/ClearForm";
+import CustomPagination from "../helpers/pagination/CustomPagination";
 
 const SubCategory = props => {
     const selectRow = [10, 20, 30, 40, 50];
@@ -33,6 +32,17 @@ const SubCategory = props => {
         sub_category_icon: ""
     });
 
+    useEffect(() => {
+        getMenu();
+    }, []);
+
+    useEffect(() => {
+        getSubCategoryList();
+        return () => {
+            setSubCategoryList([]);
+        };
+    }, [search, currentRow]);
+
     const menuChangeFunctions = e => {
         handleChange(e);
         getCategory(e.target.value);
@@ -41,7 +51,6 @@ const SubCategory = props => {
     // Sub Category List
     const getSubCategoryList = (page = 1) => {
         const main_url = `sub_category?q=${search}&row=${currentRow}&page=${page}`;
-
         Axios.get(main_url)
             .then(response => {
                 setSubCategoryList(response.data.data.data);
@@ -50,14 +59,6 @@ const SubCategory = props => {
             })
             .catch(error => console.log(error));
     };
-
-    useEffect(() => {
-        getSubCategoryList();
-        return () => {
-            setSubCategoryList([]);
-        };
-    }, [search, currentRow]);
-    // Sub Category List
 
     // Menu Data Get
     const getMenu = () => {
@@ -70,11 +71,6 @@ const SubCategory = props => {
             });
     };
 
-    useEffect(() => {
-        getMenu();
-    }, []);
-    // Menu Data Get
-
     // Category Data Get
     const getCategory = menu_id => {
         Axios.get("/category_get/" + menu_id)
@@ -85,46 +81,25 @@ const SubCategory = props => {
                 console.log(error);
             });
     };
-    // Category Data Get
 
-    // Image Render
-    const onImageChangeHandler = e => {
-        let files = e.target.files[0];
-        let reader = new FileReader();
-        reader.onload = e => {
-            setSubCategoryForm({
-                ...subCategoryForm,
-                sub_category_icon: e.target.result
-            });
-        };
-        reader.readAsDataURL(files);
+    // Clear From
+    const clearFrom = () => {
+        setErrors([]);
+        let form = ClearForm(subCategoryForm);
+        setSubCategoryForm({ ...subCategoryForm, ...form });
     };
-    // Image Render
-
-    // Edit Image render
-    const onEditImageChangeHandler = e => {
-        let files = e.target.files[0];
-        let reader = new FileReader();
-        reader.onload = e => {
-            setEditForm({
-                ...editForm,
-                sub_category_icon: e.target.result
-            });
-        };
-        reader.readAsDataURL(files);
-    };
-    // Edit Image render
 
     // Form Submit Handler
     const submitHandler = e => {
         e.preventDefault();
         Axios.post("/sub_category", subCategoryForm)
             .then(response => {
-                console.log(response);
-                $(".close").click();
-                getSubCategoryList();
-                clearFrom();
-                toast.success("Sub Category Data Inserted Successfully!");
+                if (response.data.code === 201) {
+                    $(".close").click();
+                    getSubCategoryList();
+                    clearFrom();
+                    toast.success("Sub Category Data Inserted Successfully!");
+                }
             })
             .catch(error => {
                 if (error.response.status == 422) {
@@ -132,7 +107,6 @@ const SubCategory = props => {
                 }
             });
     };
-    // Form Submit Handler
 
     // Delete Handler
     const deleteHandler = (id, index) => {
@@ -157,7 +131,7 @@ const SubCategory = props => {
                             list.splice(index, 1);
                             setSubCategoryList(list);
                         } else {
-                            swal("Opps", "Something Went Wrong", "warning");
+                            swal("Oops", "Something Went Wrong", "warning");
                         }
                     })
                     .catch(error => {
@@ -168,11 +142,10 @@ const SubCategory = props => {
             }
         });
     };
-    // Delete Handler
 
     // Edit Data Get Handler
-    const editHandler = (id, data, index) => {
-        SubCategoryList.sub_category_id = id;
+    const editHandler = (id, data) => {
+        subCategoryList.sub_category_id = id;
         let value = JSON.parse(JSON.stringify(data));
         setEditForm(value);
         getCategory(value.menu_id);
@@ -184,10 +157,12 @@ const SubCategory = props => {
         e.preventDefault();
         Axios.put("/sub_category/" + editForm.sub_category_id, editForm)
             .then(response => {
-                $(".close").click();
-                getSubCategoryList();
-                clearFrom();
-                toast.success("Sub Category Data Update Successfully!");
+                if (response.data.code === 201) {
+                    $(".close").click();
+                    getSubCategoryList();
+                    clearFrom();
+                    toast.success("Sub Category Data Update Successfully!");
+                }
             })
             .catch(error => {
                 if (error.response.status == 422) {
@@ -195,7 +170,6 @@ const SubCategory = props => {
                 }
             });
     };
-    // Update Form Submit Handler
 
     // Change Status Handler
     const changeStatus = id => {
@@ -215,15 +189,6 @@ const SubCategory = props => {
                 console.log(error);
             });
     };
-    // Change Status Handler
-
-    // Clear From
-    const clearFrom = () => {
-        setErrors([]);
-        let form = ClearForm(subCategoryForm);
-        setCategoryForm({ ...subCategoryForm, ...form });
-    };
-    // Clear From
 
     return (
         <Fragment>
@@ -296,6 +261,9 @@ const SubCategory = props => {
                                                 <div className="col-lg-12">
                                                     <select
                                                         name="menu_id"
+                                                        value={
+                                                            subCategoryForm.menu_id
+                                                        }
                                                         className="form-control"
                                                         onChange={e =>
                                                             menuChangeFunctions(
@@ -334,6 +302,9 @@ const SubCategory = props => {
                                                     <select
                                                         name="category_id"
                                                         className="form-control"
+                                                        value={
+                                                            subCategoryForm.category_id
+                                                        }
                                                         onChange={handleChange}
                                                     >
                                                         <option
@@ -374,6 +345,9 @@ const SubCategory = props => {
                                                         name="sub_category_name"
                                                         placeholder="Enter Sub Category Name"
                                                         onChange={handleChange}
+                                                        value={
+                                                            subCategoryForm.sub_category_name
+                                                        }
                                                     />
                                                     <span className="text-danger">
                                                         {
@@ -771,8 +745,7 @@ const SubCategory = props => {
                                                                 onClick={() =>
                                                                     editHandler(
                                                                         subCategory.sub_category_id,
-                                                                        subCategory,
-                                                                        i
+                                                                        subCategory
                                                                     )
                                                                 }
                                                             ></i>{" "}
