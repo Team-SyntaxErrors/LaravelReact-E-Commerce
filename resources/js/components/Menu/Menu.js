@@ -11,9 +11,6 @@ import ClearForm from "../helpers/clearForm/ClearForm";
 
 const Menu = props => {
     const selectRow = [10, 20, 30, 40, 50];
-    const [menu_id, setMenuId] = useState("");
-    const [menu_name, setMenuName] = useState("");
-    const [menu_icon, setMenuIcon] = useState("");
     const [search, setSearch] = useState("");
     const [currentRow, setCurrentRow] = useState(8);
     const [errors, setErrors] = useState([]);
