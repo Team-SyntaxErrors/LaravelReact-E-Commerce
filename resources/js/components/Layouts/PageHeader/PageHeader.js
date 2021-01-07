@@ -7,7 +7,6 @@ function PageHeader({ breadCrumbs, Module }) {
                 <div className="row align-items-end">
                     <div className="col-lg-8">
                         <div className="page-header-title">
-                            {/* <i className="ik ik-home bg-blue" /> */}
                             <div className="d-inline">
                                 <h5>{breadCrumbs}</h5>
                             </div>
@@ -43,4 +42,4 @@ function PageHeader({ breadCrumbs, Module }) {
     );
 }
 
-export default PageHeader;
+export default React.memo(PageHeader);
