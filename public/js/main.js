@@ -45597,7 +45597,7 @@ var CategoryState = function CategoryState(props) {
     e.preventDefault();
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/category", categoryForm).then(function (response) {
       if (response.data.code === 201) {
-        $(".close").click();
+        document.querySelector(".close").click();
         getCategories();
         clearFrom();
         react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].success("Category Data Inserted Successfully!");
@@ -45651,7 +45651,7 @@ var CategoryState = function CategoryState(props) {
     e.preventDefault();
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/category/" + editForm.category_id, editForm).then(function (response) {
       if (response.data.code === 201) {
-        $(".close").click();
+        document.querySelector(".close").click();
         getCategories();
         clearFrom();
         react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].success("Category Data Update Successfully!");
