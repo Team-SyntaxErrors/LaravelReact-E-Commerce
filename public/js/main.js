@@ -45827,8 +45827,8 @@ var router = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/professor/Documents/Laravel/Laravel + React_js/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
-module.exports = __webpack_require__(/*! /home/professor/Documents/Laravel/Laravel + React_js/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
+__webpack_require__(/*! /home/shawon/Documents/Laravel/Laravel__React_js/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /home/shawon/Documents/Laravel/Laravel__React_js/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
 
 
 /***/ })
