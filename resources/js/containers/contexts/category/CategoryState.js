@@ -72,7 +72,7 @@ const CategoryState = props => {
         Axios.post("/category", categoryForm)
             .then(response => {
                 if (response.data.code === 201) {
-                    $(".close").click();
+                    document.querySelector(".close").click();
                     getCategories();
                     clearFrom();
                     toast.success("Category Data Inserted Successfully!");
@@ -132,7 +132,7 @@ const CategoryState = props => {
         Axios.put("/category/" + editForm.category_id, editForm)
             .then(response => {
                 if (response.data.code === 201) {
-                    $(".close").click();
+                    document.querySelector(".close").click();
                     getCategories();
                     clearFrom();
                     toast.success("Category Data Update Successfully!");
