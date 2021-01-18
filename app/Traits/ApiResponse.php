@@ -9,12 +9,12 @@ trait ApiResponse
     /**
      * Success Response Function
      *
-     * @param mixed  $data    Value.
-     * @param string $message Success message.
-     * @param mixed  $code    Success response status code.
+     * @param  mixed   $data    Value.
+     * @param  string  $message Success message.
+     * @param  integer $code    Success response status code.
      * @return object
      */
-    protected function successResponse($data, string $message = null, $code = Response::HTTP_OK)
+    protected function successResponse($data, string $message = null, int $code = Response::HTTP_OK)
     {
         return response()->json([
             'status'  => 'Success',
@@ -27,11 +27,11 @@ trait ApiResponse
     /**
      * Error response function
      *
-     * @param string $message Error message.
-     * @param mixed  $code    Error response status code.
+     * @param  string  $message Error message.
+     * @param  integer $code    Error response status code.
      * @return object
      */
-    protected function errorResponse(string $message = null, $code = Response::HTTP_BAD_REQUEST)
+    protected function errorResponse(string $message = null, int $code = Response::HTTP_BAD_REQUEST)
     {
         return response()->json([
             'status'  => 'Error',
