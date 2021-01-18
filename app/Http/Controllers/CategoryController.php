@@ -46,9 +46,9 @@ class CategoryController extends Controller
             $category_model = new Category();
             $requested_data = $request->all();
             if ($request->category_icon) {
-                $upload_path = $this->verifyStore($request, 'category_icon', 'category_icon');
+                $upload_path    = $this->verifyStore($request, 'category_icon', 'category_icon');
                 $requested_data = Arr::set($requested_data, "category_icon", $upload_path);
-                $category_slug = Str::slug($request->category_name, '-');
+                $category_slug  = Str::slug($request->category_name, '-');
                 $requested_data = Arr::set($requested_data, "category_slug", $category_slug);
                 $category_model->fill($requested_data)->save();
             }
@@ -96,10 +96,10 @@ class CategoryController extends Controller
                 if (File::exists($category_model->category_icon)) {
                     File::delete($category_model->category_icon);
                 }
-                $upload_path = $this->verifyStore($request, 'category_icon', 'category_icon');
+                $upload_path    = $this->verifyStore($request, 'category_icon', 'category_icon');
                 $requested_data = Arr::set($requested_data, "category_icon", $upload_path);
             }
-            $category_slug = Str::slug($request->category_name, '-');
+            $category_slug  = Str::slug($request->category_name, '-');
             $requested_data = Arr::set($requested_data, "category_slug", $category_slug);
             $category_model->fill($requested_data)->save();
             return $this->successResponse($category_model, "Category Update Successfully", Response::HTTP_CREATED);
@@ -138,10 +138,10 @@ class CategoryController extends Controller
     {
         try {
             $category = Category::findOrFail($id);
-            if ($category->status == 1) :
+            if ($category->status == 1):
                 $category->update(['status' => 0]);
                 $status = Response::HTTP_CREATED;
-            else :
+            else:
                 $category->update(['status' => 1]);
                 $status = Response::HTTP_OK;
             endif;

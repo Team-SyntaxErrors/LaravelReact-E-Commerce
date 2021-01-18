@@ -67,7 +67,7 @@ class ProductController extends Controller
             //Product Tags inserting in product_tags table
             if ($request->tags[0]) {
                 $data = [];
-                foreach ($request->tags as $key => $value) {
+                foreach ($request->tags as $value) {
                     $data[] = [
                         'product_id' => $product->product_id,
                         'tags'       => $value,
