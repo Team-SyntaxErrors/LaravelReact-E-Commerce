@@ -4,11 +4,11 @@ import "react-toastify/dist/ReactToastify.css";
 import React, { Fragment, useEffect, useState } from "react";
 
 import Axios from "axios";
-import CustomPagination from "../helpers/pagination/CustomPagination";
+import CustomPagination from "../../helpers/pagination/CustomPagination";
 import PageHeader from "./../Layouts/PageHeader/PageHeader";
 import swal from "sweetalert";
 import { toast } from "react-toastify";
-import useForms from "../customHooks/useForms";
+import useForms from "../../customHooks/useForms";
 
 const Unit = props => {
     const select_row = [10, 20, 30, 40, 50];

@@ -1,21 +1,23 @@
 import React, { useContext } from "react";
 
-import MenuContext from "../../containers/contexts/menu/MenuContext";
+import CategoryContext from "../../../containers/contexts/category/CategoryContext";
 
-const EditMenu = () => {
-    const menuContext = useContext(MenuContext);
+const AddCategory = () => {
+    const categoryContext = useContext(CategoryContext);
     const {
-        updateHandler,
-        editMenu,
-        editHandlerChange,
+        menu,
+        categoryForm,
+        handleChange,
+        submitHandler,
         errors,
         clearFrom
-    } = menuContext;
+    } = categoryContext;
+
     return (
-        <form onSubmit={updateHandler}>
+        <form onSubmit={submitHandler}>
             <div
                 className="modal fade"
-                id="edit_modal"
+                id="add_modal"
                 tabIndex={-1}
                 role="dialog"
                 aria-labelledby="exampleModalLongLabel"
@@ -28,7 +30,7 @@ const EditMenu = () => {
                                 className="modal-title"
                                 id="exampleModalLongLabel"
                             >
-                                Edit Menu
+                                Add Category
                             </h5>
                             <button
                                 type="button"
@@ -36,10 +38,7 @@ const EditMenu = () => {
                                 data-dismiss="modal"
                                 aria-label="Close"
                             >
-                                <span aria-hidden="true">
-                                    {" "}
-                                    <i className="ik ik-x"></i>
-                                </span>
+                                <span aria-hidden="true">×</span>
                             </button>
                         </div>
                         <div className="modal-body">
@@ -49,9 +48,9 @@ const EditMenu = () => {
                                         <img
                                             className="custom-icon rounded-circle"
                                             src={
-                                                !editMenu.menu_icon
+                                                !categoryForm.category_icon
                                                     ? "backend_assets/img/menu-icon.png"
-                                                    : editMenu.menu_icon
+                                                    : categoryForm.category_icon
                                             }
                                         />
                                         <span className="text-danger" />
@@ -59,36 +58,71 @@ const EditMenu = () => {
                                     <div className="col-md-9 col-sm-12 ">
                                         <div className="form-group">
                                             <label className="col-lg-6 control-label">
-                                                Menu Icon:
+                                                Category Icon:
                                             </label>
                                             <div className="col-lg-12">
                                                 <input
                                                     type="file"
+                                                    name="category_icon"
                                                     className="form-control"
+                                                    onChange={handleChange}
+                                                    value=""
                                                     placeholder="Enter Menu Icon"
-                                                    name="menu_icon"
-                                                    onChange={editHandlerChange}
                                                 />
                                                 <span className="text-danger">
-                                                    {errors.menu_icon}
+                                                    {errors.category_icon}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="col-lg-6 control-label">
+                                                Menu:
+                                            </label>
+                                            <div className="col-lg-12">
+                                                <select
+                                                    name="menu_id"
+                                                    className="form-control"
+                                                    onChange={handleChange}
+                                                    value={categoryForm.menu_id}
+                                                >
+                                                    <option
+                                                        value
+                                                        defaultValue
+                                                        hidden
+                                                    >
+                                                        --Select One--
+                                                    </option>
+                                                    {menu.map((menu, i) => (
+                                                        <option
+                                                            key={i}
+                                                            value={menu.menu_id}
+                                                        >
+                                                            {menu.menu_name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                <span className="text-danger">
+                                                    {errors.menu_id}
                                                 </span>
                                             </div>
                                         </div>
                                         <div className="form-group ">
                                             <label className="col-lg-6 control-label">
-                                                Menu Name:
+                                                Category Name:
                                             </label>
                                             <div className="col-lg-12">
                                                 <input
                                                     type="text"
+                                                    name="category_name"
                                                     className="form-control"
+                                                    onChange={handleChange}
+                                                    value={
+                                                        categoryForm.category_name
+                                                    }
                                                     placeholder="Enter Menu Name"
-                                                    name="menu_name"
-                                                    onChange={editHandlerChange}
-                                                    value={editMenu.menu_name}
                                                 />
                                                 <span className="text-danger">
-                                                    {errors.menu_name}
+                                                    {errors.category_name}
                                                 </span>
                                             </div>
                                         </div>
@@ -100,7 +134,6 @@ const EditMenu = () => {
                             <button
                                 type="button"
                                 className="btn btn-secondary"
-                                id="edit_close"
                                 data-dismiss="modal"
                                 onClick={clearFrom}
                             >
@@ -117,4 +150,4 @@ const EditMenu = () => {
     );
 };
 
-export default React.memo(EditMenu);
+export default React.memo(AddCategory);

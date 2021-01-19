@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
-import CategoryContext from "../../containers/contexts/category/CategoryContext";
+
+import CategoryContext from "../../../containers/contexts/category/CategoryContext";
 
 const EditCategory = () => {
     const categoryContext = useContext(CategoryContext);

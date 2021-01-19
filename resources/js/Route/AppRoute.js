@@ -1,13 +1,16 @@
-import React, { Fragment, lazy, Suspense } from "react";
+import React, { Fragment, Suspense, lazy } from "react";
 import { Route, Switch } from "react-router";
+
 import router from "../router";
-const AddProduct = lazy(() => import("../components/Product/AddProduct"));
-const Brand = lazy(() => import("../components/Brand/Brand"));
-const Category = lazy(() => import("../components/Category/Category"));
-const DashBoard = lazy(() => import("../components/DashBoard/DashBoard"));
-const Menu = lazy(() => import("../components/Menu/Menu"));
-const SubCategory = lazy(() => import("../components/SubCategory/SubCategory"));
-const Unit = lazy(() => import("../components/Unit/Unit"));
+const AddProduct = lazy(() => import("../components/Views/Product/AddProduct"));
+const Brand = lazy(() => import("../components/Views/Brand/Brand"));
+const Category = lazy(() => import("../components/Views/Category/Category"));
+const DashBoard = lazy(() => import("../components/Views/DashBoard/DashBoard"));
+const Menu = lazy(() => import("../components/Views/Menu/Menu"));
+const SubCategory = lazy(() =>
+    import("../components/Views/SubCategory/SubCategory")
+);
+const Unit = lazy(() => import("../components/Views/Unit/Unit"));
 
 function AppRoute() {
     return (

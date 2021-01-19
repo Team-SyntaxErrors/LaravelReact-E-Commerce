@@ -3,7 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import AddCategory from "./AddCategory";
 import CategoryList from "./CategoryList";
-import CategoryState from "../../containers/contexts/category/CategoryState";
+import CategoryState from "../../../containers/contexts/category/CategoryState";
 import EditCategory from "./EditCategory";
 import PageHeader from "./../Layouts/PageHeader/PageHeader";
 import React from "react";

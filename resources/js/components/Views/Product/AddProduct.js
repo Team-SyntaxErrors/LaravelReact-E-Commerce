@@ -10,9 +10,9 @@ import { Link } from "react-router-dom";
 import PageHeader from "./../Layouts/PageHeader/PageHeader";
 import ReactTagInput from "@pathofdev/react-tag-input";
 import SimpleReactValidator from "simple-react-validator";
-import Slugger from "./../helpers/slugger/Slugger";
+import Slugger from "../../helpers/slugger/Slugger";
 import { toast } from "react-toastify";
-import useForms from "../customHooks/useForms";
+import useForms from "../../customHooks/useForms";
 
 const AddProduct = props => {
     const [category, setCategory] = useState([]);

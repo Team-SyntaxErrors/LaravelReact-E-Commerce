@@ -1,11 +1,12 @@
 import React, { lazy } from "react";
-import AddProduct from "./components/Product/AddProduct";
-import Brand from "./components/Brand/Brand";
-import Category from "./components/Category/Category";
-import DashBoard from "./components/DashBoard/DashBoard";
-import Menu from "./components/Menu/Menu";
-import SubCategory from "./components/SubCategory/SubCategory";
-import Unit from "./components/Unit/Unit";
+
+import AddProduct from "./components/Views/Product/AddProduct";
+import Brand from "./components/Views/Brand/Brand";
+import Category from "./components/Views/Category/Category";
+import DashBoard from "./components/Views/DashBoard/DashBoard";
+import Menu from "./components/Views/Menu/Menu";
+import SubCategory from "./components/Views/SubCategory/SubCategory";
+import Unit from "./components/Views/Unit/Unit";
 
 const router = [
     {
