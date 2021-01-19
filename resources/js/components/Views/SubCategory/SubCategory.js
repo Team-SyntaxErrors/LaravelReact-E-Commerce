@@ -1,12 +1,14 @@
 import "./SubCategory.css";
 import "react-toastify/dist/ReactToastify.css";
+
 import React, { Fragment, useEffect, useState } from "react";
+
 import Axios from "axios";
-import PageHeader from "./../Layouts/PageHeader/PageHeader";
+import ClearForm from "../../helpers/clearForm/ClearForm";
+import CustomPagination from "../../helpers/pagination/CustomPagination";
+import PageHeader from "../Layouts/PageHeader/PageHeader";
 import { toast } from "react-toastify";
-import useForms from "../customHooks/useForms";
-import ClearForm from "../helpers/clearForm/ClearForm";
-import CustomPagination from "../helpers/pagination/CustomPagination";
+import useForms from "../../customHooks/useForms";
 
 const SubCategory = props => {
     const selectRow = [10, 20, 30, 40, 50];

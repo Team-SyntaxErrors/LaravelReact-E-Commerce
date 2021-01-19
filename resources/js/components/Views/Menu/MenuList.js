@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 
-import CustomPagination from "../helpers/pagination/CustomPagination";
-import MenuContext from "../../containers/contexts/menu/MenuContext";
+import CustomPagination from "../../helpers/pagination/CustomPagination";
+import MenuContext from "../../../containers/contexts/menu/MenuContext";
+
 const MenuList = () => {
     const menuContext = useContext(MenuContext);
     const {

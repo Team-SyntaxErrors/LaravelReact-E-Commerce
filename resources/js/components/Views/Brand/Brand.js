@@ -1,17 +1,17 @@
 import "./Brand.css";
 import "react-toastify/dist/ReactToastify.css";
 
-import React, { Fragment, useEffect, useState, useRef } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 
 import Axios from "axios";
-import SimpleReactValidator from "simple-react-validator";
-import PageHeader from "./../Layouts/PageHeader/PageHeader";
+import ClearForm from "../../helpers/clearForm/ClearForm";
+import CustomPagination from "../../helpers/pagination/CustomPagination";
+import PageHeader from "../Layouts/PageHeader/PageHeader";
 import Pagination from "react-js-pagination";
+import SimpleReactValidator from "simple-react-validator";
 import swal from "sweetalert";
 import { toast } from "react-toastify";
-import useForms from "../customHooks/useForms";
-import ClearForm from "../helpers/clearForm/ClearForm";
-import CustomPagination from "../helpers/pagination/CustomPagination";
+import useForms from "../../customHooks/useForms";
 
 const Brand = props => {
     const [Brand, setBrand] = useState([]);

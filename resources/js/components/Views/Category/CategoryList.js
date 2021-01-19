@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
-import CategoryContext from "../../containers/contexts/category/CategoryContext";
-import CustomPagination from "../helpers/pagination/CustomPagination";
+
+import CategoryContext from "../../../containers/contexts/category/CategoryContext";
+import CustomPagination from "../../helpers/pagination/CustomPagination";
 
 const CategoryList = () => {
     const categoryContext = useContext(CategoryContext);

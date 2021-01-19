@@ -1,10 +1,10 @@
 import AppRoute from "./Route/AppRoute";
 import { BrowserRouter } from "react-router-dom";
-import Footer from "./components/Layouts/Footer/Footer";
-import NavBar from "./components/Layouts/NavBar/NavBar";
+import Footer from "./components/Views/Layouts/Footer/Footer";
+import NavBar from "./components/Views/Layouts/NavBar/NavBar";
 import React from "react";
-import SideBar from "./components/Layouts/SideBar/SideBar";
-import { ToastContainer } from "react-toastify";
+import SideBar from "./components/Views/Layouts/SideBar/SideBar";
+import Toastr from "./components/helpers/Toastr/Toastr";
 function App() {
     return (
         <div>
@@ -15,17 +15,7 @@ function App() {
                         <SideBar />
                         <div className="main-content">
                             <AppRoute />
-                            <ToastContainer
-                                position="bottom-right"
-                                autoClose={5000}
-                                hideProgressBar={false}
-                                newestOnTop={false}
-                                closeOnClick
-                                rtl={false}
-                                pauseOnFocusLoss={false}
-                                draggable
-                                pauseOnHover={false}
-                            />
+                            <Toastr />
                         </div>
                         <Footer />
                     </div>

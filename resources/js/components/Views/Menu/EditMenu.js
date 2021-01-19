@@ -1,22 +1,21 @@
 import React, { useContext } from "react";
 
-import MenuContext from "../../containers/contexts/menu/MenuContext";
+import MenuContext from "../../../containers/contexts/menu/MenuContext";
 
-const AddMenu = () => {
+const EditMenu = () => {
     const menuContext = useContext(MenuContext);
     const {
-        menuForm,
-        submitHandler,
-        handlerChange,
+        updateHandler,
+        editMenu,
+        editHandlerChange,
         errors,
         clearFrom
     } = menuContext;
-
     return (
-        <form onSubmit={submitHandler}>
+        <form onSubmit={updateHandler}>
             <div
                 className="modal fade"
-                id="add_modal"
+                id="edit_modal"
                 tabIndex={-1}
                 role="dialog"
                 aria-labelledby="exampleModalLongLabel"
@@ -29,7 +28,7 @@ const AddMenu = () => {
                                 className="modal-title"
                                 id="exampleModalLongLabel"
                             >
-                                Add Menu
+                                Edit Menu
                             </h5>
                             <button
                                 type="button"
@@ -38,6 +37,7 @@ const AddMenu = () => {
                                 aria-label="Close"
                             >
                                 <span aria-hidden="true">
+                                    {" "}
                                     <i className="ik ik-x"></i>
                                 </span>
                             </button>
@@ -49,9 +49,9 @@ const AddMenu = () => {
                                         <img
                                             className="custom-icon rounded-circle"
                                             src={
-                                                !menuForm.menu_icon
+                                                !editMenu.menu_icon
                                                     ? "backend_assets/img/menu-icon.png"
-                                                    : menuForm.menu_icon
+                                                    : editMenu.menu_icon
                                             }
                                         />
                                         <span className="text-danger" />
@@ -65,9 +65,9 @@ const AddMenu = () => {
                                                 <input
                                                     type="file"
                                                     className="form-control"
-                                                    name="menu_icon"
-                                                    onChange={handlerChange}
                                                     placeholder="Enter Menu Icon"
+                                                    name="menu_icon"
+                                                    onChange={editHandlerChange}
                                                 />
                                                 <span className="text-danger">
                                                     {errors.menu_icon}
@@ -84,8 +84,8 @@ const AddMenu = () => {
                                                     className="form-control"
                                                     placeholder="Enter Menu Name"
                                                     name="menu_name"
-                                                    onChange={handlerChange}
-                                                    value={menuForm.menu_name}
+                                                    onChange={editHandlerChange}
+                                                    value={editMenu.menu_name}
                                                 />
                                                 <span className="text-danger">
                                                     {errors.menu_name}
@@ -100,7 +100,7 @@ const AddMenu = () => {
                             <button
                                 type="button"
                                 className="btn btn-secondary"
-                                id="close"
+                                id="edit_close"
                                 data-dismiss="modal"
                                 onClick={clearFrom}
                             >
@@ -117,4 +117,4 @@ const AddMenu = () => {
     );
 };
 
-export default React.memo(AddMenu);
+export default React.memo(EditMenu);
