@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
-use App\Jobs\SaveProductTagJob;
-use App\Observers\ProductObserver;
 use App\Product;
-use App\ProductTag;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -15,23 +12,24 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  Illuminate\Http\Request $request Getting search & pagination data.
+     * @param  \Illuminate\Http\Request $request Getting search & pagination data.
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
+        // dd($request->q);
         try {
-            $product = Product::with("images")
+            $products = Product::search($request->q)
                 ->with('tags')
                 ->with('categories')
                 ->with('subCategories')
                 ->with('brands')
                 ->with('units')
-                ->Search($request->q)
                 ->paginate($request->row);
+
             return $this->successResponse(
-                $product,
-                "Product Get Successfully",
+                $products,
+                "Product fetch Successfully",
                 Response::HTTP_OK
             );
         } catch (\Exception $e) {
@@ -63,18 +61,7 @@ class ProductController extends Controller
     {
         try {
             $requested = $request->all();
-
-            //if there is any tag founded 1 will be stored in product_has_tag field
-            if ($request->tags[0]) {
-                $requested['product_has_tag'] = 1;
-            } else {
-                $requested['product_has_tag'] = 0;
-            }
-
             $product->fill($requested)->save();
-
-            //Product Tags inserting in product_tags table
-            SaveProductTagJob::dispatch($requested, $product);
 
             return $this->successResponse(
                 $product,
@@ -152,12 +139,15 @@ class ProductController extends Controller
      * @param  integer $id Instantiating object of model through this id.
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $id)
+    public function destroy(Product $product)
     {
         try {
-            $product = Product::findOrFail($id);
             $product->delete();
-            return $this->successResponse(null, "Product Delete Successfully", Response::HTTP_NO_CONTENT);
+            return $this->successResponse(
+                null,
+                "Product Delete Successfully",
+                Response::HTTP_NO_CONTENT
+            );
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
         }

@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 
 class Product extends Model
@@ -38,26 +40,40 @@ class Product extends Model
         'purchase_price',
         'sell_price',
         'description',
-        'product_has_tag',
         'status',
     ];
+
+    /**
+     * Product search function
+     *
+     * @param  object $query Orm.
+     * @param  mixed  $q     Searching data.
+     * @return object
+     */
+    public function scopeSearch(object $query, $q): object
+    {
+        return $query->where('product_name', 'LIKE', '%' . $q . '%')
+            ->orWhere('product_sku', 'LIKE', '%', $q . '%')
+            ->orWhere('purchase_price', 'LIKE', '%', $q . '%')
+            ->orWhere('sell_price', 'LIKE', '%', $q . '%');
+    }
 
     /**
      * The relation between product and product image table
      *
      * @return object
      */
-    public function images()
-    {
-        return $this->hasMany(ProductImage::class, 'product_id');
-    }
+    // public function images()
+    // {
+    //     return $this->hasMany(ProductImage::class, 'product_id');
+    // }
 
     /**
      * The relation between product and tag table
      *
-     * @return object
+     * @return HasMany
      */
-    public function tags()
+    public function tags(): HasMany
     {
         return $this->hasMany(ProductTag::class, 'product_id');
     }
@@ -65,9 +81,9 @@ class Product extends Model
     /**
      * The relation between product and category table
      *
-     * @return object
+     * @return BelongsTo
      */
-    public function categories()
+    public function categories(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
@@ -75,9 +91,9 @@ class Product extends Model
     /**
      * The relation between product and subCategory table
      *
-     * @return object
+     * @return BelongsTo
      */
-    public function subCategories()
+    public function subCategories(): BelongsTo
     {
         return $this->belongsTo(SubCategory::class, 'subcategory_id');
     }
@@ -85,9 +101,9 @@ class Product extends Model
     /**
      * The relation between product and brand table
      *
-     * @return object
+     * @return BelongsTo
      */
-    public function brands()
+    public function brands(): BelongsTo
     {
         return $this->belongsTo(Brand::class, 'brand_id');
     }
@@ -95,9 +111,9 @@ class Product extends Model
     /**
      * The relation between product and unit table
      *
-     * @return object
+     * @return BelongsTo
      */
-    public function units()
+    public function units(): BelongsTo
     {
         return $this->belongsTo(Unit::class, 'unit_id');
     }

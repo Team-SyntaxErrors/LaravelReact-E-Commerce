@@ -168,16 +168,17 @@ function SideBar() {
                                             className="menu-item"
                                             className={
                                                 useLocation().pathname ==
-                                                "/product"
+                                                "/product/product-list"
                                                     ? "menu-item active"
                                                     : "menu-item"
                                             }
                                             to={{
-                                                pathname: "/product",
+                                                pathname:
+                                                    "/product/product-list",
                                                 state: "Product"
                                             }}
                                         >
-                                            <span>Product</span>{" "}
+                                            <span>Product List</span>{" "}
                                         </Link>
                                     </div>
                                 </div>

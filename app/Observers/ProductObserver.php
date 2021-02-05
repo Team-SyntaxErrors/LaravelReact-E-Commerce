@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Product;
+use App\Jobs\SaveProductTagJob;
 
 class ProductObserver
 {
@@ -14,7 +15,7 @@ class ProductObserver
      */
     public function created(Product $product)
     {
-        //
+        SaveProductTagJob::dispatch(request()->all(), $product);
     }
 
     /**

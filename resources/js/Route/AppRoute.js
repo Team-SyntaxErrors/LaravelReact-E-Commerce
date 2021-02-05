@@ -1,8 +1,11 @@
 import React, { Fragment, Suspense, lazy } from "react";
 import { Route, Switch } from "react-router";
 
-import router from "../router";
+// import router from "../router";
 const AddProduct = lazy(() => import("../components/Views/Product/AddProduct"));
+const ProductList = lazy(() =>
+    import("../components/Views/Product/ProductList")
+);
 const Brand = lazy(() => import("../components/Views/Brand/Brand"));
 const Category = lazy(() => import("../components/Views/Category/Category"));
 const DashBoard = lazy(() => import("../components/Views/DashBoard/DashBoard"));
@@ -95,6 +98,16 @@ function AppRoute() {
                         render={() => (
                             <AddProduct
                                 breadCrumbs="Add Product"
+                                Module="Products"
+                            />
+                        )}
+                    />
+                    <Route
+                        exact
+                        path="/product/product-list"
+                        render={() => (
+                            <ProductList
+                                breadCrumbs="Product List"
                                 Module="Products"
                             />
                         )}
