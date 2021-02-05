@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
+use App\Jobs\SaveProductTagJob;
+use App\Observers\ProductObserver;
 use App\Product;
 use App\ProductTag;
 use Illuminate\Http\Request;
@@ -18,19 +20,26 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $product = Product::with("images")
-            ->with('tags')
-            ->with('categories')
-            ->with('subCategories')
-            ->with('brands')
-            ->with('units')
-            ->Search($request->q)
-            ->paginate($request->row);
-        return $this->successResponse(
-            $product,
-            "Product Get Successfully",
-            Response::HTTP_OK
-        );
+        try {
+            $product = Product::with("images")
+                ->with('tags')
+                ->with('categories')
+                ->with('subCategories')
+                ->with('brands')
+                ->with('units')
+                ->Search($request->q)
+                ->paginate($request->row);
+            return $this->successResponse(
+                $product,
+                "Product Get Successfully",
+                Response::HTTP_OK
+            );
+        } catch (\Exception $e) {
+            return $this->errorResponse(
+                $e->getMessage(),
+                Response::HTTP_OK
+            );
+        }
     }
 
     /**
@@ -65,16 +74,7 @@ class ProductController extends Controller
             $product->fill($requested)->save();
 
             //Product Tags inserting in product_tags table
-            if ($request->tags[0]) {
-                $data = [];
-                foreach ($request->tags as $value) {
-                    $data[] = [
-                        'product_id' => $product->product_id,
-                        'tags'       => $value,
-                    ];
-                }
-                ProductTag::insert($data);
-            }
+            SaveProductTagJob::dispatch($requested, $product);
 
             return $this->successResponse(
                 $product,
@@ -180,9 +180,16 @@ class ProductController extends Controller
                 $product->update(['status' => 1]);
                 $status = Response::HTTP_OK;
             endif;
-            return $this->successResponse($product, "Product Status Change Successfully", $status);
+            return $this->successResponse(
+                $product,
+                "Product Status Change Successfully",
+                $status
+            );
         } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+            return $this->errorResponse(
+                $e->getMessage(),
+                Response::HTTP_BAD_REQUEST
+            );
         }
     }
 }

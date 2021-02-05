@@ -43415,7 +43415,6 @@ var AddProduct = function AddProduct(props) {
 
   var submitHandler = function submitHandler(event) {
     event.preventDefault();
-    console.log(simpleValidator.current);
 
     if (simpleValidator.current.allValid()) {
       axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/products", product).then(function (response) {
@@ -46520,8 +46519,8 @@ var router = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/tanvir/Work/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
-module.exports = __webpack_require__(/*! /home/tanvir/Work/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
+__webpack_require__(/*! /home/shawon/Documents/Laravel/Laravel__React_js/LaravelReact-E-Commerce/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /home/shawon/Documents/Laravel/Laravel__React_js/LaravelReact-E-Commerce/resources/sass/main.scss */"./resources/sass/main.scss");
 
 
 /***/ })

@@ -177,7 +177,6 @@ const AddProduct = props => {
      */
     const submitHandler = event => {
         event.preventDefault();
-        console.log(simpleValidator.current);
         if (simpleValidator.current.allValid()) {
             Axios.post("/products", product)
                 .then(response => {
