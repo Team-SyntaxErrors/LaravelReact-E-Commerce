@@ -26,7 +26,6 @@ class CreateProductsTable extends Migration
             $table->integer('purchase_price');
             $table->integer('sell_price');
             $table->text('description');
-            $table->tinyInteger('product_has_tag')->nullable()->default(0);
             $table->boolean('status')->default(1);
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();

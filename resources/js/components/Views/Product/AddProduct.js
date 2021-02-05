@@ -201,17 +201,17 @@ const AddProduct = props => {
             <div className="card">
                 <div className="card-header d-block">
                     <h3>Add Product</h3>
-                    <Link
-                        to={{
-                            pathname: "/product",
-                            state: "Product"
-                        }}
-                    >
-                        <button className="btn btn-info table-button">
+                    <button className="btn btn-info table-button">
+                        <Link
+                            to={{
+                                pathname: "/product/product-list",
+                                state: "Product"
+                            }}
+                        >
                             <i className="ik ik-clipboard"></i>
                             Product List
-                        </button>{" "}
-                    </Link>
+                        </Link>
+                    </button>{" "}
                 </div>
                 <form onSubmit={submitHandler} id="product-from">
                     <div className="card-body">
