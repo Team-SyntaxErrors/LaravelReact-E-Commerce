@@ -12,7 +12,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".pull-right{\n    float: right;\n}\n.ck-editor__editable_inline{\n    height: 130px;\n}", ""]);
+exports.push([module.i, ".pull-right {\n    float: right;\n}\n\n.table-button {\n    float: right;\n    margin-top: -30px;\n}\n\n.ck-editor__editable_inline {\n    height: 130px;\n}\n", ""]);
 
 // exports
 

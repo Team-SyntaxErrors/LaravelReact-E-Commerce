@@ -38304,25 +38304,25 @@ var AddProduct = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])
   return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(8), __webpack_require__.e(9), __webpack_require__.e(17)]).then(__webpack_require__.bind(null, /*! ../components/Views/Product/AddProduct */ "./resources/js/components/Views/Product/AddProduct.js"));
 });
 var ProductList = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(10), __webpack_require__.e(18), __webpack_require__.e(0)]).then(__webpack_require__.bind(null, /*! ../components/Views/Product/ProductList */ "./resources/js/components/Views/Product/ProductList.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(7), __webpack_require__.e(18)]).then(__webpack_require__.bind(null, /*! ../components/Views/Product/ProductList */ "./resources/js/components/Views/Product/ProductList.js"));
 });
 var Brand = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(10), __webpack_require__.e(18), __webpack_require__.e(8), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, /*! ../components/Views/Brand/Brand */ "./resources/js/components/Views/Brand/Brand.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(7), __webpack_require__.e(8), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, /*! ../components/Views/Brand/Brand */ "./resources/js/components/Views/Brand/Brand.js"));
 });
 var Category = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(10), __webpack_require__.e(18), __webpack_require__.e(13)]).then(__webpack_require__.bind(null, /*! ../components/Views/Category/Category */ "./resources/js/components/Views/Category/Category.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(7), __webpack_require__.e(13)]).then(__webpack_require__.bind(null, /*! ../components/Views/Category/Category */ "./resources/js/components/Views/Category/Category.js"));
 });
 var DashBoard = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
   return __webpack_require__.e(/*! import() */ 11).then(__webpack_require__.bind(null, /*! ../components/Views/DashBoard/DashBoard */ "./resources/js/components/Views/DashBoard/DashBoard.js"));
 });
 var Menu = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(10), __webpack_require__.e(18), __webpack_require__.e(14)]).then(__webpack_require__.bind(null, /*! ../components/Views/Menu/Menu */ "./resources/js/components/Views/Menu/Menu.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(7), __webpack_require__.e(14)]).then(__webpack_require__.bind(null, /*! ../components/Views/Menu/Menu */ "./resources/js/components/Views/Menu/Menu.js"));
 });
 var SubCategory = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(10), __webpack_require__.e(15)]).then(__webpack_require__.bind(null, /*! ../components/Views/SubCategory/SubCategory */ "./resources/js/components/Views/SubCategory/SubCategory.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(15)]).then(__webpack_require__.bind(null, /*! ../components/Views/SubCategory/SubCategory */ "./resources/js/components/Views/SubCategory/SubCategory.js"));
 });
 var Unit = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(10), __webpack_require__.e(18), __webpack_require__.e(16)]).then(__webpack_require__.bind(null, /*! ../components/Views/Unit/Unit */ "./resources/js/components/Views/Unit/Unit.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(7), __webpack_require__.e(16)]).then(__webpack_require__.bind(null, /*! ../components/Views/Unit/Unit */ "./resources/js/components/Views/Unit/Unit.js"));
 });
 
 function AppRoute() {
@@ -38712,7 +38712,7 @@ var NavBar = function NavBar() {
     "aria-expanded": "false"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
     className: "avatar",
-    src: "backend_assets/img/user.jpg"
+    src: "/backend_assets/img/user.jpg"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "dropdown-menu dropdown-menu-right",
     "aria-labelledby": "userDropdown"

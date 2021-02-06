@@ -266,7 +266,7 @@ const NavBar = () => {
                                 >
                                     <img
                                         className="avatar"
-                                        src="backend_assets/img/user.jpg"
+                                        src="/backend_assets/img/user.jpg"
                                     />
                                 </a>
                                 <div

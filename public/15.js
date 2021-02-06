@@ -12,7 +12,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".ik {\n    cursor: pointer;\n}\n", ""]);
+exports.push([module.i, ".ik {\n    cursor: pointer;\n}\n\nul {\n    list-style-type: none;\n}\n\n.table-button {\n    float: right;\n    margin-top: -30px;\n}\n.image-list {\n    width: 10%;\n}\n.custom-icon {\n    width: 7rem;\n    height: 7rem;\n}\n\n.custom-head {\n    width: 91px;\n}\n\n.image-list {\n    width: 10%;\n}\n\n.bg-dark {\n    color: white !important;\n    background-color: #404e67 !important;\n}\n\n.ik-x {\n    color: white !important;\n}\n", ""]);
 
 // exports
 
@@ -824,7 +824,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var SubCategoryState = function SubCategoryState(props) {
-  var selectRow = [10, 20, 30, 40, 50];
+  var selectRow = [15, 20, 30, 40, 50];
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
@@ -836,7 +836,7 @@ var SubCategoryState = function SubCategoryState(props) {
       search = _useState4[0],
       setSearch = _useState4[1];
 
-  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(8),
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(15),
       _useState6 = _slicedToArray(_useState5, 2),
       currentRow = _useState6[0],
       setCurrentRow = _useState6[1];

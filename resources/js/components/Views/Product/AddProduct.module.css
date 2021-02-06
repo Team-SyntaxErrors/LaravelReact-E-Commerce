@@ -1,6 +1,12 @@
-.pull-right{
+.pull-right {
     float: right;
 }
-.ck-editor__editable_inline{
+
+.table-button {
+    float: right;
+    margin-top: -30px;
+}
+
+.ck-editor__editable_inline {
     height: 130px;
 }

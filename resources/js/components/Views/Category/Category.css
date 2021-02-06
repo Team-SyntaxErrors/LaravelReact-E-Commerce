@@ -6,3 +6,27 @@ ul {
     float: right;
     margin-top: -30px;
 }
+.image-list {
+    width: 10%;
+}
+.custom-icon {
+    width: 7rem;
+    height: 7rem;
+}
+
+.custom-head {
+    width: 91px;
+}
+
+.image-list {
+    width: 10%;
+}
+
+.bg-dark {
+    color: white !important;
+    background-color: #404e67 !important;
+}
+
+.ik-x {
+    color: white !important;
+}

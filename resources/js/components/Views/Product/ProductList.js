@@ -1,6 +1,6 @@
 import "./product.css";
 import "react-toastify/dist/ReactToastify.css";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Axios from "axios";
 import PageHeader from "../Layouts/PageHeader/PageHeader";
@@ -9,9 +9,9 @@ import { toast } from "react-toastify";
 import swal from "sweetalert";
 
 const ProductList = ({ breadCrumbs, Module }) => {
-    const select_row = [10, 20, 30, 40, 50];
+    const select_row = [15, 20, 30, 40, 50];
     const [activePage, setActivePage] = useState(1);
-    const [currentRow, setCurrentRow] = useState(10);
+    const [currentRow, setCurrentRow] = useState(15);
     const [search, setSearch] = useState("");
     const [products, setProducts] = useState([]);
     const [totalItemsCount, setTotalItemsCount] = useState(0);
@@ -37,9 +37,7 @@ const ProductList = ({ breadCrumbs, Module }) => {
 
     useEffect(() => {
         getProducts();
-        return () => {
-            setProducts([]);
-        };
+        return () => setProducts([]);
     }, [search, currentRow]);
 
     // Product delete function.
@@ -74,6 +72,23 @@ const ProductList = ({ breadCrumbs, Module }) => {
                 swal("Your imaginary file is safe!");
             }
         });
+    };
+
+    // Product status change function.
+    const changeStatus = id => {
+        Axios.get("/products/status/" + id)
+            .then(response => {
+                if (response.data.code === 200) {
+                    toast.success("This product is active!");
+                }
+                if (response.data.code === 201) {
+                    toast.warning("This product is inactive!");
+                }
+                getProducts();
+            })
+            .catch(error => {
+                console.log(error);
+            });
     };
 
     return (

@@ -32,9 +32,9 @@ class SaveProductTagJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($request, $product)
+    public function __construct($product)
     {
-        $this->request = $request;
+        $this->request = request()->all();
         $this->product = $product;
     }
 

@@ -25,6 +25,7 @@ class ProductController extends Controller
                 ->with('subCategories')
                 ->with('brands')
                 ->with('units')
+                ->latest()
                 ->paginate($request->row);
 
             return $this->successResponse(
