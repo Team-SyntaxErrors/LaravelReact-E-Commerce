@@ -12,8 +12,8 @@ const BrandState = props => {
     const [Brand, setBrand] = useState([]);
     const [BrandList, setBrandList] = useState([]);
     const [search, setSearch] = useState("");
-    const select_row = [10, 20, 30, 40, 50, 100];
-    const [current_raw, setCurrentRaw] = useState(10);
+    const select_row = [15, 20, 30, 40, 50, 100];
+    const [current_raw, setCurrentRaw] = useState(15);
     const [page, setPage] = useState(1);
     const [error, setErrors] = useState([]);
     const simpleValidator = useRef(new SimpleReactValidator());

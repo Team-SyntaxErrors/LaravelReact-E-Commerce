@@ -7,9 +7,9 @@ import { toast } from "react-toastify";
 import swal from "sweetalert";
 
 const CategoryState = props => {
-    const select_row = [10, 20, 30, 40, 50];
+    const select_row = [15, 20, 30, 40, 50];
     const [activePage, setActivePage] = useState(1);
-    const [currentRow, setCurrentRow] = useState(10);
+    const [currentRow, setCurrentRow] = useState(15);
     const [search, setSearch] = useState("");
     const [categoryList, setCategoryList] = useState([]);
     const [totalItemsCount, setTotalItemsCount] = useState(0);

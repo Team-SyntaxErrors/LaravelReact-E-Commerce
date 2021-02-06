@@ -1,6 +1,4 @@
-import "./Category.css";
 import "react-toastify/dist/ReactToastify.css";
-
 import AddCategory from "./AddCategory";
 import CategoryList from "./CategoryList";
 import CategoryState from "../../../containers/contexts/category/CategoryState";

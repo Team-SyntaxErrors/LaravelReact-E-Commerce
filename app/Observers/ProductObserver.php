@@ -15,7 +15,7 @@ class ProductObserver
      */
     public function created(Product $product)
     {
-        SaveProductTagJob::dispatch(request()->all(), $product);
+        SaveProductTagJob::dispatch($product);
     }
 
     /**

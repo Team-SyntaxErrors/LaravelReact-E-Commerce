@@ -13,11 +13,22 @@
 
 .bg-dark {
     color: white !important;
-    background-color: #404E67 !important;
+    background-color: #404e67 !important;
 }
 
 .ik-x {
     color: white !important;
+}
+ul {
+    list-style-type: none;
+}
+
+.table-button {
+    float: right;
+    margin-top: -30px;
+}
+.image-list {
+    width: 10%;
 }
 
 .p-status {

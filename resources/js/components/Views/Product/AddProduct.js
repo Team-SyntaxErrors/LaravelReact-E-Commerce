@@ -1,8 +1,6 @@
 import "@pathofdev/react-tag-input/build/index.css";
 import "./AddProduct.module.css";
-
 import React, { Fragment, useEffect, useRef, useState } from "react";
-
 import Axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";

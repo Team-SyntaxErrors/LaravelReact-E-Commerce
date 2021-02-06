@@ -8,9 +8,9 @@ import { toast } from "react-toastify";
 import useForms from "../../../components/customHooks/useForms";
 
 const MenuState = props => {
-    const selectRow = [10, 20, 30, 40, 50];
+    const selectRow = [15, 20, 30, 40, 50];
     const [search, setSearch] = useState("");
-    const [currentRow, setCurrentRow] = useState(8);
+    const [currentRow, setCurrentRow] = useState(15);
     const [errors, setErrors] = useState([]);
     const [menuList, setMenuList] = useState([]);
     const [activePage, setActivePage] = useState(1);

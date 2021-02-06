@@ -12,7 +12,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "ul {\n    list-style-type: none;\n}\n\n.table-button {\n    float: right;\n    margin-top: -30px;\n}\n.image-list {\n    width: 10%;\n}", ""]);
+exports.push([module.i, "ul {\n    list-style-type: none;\n}\n\n.table-button {\n    float: right;\n    margin-top: -30px;\n}\n.image-list {\n    width: 10%;\n}\n.custom-icon {\n    width: 7rem;\n    height: 7rem;\n}\n\n.custom-head {\n    width: 91px;\n}\n\n.image-list {\n    width: 10%;\n}\n\n.bg-dark {\n    color: white !important;\n    background-color: #404e67 !important;\n}\n\n.ik-x {\n    color: white !important;\n}\n", ""]);
 
 // exports
 
@@ -864,9 +864,9 @@ var BrandState = function BrandState(props) {
       search = _useState6[0],
       setSearch = _useState6[1];
 
-  var select_row = [10, 20, 30, 40, 50, 100];
+  var select_row = [15, 20, 30, 40, 50, 100];
 
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(10),
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(15),
       _useState8 = _slicedToArray(_useState7, 2),
       current_raw = _useState8[0],
       setCurrentRaw = _useState8[1];

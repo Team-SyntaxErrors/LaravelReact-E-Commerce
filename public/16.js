@@ -713,7 +713,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var UnitState = function UnitState(props) {
-  var select_row = [10, 20, 30, 40, 50];
+  var select_row = [15, 20, 30, 40, 50];
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""),
       _useState2 = _slicedToArray(_useState, 2),
@@ -730,7 +730,7 @@ var UnitState = function UnitState(props) {
       unitList = _useState6[0],
       setUnitList = _useState6[1];
 
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(10),
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(15),
       _useState8 = _slicedToArray(_useState7, 2),
       currentRow = _useState8[0],
       setCurrentRow = _useState8[1];

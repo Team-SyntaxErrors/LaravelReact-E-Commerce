@@ -1,5 +1,5 @@
+import "./Category.css";
 import React, { useContext } from "react";
-
 import CategoryContext from "../../../containers/contexts/category/CategoryContext";
 import CustomPagination from "../../helpers/pagination/CustomPagination";
 

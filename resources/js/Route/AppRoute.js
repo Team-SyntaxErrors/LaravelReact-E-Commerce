@@ -1,6 +1,5 @@
 import React, { Fragment, Suspense, lazy } from "react";
 import { Route, Switch } from "react-router";
-
 // import router from "../router";
 const AddProduct = lazy(() => import("../components/Views/Product/AddProduct"));
 const ProductList = lazy(() =>

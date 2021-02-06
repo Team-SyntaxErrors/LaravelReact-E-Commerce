@@ -54,8 +54,15 @@ class Product extends Model
     {
         return $query->where('product_name', 'LIKE', '%' . $q . '%')
             ->orWhere('product_sku', 'LIKE', '%', $q . '%')
-            ->orWhere('purchase_price', 'LIKE', '%', $q . '%')
-            ->orWhere('sell_price', 'LIKE', '%', $q . '%');
+            ->orWhereHas('categories', function ($query) use ($q) {
+                $query->where('category_name', 'LIKE', '%' . $q . '%');
+            })
+            ->orWhereHas('subCategories', function ($query) use ($q) {
+                $query->where('sub_category_name', 'LIKE', '%' . $q . '%');
+            })
+            ->orWhereHas('brands', function ($query) use ($q) {
+                $query->where('brand_name', 'LIKE', '%' . $q . '%');
+            });
     }
 
     /**
