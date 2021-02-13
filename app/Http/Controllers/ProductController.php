@@ -92,11 +92,26 @@ class ProductController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  integer $id Instantiating object of model through this id.
-     * @return void
+     * @return object
      */
     public function edit(int $id)
     {
-        //
+        try {
+            $product = new Product();
+            $product = $product->with('tags:product_id,tags')
+                ->where('product_id', $id)
+                ->first();
+            return $this->successResponse(
+                $product,
+                'Fetch the edit product',
+                Response::HTTP_OK
+            );
+        } catch (\Exception $e) {
+            return $this->errorResponse(
+                $e->getMessage(),
+                Response::HTTP_BAD_REQUEST
+            );
+        }
     }
 
     /**
@@ -106,32 +121,33 @@ class ProductController extends Controller
      * @param  integer                  $id      Instantiating object of model through this id.
      * @return void
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request, Product $product)
     {
-        // try {
-        //     $product = Product::find($id);
-        //     if ($request->tags[0]) {
-        //         $request->product_has_tag = 1;
-        //     } else {
-        //         $request->product_has_tag = 0;
-        //     }
+        try {
+            // $product = Product::find($id);
+            $product->fill($request->all())->save();
 
-        //     $product->fill($request->all())->save();
-
-        //     if ($request->tags[0]) {
-        //         $data = [];
-        //         foreach ($request->tags as $key => $value) {
-        //             $data[] = [
-        //                 'product_id' => $product->product_id,
-        //                 'tags'       => $value,
-        //             ];
-        //         }
-        //         ProductTag::insert($data);
-        //     }
-        //     return $this->successResponse($product, "Product Saved Successfully", Response::HTTP_CREATED);
-        // } catch (\Exception $e) {
-        //     return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
-        // }
+            // if ($request->tags[0]) {
+            //     $data = [];
+            //     foreach ($request->tags as $key => $value) {
+            //         $data[] = [
+            //             'product_id' => $product->product_id,
+            //             'tags'       => $value,
+            //         ];
+            //     }
+            //     ProductTag::insert($data);
+            // }
+            return $this->successResponse(
+                $product,
+                "Product Update Successfully",
+                Response::HTTP_CREATED
+            );
+        } catch (\Exception $e) {
+            return $this->errorResponse(
+                $e->getMessage(),
+                Response::HTTP_BAD_REQUEST
+            );
+        }
     }
 
     /**

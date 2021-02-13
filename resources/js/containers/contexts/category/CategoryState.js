@@ -36,9 +36,9 @@ const CategoryState = props => {
     }, []);
 
     // Get category list.
-    const getCategories = (page = 1) => {
+    const getCategories = async (page = 1) => {
         const main_url = `category?q=${search}&row=${currentRow}&page=${page}`;
-        Axios.get(main_url)
+        await Axios.get(main_url)
             .then(response => {
                 setCategoryList(response.data.data.data);
                 setActivePage(response.data.data.current_page);
@@ -50,8 +50,8 @@ const CategoryState = props => {
     };
 
     // Get menu.
-    const getAllMenu = () => {
-        Axios.get("/all_menu_get")
+    const getAllMenu = async () => {
+        await Axios.get("/all_menu_get")
             .then(response => {
                 setMenu(response.data.data);
             })

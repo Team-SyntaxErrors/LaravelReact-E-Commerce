@@ -38301,28 +38301,31 @@ __webpack_require__.r(__webpack_exports__);
  // import router from "../router";
 
 var AddProduct = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(8), __webpack_require__.e(9), __webpack_require__.e(17)]).then(__webpack_require__.bind(null, /*! ../components/Views/Product/AddProduct */ "./resources/js/components/Views/Product/AddProduct.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(12), __webpack_require__.e(4), __webpack_require__.e(10), __webpack_require__.e(19)]).then(__webpack_require__.bind(null, /*! ../components/Views/Product/AddProduct */ "./resources/js/components/Views/Product/AddProduct.js"));
+});
+var EditProduct = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(12), __webpack_require__.e(4), __webpack_require__.e(10), __webpack_require__.e(20)]).then(__webpack_require__.bind(null, /*! ../components/Views/Product/EditProduct */ "./resources/js/components/Views/Product/EditProduct.js"));
 });
 var ProductList = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(7), __webpack_require__.e(18)]).then(__webpack_require__.bind(null, /*! ../components/Views/Product/ProductList */ "./resources/js/components/Views/Product/ProductList.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(12), __webpack_require__.e(21)]).then(__webpack_require__.bind(null, /*! ../components/Views/Product/ProductList */ "./resources/js/components/Views/Product/ProductList.js"));
 });
 var Brand = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(7), __webpack_require__.e(8), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, /*! ../components/Views/Brand/Brand */ "./resources/js/components/Views/Brand/Brand.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(4), __webpack_require__.e(14)]).then(__webpack_require__.bind(null, /*! ../components/Views/Brand/Brand */ "./resources/js/components/Views/Brand/Brand.js"));
 });
 var Category = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(7), __webpack_require__.e(13)]).then(__webpack_require__.bind(null, /*! ../components/Views/Category/Category */ "./resources/js/components/Views/Category/Category.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(12), __webpack_require__.e(15)]).then(__webpack_require__.bind(null, /*! ../components/Views/Category/Category */ "./resources/js/components/Views/Category/Category.js"));
 });
 var DashBoard = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return __webpack_require__.e(/*! import() */ 11).then(__webpack_require__.bind(null, /*! ../components/Views/DashBoard/DashBoard */ "./resources/js/components/Views/DashBoard/DashBoard.js"));
+  return __webpack_require__.e(/*! import() */ 13).then(__webpack_require__.bind(null, /*! ../components/Views/DashBoard/DashBoard */ "./resources/js/components/Views/DashBoard/DashBoard.js"));
 });
 var Menu = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(7), __webpack_require__.e(14)]).then(__webpack_require__.bind(null, /*! ../components/Views/Menu/Menu */ "./resources/js/components/Views/Menu/Menu.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(16)]).then(__webpack_require__.bind(null, /*! ../components/Views/Menu/Menu */ "./resources/js/components/Views/Menu/Menu.js"));
 });
 var SubCategory = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(15)]).then(__webpack_require__.bind(null, /*! ../components/Views/SubCategory/SubCategory */ "./resources/js/components/Views/SubCategory/SubCategory.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(17)]).then(__webpack_require__.bind(null, /*! ../components/Views/SubCategory/SubCategory */ "./resources/js/components/Views/SubCategory/SubCategory.js"));
 });
 var Unit = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(7), __webpack_require__.e(16)]).then(__webpack_require__.bind(null, /*! ../components/Views/Unit/Unit */ "./resources/js/components/Views/Unit/Unit.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(18)]).then(__webpack_require__.bind(null, /*! ../components/Views/Unit/Unit */ "./resources/js/components/Views/Unit/Unit.js"));
 });
 
 function AppRoute() {
@@ -38383,15 +38386,6 @@ function AppRoute() {
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Route"], {
     exact: true,
-    path: "/product",
-    render: function render() {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ListProduct, {
-        breadCrumbs: "Product",
-        Module: "Products"
-      });
-    }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Route"], {
-    exact: true,
     path: "/product/add_product",
     render: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(AddProduct, {
@@ -38406,6 +38400,16 @@ function AppRoute() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ProductList, {
         breadCrumbs: "Product List",
         Module: "Products"
+      });
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Route"], {
+    exact: true,
+    path: "/product/:id/edit",
+    render: function render(props) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditProduct, {
+        breadCrumbs: "Edit-Product",
+        Module: "Products",
+        productId: props.match.params.id
       });
     }
   }))));

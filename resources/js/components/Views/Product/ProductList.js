@@ -17,8 +17,8 @@ const ProductList = ({ breadCrumbs, Module }) => {
     const [totalItemsCount, setTotalItemsCount] = useState(0);
 
     // Get all product data.
-    const getProducts = (page = 1) => {
-        Axios.get("/products", {
+    const getProducts = async (page = 1) => {
+        await Axios.get("/products", {
             params: {
                 q: search,
                 row: currentRow,
@@ -289,18 +289,15 @@ const ProductList = ({ breadCrumbs, Module }) => {
                                                                 )
                                                             }
                                                         ></i>{" "}
-                                                        <i
-                                                            className="ik ik-edit f-16 mr-15 text-blue"
-                                                            data-toggle="modal"
-                                                            data-target="#edit_modal"
-                                                            onClick={() =>
-                                                                editHandler(
-                                                                    product.product_id,
-                                                                    product,
-                                                                    i
-                                                                )
-                                                            }
-                                                        ></i>{" "}
+                                                        <Link
+                                                            to={{
+                                                                pathname: `/product/${product.product_id}/edit`,
+                                                                state:
+                                                                    "Edit-Product"
+                                                            }}
+                                                        >
+                                                            <i className="ik ik-edit f-16 mr-15 text-blue"></i>
+                                                        </Link>{" "}
                                                         <i
                                                             className="ik ik-trash-2 f-16 text-red"
                                                             onClick={() =>

@@ -1,18 +1,18 @@
-import "@pathofdev/react-tag-input/build/index.css";
 import "./AddProduct.module.css";
-import React, { Fragment, useEffect, useRef, useState } from "react";
-import Axios from "axios";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import "@pathofdev/react-tag-input/build/index.css";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import PageHeader from "./../Layouts/PageHeader/PageHeader";
+import PageHeader from "../Layouts/PageHeader/PageHeader";
+import useForms from "../../customHooks/useForms";
 import ReactTagInput from "@pathofdev/react-tag-input";
 import SimpleReactValidator from "simple-react-validator";
 import Slugger from "../../helpers/slugger/Slugger";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { toast } from "react-toastify";
-import useForms from "../../customHooks/useForms";
+import Axios from "axios";
 
-const AddProduct = props => {
+const EditProduct = props => {
     const [category, setCategory] = useState([]);
     const [subCategory, setSubCategory] = useState([]);
     const [brand, setBrand] = useState([]);
@@ -20,7 +20,7 @@ const AddProduct = props => {
     const [slugWarning, setSlugWarning] = useState("");
     const [error, setError] = useState([]);
     const simpleValidator = useRef(new SimpleReactValidator());
-    const [product, setProduct, handleChange] = useForms({
+    const [editProduct, setEditProduct, handleChange] = useForms({
         product_name: "",
         product_slug: "",
         product_sku: "",
@@ -31,10 +31,14 @@ const AddProduct = props => {
         sell_price: "",
         unit_id: "",
         product_alert_qty: "",
-        tags: [],
+        product_tags: [],
         status: "",
         description: ""
     });
+
+    useEffect(() => {
+        getProduct();
+    }, []);
 
     useEffect(() => {
         getCategory();
@@ -42,13 +46,74 @@ const AddProduct = props => {
         getUnit();
     }, []);
 
-    /**
-     * It's slugify the product name using regex
-     * And check if the slug already recorded
-     *
-     * @param  {object} event
-     * @return {void}
-     */
+    const getProduct = async () => {
+        await Axios.get(`/products/${props.productId}/edit`)
+            .then(response => {
+                let editData = response.data.data;
+                let productTags = [];
+                setEditProduct({ ...editProduct, ...editData });
+                for (let index = 0; index < editData.tags.length; index++) {
+                    productTags.push(editData.tags[index].tags);
+                }
+                setEditProduct({
+                    ...editData,
+                    ["product_tags"]: productTags
+                });
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
+
+    const getCategory = async () => {
+        await Axios.get(`/all_categories`)
+            .then(response => {
+                setCategory(response.data.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
+
+    const getSubCategory = async event => {
+        let category_id = event.target.value;
+        await Axios.get(`/subcategory_get/${category_id}`)
+            .then(response => {
+                setSubCategory(response.data.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
+
+    const getBrand = async () => {
+        await Axios.get(`/all_brand_get`)
+            .then(response => {
+                setBrand(response.data.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
+
+    const getUnit = async () => {
+        await Axios.get(`/all_unit_get`)
+            .then(response => {
+                setUnit(response.data.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
+
+    const setTags = newTags => {
+        setEditProduct({ ...editProduct, ["product_tags"]: newTags });
+    };
+
+    const setDescription = description => {
+        setEditProduct({ ...editProduct, ["description"]: description });
+    };
+
     const slugger = event => {
         let name = event.target.value;
         if (name == "") {
@@ -58,10 +123,10 @@ const AddProduct = props => {
         setSlugWarning("");
         let slug = Slugger(name);
         // Check slug availability from database
-        Axios.get("/product_slug_check/" + slug)
+        Axios.get(`/product_slug_check/${slug}`)
             .then(response => {
                 if (response.status == 204) {
-                    setProduct({ ...product, ["product_slug"]: slug });
+                    setEditProduct({ ...editProduct, ["product_slug"]: slug });
                 } else {
                     setSlugWarning("This slug is recorded already");
                 }
@@ -71,134 +136,28 @@ const AddProduct = props => {
             });
     };
 
-    /**
-     * Assigning product tags as an array to product object
-     *
-     * @param  {array} newTags
-     * @return {void}
-     */
-    const setTags = newTags => {
-        setProduct({ ...product, ["tags"]: newTags });
-        // simpleValidator.current.showMessageFor("tags");
-    };
-
-    /**
-     * Assigning product description to product object
-     *
-     * @param  {string} description
-     * @return {void}
-     */
-    const setDescription = description => {
-        setProduct({ ...product, ["description"]: description });
-    };
-
-    /**
-     * Getting the active category list
-     *
-     * @return {void}
-     */
-    const getCategory = async () => {
-        await Axios.get("/all_categories")
+    const updateHandler = e => {
+        e.preventDefault();
+        Axios.put(`/products/${editProduct.product_id}`, editProduct)
             .then(response => {
-                setCategory(response.data.data);
+                // if (response.data.code === 201) {
+                toast.success("Product Data Updated Successfully!");
+                // }
             })
             .catch(error => {
-                console.log(error);
+                if (error.response) {
+                    setError(error.response.data.errors);
+                }
             });
     };
 
-    /**
-     * Get category wise sub category.
-     *
-     * @param {int} category_id
-     */
-    const getSubCategory = async event => {
-        let category_id = event.target.value;
-        await Axios.get("/subcategory_get/" + category_id)
-            .then(response => {
-                setSubCategory(response.data.data);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    };
-
-    /**
-     * Getting the active brand list
-     *
-     * @return {void}
-     */
-    const getBrand = async () => {
-        await Axios.get("/all_brand_get")
-            .then(response => {
-                setBrand(response.data.data);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    };
-
-    /**
-     * Getting the active unit list
-     *
-     * @return {void}
-     */
-    const getUnit = async () => {
-        await Axios.get("/all_unit_get")
-            .then(response => {
-                setUnit(response.data.data);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    };
-
-    /**
-     * Clear form data
-     *
-     * @return {void}
-     */
-    const clearFrom = () => {
-        setError([]);
-        let form = product;
-        Object.keys(form).forEach(function(key) {
-            form[key] = "";
-        });
-        form.tags = [];
-        setProduct({ ...product, ...form });
-    };
-
-    /**
-     * Submitting the product data.
-     *
-     * @param {object} event
-     */
-    const submitHandler = event => {
-        event.preventDefault();
-        if (simpleValidator.current.allValid()) {
-            Axios.post("/products", product)
-                .then(response => {
-                    if (response.data.code === 201) {
-                        toast.success("Product Data Inserted Successfully!");
-                        clearFrom();
-                    }
-                })
-                .catch(error => {
-                    if (error.response) {
-                        setError(error.response.data.errors);
-                    }
-                });
-        } else {
-            setError(simpleValidator.current.errorMessages);
-        }
-    };
     return (
         <Fragment>
             <PageHeader breadCrumbs={props.breadCrumbs} Module={props.Module} />
 
             <div className="card">
                 <div className="card-header d-block">
-                    <h3>Add Product</h3>
+                    <h3>Edit Product</h3>
                     <button className="btn btn-info table-button">
                         <Link
                             to={{
@@ -211,7 +170,7 @@ const AddProduct = props => {
                         </Link>
                     </button>{" "}
                 </div>
-                <form onSubmit={submitHandler} id="product-from">
+                <form onSubmit={updateHandler} id="product-from">
                     <div className="card-body">
                         <div className="row">
                             <div className="col-md-4">
@@ -223,7 +182,7 @@ const AddProduct = props => {
                                         <input
                                             type="text"
                                             name="product_name"
-                                            value={product.product_name}
+                                            value={editProduct.product_name}
                                             className="form-control"
                                             placeholder="Enter Product Name"
                                             onChange={handleChange}
@@ -231,7 +190,7 @@ const AddProduct = props => {
                                         />
                                         {simpleValidator.current.message(
                                             "product_name",
-                                            product.product_name,
+                                            editProduct.product_name,
                                             "required"
                                         )}
                                         <span className="text-danger">
@@ -251,7 +210,7 @@ const AddProduct = props => {
                                             name="product_slug"
                                             className="form-control"
                                             placeholder="Product Slug"
-                                            value={product.product_slug}
+                                            value={editProduct.product_slug}
                                             readOnly
                                         />
                                         <span className="text-danger">
@@ -269,14 +228,14 @@ const AddProduct = props => {
                                         <input
                                             type="text"
                                             name="product_sku"
-                                            value={product.product_sku}
+                                            value={editProduct.product_sku}
                                             className="form-control"
                                             placeholder="Enter Product Sku"
                                             onChange={e => handleChange(e)}
                                         />
                                         {simpleValidator.current.message(
                                             "product_sku",
-                                            product.product_sku,
+                                            editProduct.product_sku,
                                             "required"
                                         )}
                                         <span className="text-danger">
@@ -297,7 +256,7 @@ const AddProduct = props => {
                                         <select
                                             className="form-control"
                                             name="category_id"
-                                            value={product.category_id}
+                                            value={editProduct.category_id}
                                             onChange={e => (
                                                 handleChange(e),
                                                 getSubCategory(e)
@@ -317,7 +276,7 @@ const AddProduct = props => {
                                         </select>
                                         {simpleValidator.current.message(
                                             "category_id",
-                                            product.category_id,
+                                            editProduct.category_id,
                                             "required"
                                         )}
                                         <span className="text-danger">
@@ -336,7 +295,7 @@ const AddProduct = props => {
                                             className="form-control"
                                             name="subcategory_id"
                                             onChange={e => handleChange(e)}
-                                            value={product.subcategory_id}
+                                            value={editProduct.subcategory_id}
                                         >
                                             <option defaultValue hidden>
                                                 --Select Sub Category--
@@ -352,7 +311,7 @@ const AddProduct = props => {
                                         </select>
                                         {simpleValidator.current.message(
                                             "subcategory_id",
-                                            product.subcategory_id,
+                                            editProduct.subcategory_id,
                                             "required"
                                         )}
                                         <span className="text-danger">
@@ -371,7 +330,7 @@ const AddProduct = props => {
                                             className="form-control"
                                             name="brand_id"
                                             onChange={e => handleChange(e)}
-                                            value={product.brand_id}
+                                            value={editProduct.brand_id}
                                         >
                                             <option defaultValue hidden>
                                                 --Select Brand--
@@ -387,7 +346,7 @@ const AddProduct = props => {
                                         </select>
                                         {simpleValidator.current.message(
                                             "brand_id",
-                                            product.brand_id,
+                                            editProduct.brand_id,
                                             "required"
                                         )}
                                         <span className="text-danger">
@@ -410,12 +369,12 @@ const AddProduct = props => {
                                             name="purchase_price"
                                             className="form-control"
                                             placeholder="Enter Product Purchase Price"
-                                            value={product.purchase_price}
+                                            value={editProduct.purchase_price}
                                             onChange={e => handleChange(e)}
                                         />
                                         {simpleValidator.current.message(
                                             "purchase_price",
-                                            product.purchase_price,
+                                            editProduct.purchase_price,
                                             "required"
                                         )}
                                         <span className="text-danger">
@@ -434,13 +393,13 @@ const AddProduct = props => {
                                             type="number"
                                             name="sell_price"
                                             className="form-control"
-                                            value={product.sell_price}
+                                            value={editProduct.sell_price}
                                             onChange={e => handleChange(e)}
                                             placeholder="Enter Product Sell Price"
                                         />
                                         {simpleValidator.current.message(
                                             "sell_price",
-                                            product.sell_price,
+                                            editProduct.sell_price,
                                             "required"
                                         )}
                                         <span className="text-danger">
@@ -459,7 +418,7 @@ const AddProduct = props => {
                                             className="form-control"
                                             onChange={e => handleChange(e)}
                                             name="unit_id"
-                                            value={product.unit_id}
+                                            value={editProduct.unit_id}
                                         >
                                             <option defaultValue hidden>
                                                 --Select Unit--
@@ -475,7 +434,7 @@ const AddProduct = props => {
                                         </select>
                                         {simpleValidator.current.message(
                                             "unit_id",
-                                            product.unit_id,
+                                            editProduct.unit_id,
                                             "required"
                                         )}
                                         <span className="text-danger">
@@ -498,12 +457,14 @@ const AddProduct = props => {
                                             name="product_alert_qty"
                                             className="form-control"
                                             onChange={e => handleChange(e)}
-                                            value={product.product_alert_qty}
+                                            value={
+                                                editProduct.product_alert_qty
+                                            }
                                             placeholder="Enter Product Alert Quantity"
                                         />
                                         {simpleValidator.current.message(
                                             "product_alert_qty",
-                                            product.product_alert_qty,
+                                            editProduct.product_alert_qty,
                                             "required"
                                         )}
                                         <span className="text-danger">
@@ -519,7 +480,7 @@ const AddProduct = props => {
                                     </label>
                                     <div className="col-lg-12">
                                         <ReactTagInput
-                                            tags={product.tags}
+                                            tags={editProduct.product_tags}
                                             onChange={newTags =>
                                                 setTags(newTags)
                                             }
@@ -527,7 +488,7 @@ const AddProduct = props => {
                                         />
                                         {simpleValidator.current.message(
                                             "tags",
-                                            product.tags,
+                                            editProduct.product_tags,
                                             "required"
                                         )}
                                         <span className="text-danger">
@@ -546,7 +507,7 @@ const AddProduct = props => {
                                             name="status"
                                             onChange={e => handleChange(e)}
                                             className="form-control"
-                                            value={product.status}
+                                            value={editProduct.status}
                                         >
                                             <option defaultValue hidden>
                                                 --Select Status--
@@ -556,7 +517,7 @@ const AddProduct = props => {
                                         </select>
                                         {simpleValidator.current.message(
                                             "status",
-                                            product.status,
+                                            editProduct.status,
                                             "required"
                                         )}
                                         <span className="text-danger">
@@ -581,11 +542,11 @@ const AddProduct = props => {
                                                 const data = editor.getData();
                                                 setDescription(data);
                                             }}
-                                            data={product.description}
+                                            data={editProduct.description}
                                         />
                                         {simpleValidator.current.message(
                                             "description",
-                                            product.description,
+                                            editProduct.description,
                                             "required"
                                         )}
                                         <span className="text-danger">
@@ -606,4 +567,4 @@ const AddProduct = props => {
     );
 };
 
-export default React.memo(AddProduct);
+export default EditProduct;
